@@ -1,3 +1,4 @@
+package Abalone;
 
 public class Case {
 
