@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
 import abalone.Coord;
+import abalone.DeplacementException;
 import abalone.Direction;
 import abalone.FenetreAbalone;
 import abalone.Plateau;
@@ -45,11 +46,15 @@ public class Application {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (plateauJeu.getCase(2, i).estOccupee()) {
-					plateauJeu.deplacerBouleDirection(Direction.dirBG,
-							new Coord(i, 2));
+				Direction dir = Direction.dirBG;
+				try {
+					plateauJeu.deplacerBouleDirection(dir, new Coord(i, 2));
 					fen.repaint();
+
+				} catch (DeplacementException e1) {
+					System.out.println(e1.getMessage());
 				}
+
 				i++;
 				if (i == 10) {
 					((Timer) e.getSource()).stop();

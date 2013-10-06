@@ -15,6 +15,9 @@ public class PanneauJeu extends JPanel {
 
 	public PanneauJeu(Plateau p) {
 		this.plateau = p;
+
+		// JButton bouton = new BoutonRond(null);
+		// this.add(bouton);
 	}
 
 	public void paintComponent(Graphics g) {

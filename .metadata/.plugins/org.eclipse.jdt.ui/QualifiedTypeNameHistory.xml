@@ -12,13 +12,17 @@
 <fullyQualifiedTypeName name="Abalone.PanneauJeu"/>
 <fullyQualifiedTypeName name="java.awt.Color"/>
 <fullyQualifiedTypeName name="java.awt.Point"/>
-<fullyQualifiedTypeName name="abalone.Case"/>
-<fullyQualifiedTypeName name="abalone.Coord"/>
 <fullyQualifiedTypeName name="java.util.Timer"/>
-<fullyQualifiedTypeName name="abalone.Direction"/>
 <fullyQualifiedTypeName name="java.awt.event.ActionEvent"/>
 <fullyQualifiedTypeName name="javax.swing.Timer"/>
 <fullyQualifiedTypeName name="abalone.FenetreAbalone"/>
 <fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
 <fullyQualifiedTypeName name="Application"/>
+<fullyQualifiedTypeName name="abalone.Direction"/>
+<fullyQualifiedTypeName name="abalone.Coord"/>
+<fullyQualifiedTypeName name="abalone.Case"/>
+<fullyQualifiedTypeName name="abalone.Plateau"/>
+<fullyQualifiedTypeName name="abalone.DeplacementException"/>
+<fullyQualifiedTypeName name="javax.swing.JButton"/>
+<fullyQualifiedTypeName name="abalone.boutonRond"/>
 </qualifiedTypeNameHistroy>
