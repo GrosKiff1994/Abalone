@@ -1,4 +1,4 @@
-package Abalone;
+package abalone;
 
 public class Plateau {
 
@@ -21,12 +21,10 @@ public class Plateau {
 					break;
 				case 'b':
 					tab[i][j] = new Case();
-					tab[i][j].setOccupee(true);
 					tab[i][j].setBoule(new Boule(Couleur.BLANC));
 					break;
 				case 'n':
 					tab[i][j] = new Case();
-					tab[i][j].setOccupee(true);
 					tab[i][j].setBoule(new Boule(Couleur.NOIR));
 					break;
 				case 'x':
@@ -39,6 +37,17 @@ public class Plateau {
 
 	public Case getCase(int i, int j) {
 		return tab[i][j];
+	}
+
+	public void deplacerBouleDirection(Direction dir, Coord coordBoule) {
+		System.out.println("je deplace (" + coordBoule.getX() + ";"
+				+ coordBoule.getY() + ") en ajoutant (" + dir.getX() + ";"
+				+ dir.getY() + ").");
+
+		tab[coordBoule.getY() + dir.getY()][coordBoule.getX() + dir.getX()]
+				.setBoule(tab[coordBoule.getY()][coordBoule.getX()].getBoule());
+
+		tab[coordBoule.getY()][coordBoule.getX()] = new Case();
 	}
 
 	public String toString() {

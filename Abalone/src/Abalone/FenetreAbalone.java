@@ -1,4 +1,4 @@
-package Abalone;
+package abalone;
 
 import javax.swing.JFrame;
 

@@ -1,28 +1,23 @@
-package Abalone;
+package abalone;
 
 public class Case {
 
-	private boolean occupee;
 	private Boule boule;
-	
-	public Case(){
-		this.occupee = false;
+
+	public Case() {
+		boule = null;
 	}
-	
-	public void setBoule(Boule boule){
-		this.boule = boule;			
+
+	public void setBoule(Boule boule) {
+		this.boule = boule;
 	}
-	
-	public Boule getBoule(){
-		return this.boule;			
+
+	public Boule getBoule() {
+		return this.boule;
 	}
-	
-	public void setOccupee(boolean occupee){
-		this.occupee = occupee;
+
+	public boolean estOccupee() {
+		return this.boule != null;
 	}
-	
-	public boolean estOccupee(){
-		return this.occupee;
-	}
-	
+
 }

@@ -1,4 +1,4 @@
-package Abalone;
+package abalone;
 
 public enum Couleur {
 	BLANC ("Couleur blanche"),

@@ -1,4 +1,4 @@
-package Abalone;
+package abalone;
 
 public class Joueur {
 
