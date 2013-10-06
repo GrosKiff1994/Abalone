@@ -1,18 +1,19 @@
 package Abalone;
+
 public class Plateau {
 
-	public static final int WEIGHT = 11;
+	public static final int HEIGHT = 11;
 	public static final int WIDTH = 11;
 	private Case tab[][];
 
 	public Plateau() {
 
-		this.tab = new Case[Plateau.WEIGHT][Plateau.WIDTH];
+		this.tab = new Case[Plateau.HEIGHT][Plateau.WIDTH];
 
 	}
 
 	public void chargerTab(char tabChar[][]) {
-		for (int i = 0; i < WEIGHT; i++) {
+		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
 				switch (tabChar[i][j]) {
 				case 'v':
@@ -36,9 +37,13 @@ public class Plateau {
 		}
 	}
 
+	public Case getCase(int i, int j) {
+		return tab[i][j];
+	}
+
 	public String toString() {
 		String res = "";
-		for (int i = 0; i < WEIGHT; i++) {
+		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
 				if (tab[i][j] != null) {
 					if (tab[i][j].estOccupee()) {

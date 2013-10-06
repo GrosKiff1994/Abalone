@@ -4,9 +4,11 @@
 <fullyQualifiedTypeName name="Couleur"/>
 <fullyQualifiedTypeName name="Plateau"/>
 <fullyQualifiedTypeName name="javax.swing.JFrame"/>
-<fullyQualifiedTypeName name="java.awt.Color"/>
 <fullyQualifiedTypeName name="Abalone.FenetreAbalone"/>
 <fullyQualifiedTypeName name="javax.swing.JPanel"/>
 <fullyQualifiedTypeName name="java.awt.Dimension"/>
+<fullyQualifiedTypeName name="Abalone.Case"/>
+<fullyQualifiedTypeName name="Abalone.Plateau"/>
 <fullyQualifiedTypeName name="Abalone.PanneauJeu"/>
+<fullyQualifiedTypeName name="java.awt.Color"/>
 </qualifiedTypeNameHistroy>

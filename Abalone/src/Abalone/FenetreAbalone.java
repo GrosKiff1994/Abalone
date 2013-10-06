@@ -1,23 +1,22 @@
 package Abalone;
 
-import java.awt.Color;
-import java.awt.Dimension;
-
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class FenetreAbalone extends JFrame {
-	public FenetreAbalone() {
-		PanneauJeu panelPrincipal = new PanneauJeu();
-		setSize(600, 300);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public FenetreAbalone(Plateau p) {
+		PanneauJeu panelPrincipal = new PanneauJeu(p);
+		setSize((int) (PanneauJeu.DIMBOULE * 16.15),
+				(int) (11 * (PanneauJeu.DIMBOULE - PanneauJeu.DIMBOULE / 16)));
 		setContentPane(panelPrincipal);
-		panelPrincipal.setBackground(Color.RED);
 
-		JPanel leRect = new JPanel();
-		leRect.setPreferredSize(new Dimension(20, 20));
-		panelPrincipal.add(leRect);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 }

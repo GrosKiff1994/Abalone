@@ -24,7 +24,7 @@ public class Application {
 
 		System.out.println(plateauJeu.toString());
 
-		FenetreAbalone fenPrincipale = new FenetreAbalone();
+		new FenetreAbalone(plateauJeu);
 
 	}
 
