@@ -6,11 +6,9 @@
 <fullyQualifiedTypeName name="javax.swing.JFrame"/>
 <fullyQualifiedTypeName name="Abalone.FenetreAbalone"/>
 <fullyQualifiedTypeName name="javax.swing.JPanel"/>
-<fullyQualifiedTypeName name="java.awt.Dimension"/>
 <fullyQualifiedTypeName name="Abalone.Case"/>
 <fullyQualifiedTypeName name="Abalone.Plateau"/>
 <fullyQualifiedTypeName name="Abalone.PanneauJeu"/>
-<fullyQualifiedTypeName name="java.awt.Color"/>
 <fullyQualifiedTypeName name="java.awt.Point"/>
 <fullyQualifiedTypeName name="java.util.Timer"/>
 <fullyQualifiedTypeName name="java.awt.event.ActionEvent"/>
@@ -25,4 +23,8 @@
 <fullyQualifiedTypeName name="abalone.DeplacementException"/>
 <fullyQualifiedTypeName name="javax.swing.JButton"/>
 <fullyQualifiedTypeName name="abalone.boutonRond"/>
+<fullyQualifiedTypeName name="java.awt.Dimension"/>
+<fullyQualifiedTypeName name="abalone.PanneauJeu"/>
+<fullyQualifiedTypeName name="abalone.BoutonRond"/>
+<fullyQualifiedTypeName name="java.awt.Color"/>
 </qualifiedTypeNameHistroy>

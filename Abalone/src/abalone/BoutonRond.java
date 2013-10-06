@@ -1,7 +1,6 @@
 package abalone;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
@@ -13,31 +12,33 @@ public class BoutonRond extends JButton {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private Color couleur;
 
-	public BoutonRond(String label) {
-		super(label);
+	public BoutonRond(int rayon, int x, int y) {
 
-		Dimension size = getPreferredSize();
-		size.width = size.height = Math.max(size.width, size.height);
-		setPreferredSize(size);
+		setLocation(x, y);
+		setSize(rayon, rayon);
 		setContentAreaFilled(false);
+	}
+
+	public void setColor(Color c) {
+		couleur = c;
 	}
 
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
 		if (getModel().isArmed()) {
-			g.setColor(Color.lightGray);
+			g.setColor(Color.RED);
 		} else {
-			g.setColor(getBackground());
+			g.setColor(couleur);
 		}
 		g.fillOval(0, 0, getSize().width - 1, getSize().height - 1);
 
 	}
 
 	protected void paintBorder(Graphics g) {
-		g.setColor(getForeground());
-		g.drawOval(0, 0, getSize().width - 1, getSize().height - 1);
+
 	}
 
 	Shape shape;
