@@ -17,7 +17,13 @@ public class BoutonRond extends JButton {
 	private int coordI;
 	private int coordJ;
 
+	boolean varDist;
+
+	private static final Color couleurSelec = new Color(75, 181, 193, 200);
+	private static final Color couleurBords = new Color(0, 0, 0);
+
 	public BoutonRond(int rayon, int i, int j) {
+
 		coordI = i;
 		coordJ = j;
 		int x = j * PanneauJeu.DIMBOULE + i * PanneauJeu.DIMBOULE / 2;
@@ -35,11 +41,16 @@ public class BoutonRond extends JButton {
 						+ ((BoutonRond) e.getSource()).getCoordI()
 						+ ", colonne "
 						+ ((BoutonRond) e.getSource()).getCoordJ());
+				((BoutonRond) e.getSource()).envoyerSignal();
 			}
 
 		};
 
 		this.addActionListener(monListener);
+	}
+
+	protected void envoyerSignal() {
+
 	}
 
 	public int getCoordI() {
@@ -54,14 +65,14 @@ public class BoutonRond extends JButton {
 		super.paintComponent(g);
 
 		if (getModel().isArmed()) {
-			g.setColor(new Color(250, 250, 200, 150));
+			g.setColor(couleurSelec);
 			g.fillOval(0, 0, getSize().width, getSize().height);
 		}
 
 	}
 
 	protected void paintBorder(Graphics g) {
-		g.setColor(Color.BLACK);
+		g.setColor(couleurBords);
 		g.drawOval(0, 0, getSize().width, getSize().height);
 	}
 

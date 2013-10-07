@@ -1,0 +1,23 @@
+int delay = 1000;
+
+		final Timer timer = new Timer(delay, new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Direction dir = Direction.dirBG;
+				try {
+					plateauJeu.deplacerBouleDirection(dir, new Coord(i, 2));
+					fen.repaint();
+
+				} catch (DeplacementException e1) {
+					System.out.println(e1.getMessage());
+				}
+
+				i++;
+				if (i == 10) {
+					((Timer) e.getSource()).stop();
+				}
+
+			}
+		});
+		timer.start();

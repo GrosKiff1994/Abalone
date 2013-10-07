@@ -1,17 +1,19 @@
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.Timer;
-
 import objects.Coord;
-import objects.Direction;
+import objects.Couleur;
+import objects.Joueur;
 import objects.Plateau;
-import core.DeplacementException;
 import display.FenetreAbalone;
 
 public class Application {
 
-	static int i = 4;
+	static Joueur gagnant = null;
+
+	private static void verifierVictoire(Joueur joueurBlanc, Joueur joueurNoir) {
+		if (joueurBlanc.getBoulesDuJoueurEjectees() >= 6)
+			gagnant = joueurNoir;
+		else if (joueurNoir.getBoulesDuJoueurEjectees() >= 6)
+			gagnant = joueurBlanc;
+	}
 
 	public static void main(String[] args) {
 
@@ -56,38 +58,37 @@ public class Application {
 
 		final Plateau plateauJeu = new Plateau();
 
-		plateauJeu.chargerTab(tabAtomouche);
+		plateauJeu.chargerTab(tabClassique);
 
 		System.out.println(plateauJeu.toString());
 
 		final FenetreAbalone fen = new FenetreAbalone(plateauJeu);
-		/*
-		 * plateauJeu.deplacerBouleDirection(Direction.dirBD, new Coord(5, 3));
-		 * System.out.println(plateauJeu);
-		 */
 
-		int delay = 1000;
+		Joueur joueurNoir = new Joueur("joueurNOIR", Couleur.NOIR);
+		Joueur joueurBlanc = new Joueur("joueurBLANC", Couleur.BLANC);
 
-		final Timer timer = new Timer(delay, new ActionListener() {
+		Coord caseDepart;
+		Coord caseDestination;
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Direction dir = Direction.dirBG;
-				try {
-					plateauJeu.deplacerBouleDirection(dir, new Coord(i, 2));
-					fen.repaint();
+		while (gagnant == null) {
+			caseDepart = null;
+			caseDestination = null;
 
-				} catch (DeplacementException e1) {
-					System.out.println(e1.getMessage());
-				}
+			/* les actions */
 
-				i++;
-				if (i == 10) {
-					((Timer) e.getSource()).stop();
-				}
+			while (caseDepart == null) {
 
 			}
-		});
-		timer.start();
+			// caseDepart est selectionnée
+
+			while (caseDestination == null) {
+
+			}
+			// caseDestination est selectionnée
+
+			/* vérification victoire */
+			verifierVictoire(joueurBlanc, joueurNoir);
+		}
+
 	}
 }

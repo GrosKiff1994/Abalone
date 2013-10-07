@@ -59,9 +59,8 @@ public class PanneauJeu extends JPanel {
 							break;
 						default:
 						}
-						g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 3, i
-								* (DIMBOULE - DIMBOULE / 8) - 3, DIMBOULE,
-								DIMBOULE);
+						g.fillOval(j * DIMBOULE + i * DIMBOULE / 2, i
+								* (DIMBOULE - DIMBOULE / 8), DIMBOULE, DIMBOULE);
 					} else {
 						g.setColor(Color.LIGHT_GRAY);
 						g.fillOval(j * DIMBOULE + i * DIMBOULE / 2, i
