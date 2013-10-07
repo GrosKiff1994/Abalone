@@ -1,6 +1,9 @@
-package abalone;
+package display;
 
 import javax.swing.JFrame;
+
+import objects.Plateau;
+
 
 public class FenetreAbalone extends JFrame {
 	/**

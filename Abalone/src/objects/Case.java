@@ -1,4 +1,5 @@
-package abalone;
+package objects;
+
 
 public class Case {
 

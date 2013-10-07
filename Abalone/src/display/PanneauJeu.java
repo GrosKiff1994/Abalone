@@ -1,9 +1,12 @@
-package abalone;
+package display;
 
 import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
+
+import objects.Case;
+import objects.Plateau;
 
 public class PanneauJeu extends JPanel {
 	/**
@@ -21,41 +24,17 @@ public class PanneauJeu extends JPanel {
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
 				Case caseCourante = plateau.getCase(i, j);
-				// case existe ?
 				if (caseCourante != null) {
-					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, j
-							* DIMBOULE + i * DIMBOULE / 2, i
-							* (DIMBOULE - DIMBOULE / 8));
-					// case occup�e ?
-					if (caseCourante.estOccupee()) {
-						// selon la couleur
-						switch (caseCourante.getBoule().getCouleur()) {
-						case NOIR:
-							tmpBouton.setColor(Color.DARK_GRAY);
-							break;
-						case BLANC:
-							tmpBouton.setColor(Color.WHITE);
-							break;
-						default:
-						}
-
-					} else {
-						tmpBouton.setColor(Color.LIGHT_GRAY);
-					} // fin case occup�e
+					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j);
 					this.add(tmpBouton);
-
-				} // fin case existe
-
-				/*
-				 * else { g.setColor(Color.DARK_GRAY); }
-				 */
+				}
 
 			}
 		}
 
 	}
 
-	public void paintComponent_old(Graphics g) {
+	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		// parcours du tableau
 		for (int i = 0; i < Plateau.HEIGHT; i++) {

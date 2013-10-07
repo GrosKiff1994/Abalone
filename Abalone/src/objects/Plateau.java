@@ -1,4 +1,6 @@
-package abalone;
+package objects;
+
+import core.DeplacementException;
 
 public class Plateau {
 

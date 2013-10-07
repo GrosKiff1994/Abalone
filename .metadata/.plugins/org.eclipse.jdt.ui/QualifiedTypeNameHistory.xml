@@ -14,7 +14,6 @@
 <fullyQualifiedTypeName name="java.awt.event.ActionEvent"/>
 <fullyQualifiedTypeName name="javax.swing.Timer"/>
 <fullyQualifiedTypeName name="abalone.FenetreAbalone"/>
-<fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
 <fullyQualifiedTypeName name="Application"/>
 <fullyQualifiedTypeName name="abalone.Direction"/>
 <fullyQualifiedTypeName name="abalone.Coord"/>
@@ -27,4 +26,10 @@
 <fullyQualifiedTypeName name="abalone.PanneauJeu"/>
 <fullyQualifiedTypeName name="abalone.BoutonRond"/>
 <fullyQualifiedTypeName name="java.awt.Color"/>
+<fullyQualifiedTypeName name="org.w3c.dom.css.RGBColor"/>
+<fullyQualifiedTypeName name="display.PanneauJeu"/>
+<fullyQualifiedTypeName name="objects.Coord"/>
+<fullyQualifiedTypeName name="java.awt.event.MouseListener"/>
+<fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
+<fullyQualifiedTypeName name="display.BoutonRond"/>
 </qualifiedTypeNameHistroy>

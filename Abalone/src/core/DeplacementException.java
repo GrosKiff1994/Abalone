@@ -1,4 +1,4 @@
-package abalone;
+package core;
 
 public class DeplacementException extends Exception {
 

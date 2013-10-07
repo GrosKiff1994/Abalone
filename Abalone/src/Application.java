@@ -3,17 +3,30 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
-import abalone.Coord;
-import abalone.DeplacementException;
-import abalone.Direction;
-import abalone.FenetreAbalone;
-import abalone.Plateau;
+import objects.Coord;
+import objects.Direction;
+import objects.Plateau;
+import core.DeplacementException;
+import display.FenetreAbalone;
 
 public class Application {
 
 	static int i = 4;
 
 	public static void main(String[] args) {
+
+		char tabVide[][] = new char[][] {
+				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
+				{ 'x', 'x', 'x', 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'x' },
+				{ 'x', 'x', 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'x' },
+				{ 'x', 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x' },
+				{ 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x' },
+				{ 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x' },
+				{ 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x', 'x' },
+				{ 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x', 'x', 'x' },
+				{ 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'x', 'x', 'x', 'x' },
+				{ 'x', 'v', 'v', 'v', 'v', 'v', 'x', 'x', 'x', 'x', 'x' },
+				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' } };
 
 		char tabClassique[][] = new char[][] {
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
@@ -28,9 +41,22 @@ public class Application {
 				{ 'x', 'n', 'n', 'n', 'n', 'n', 'x', 'x', 'x', 'x', 'x' },
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' } };
 
+		char tabAtomouche[][] = new char[][] {
+				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
+				{ 'x', 'x', 'x', 'x', 'x', 'n', 'b', 'v', 'v', 'v', 'x' },
+				{ 'x', 'x', 'x', 'x', 'b', 'v', 'v', 'n', 'b', 'n', 'x' },
+				{ 'x', 'x', 'x', 'v', 'v', 'n', 'v', 'v', 'v', 'v', 'x' },
+				{ 'x', 'x', 'n', 'v', 'b', 'v', 'v', 'v', 'v', 'b', 'x' },
+				{ 'x', 'b', 'v', 'v', 'n', 'v', 'b', 'v', 'v', 'n', 'x' },
+				{ 'x', 'n', 'v', 'v', 'v', 'v', 'n', 'v', 'b', 'x', 'x' },
+				{ 'x', 'v', 'v', 'v', 'v', 'b', 'v', 'v', 'x', 'x', 'x' },
+				{ 'x', 'b', 'n', 'b', 'v', 'v', 'n', 'x', 'x', 'x', 'x' },
+				{ 'x', 'v', 'v', 'v', 'n', 'b', 'x', 'x', 'x', 'x', 'x' },
+				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' } };
+
 		final Plateau plateauJeu = new Plateau();
 
-		plateauJeu.chargerTab(tabClassique);
+		plateauJeu.chargerTab(tabAtomouche);
 
 		System.out.println(plateauJeu.toString());
 
