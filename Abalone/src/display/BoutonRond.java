@@ -42,6 +42,7 @@ public class BoutonRond extends JButton {
 						+ ", colonne "
 						+ ((BoutonRond) e.getSource()).getCoordJ());
 				((BoutonRond) e.getSource()).envoyerSignal();
+				// ((BoutonRond) e.getSource()).setVisible(false);
 			}
 
 		};
