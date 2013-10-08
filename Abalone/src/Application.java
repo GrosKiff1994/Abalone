@@ -1,5 +1,3 @@
-import objects.Coord;
-import objects.Couleur;
 import objects.Joueur;
 import objects.Plateau;
 import display.FenetreAbalone;
@@ -8,16 +6,16 @@ public class Application {
 
 	static Joueur gagnant = null;
 
-	private static void verifierVictoire(Joueur joueurBlanc, Joueur joueurNoir) {
-		if (joueurBlanc.getBoulesDuJoueurEjectees() >= 6)
-			gagnant = joueurNoir;
-		else if (joueurNoir.getBoulesDuJoueurEjectees() >= 6)
-			gagnant = joueurBlanc;
-	}
+	// private static void verifierVictoire(Joueur joueurBlanc, Joueur
+	// joueurNoir) {
+	// if (joueurBlanc.getBoulesDuJoueurEjectees() >= 6)
+	// gagnant = joueurNoir;
+	// else if (joueurNoir.getBoulesDuJoueurEjectees() >= 6)
+	// gagnant = joueurBlanc;
+	// }
 
 	public static void main(String[] args) {
 
-		@SuppressWarnings("unused")
 		char tabVide[][] = new char[][] {
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
 				{ 'x', 'x', 'x', 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'x' },
@@ -44,7 +42,6 @@ public class Application {
 				{ 'x', 'n', 'n', 'n', 'n', 'n', 'x', 'x', 'x', 'x', 'x' },
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' } };
 
-		@SuppressWarnings("unused")
 		char tabAtomouche[][] = new char[][] {
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
 				{ 'x', 'x', 'x', 'x', 'x', 'n', 'b', 'v', 'v', 'v', 'x' },
@@ -58,7 +55,6 @@ public class Application {
 				{ 'x', 'v', 'v', 'v', 'n', 'b', 'x', 'x', 'x', 'x', 'x' },
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' } };
 
-		@SuppressWarnings("unused")
 		char tabCentrifugeuse[][] = new char[][] {
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
 				{ 'x', 'x', 'x', 'x', 'x', 'v', 'b', 'b', 'b', 'v', 'x' },
@@ -72,7 +68,6 @@ public class Application {
 				{ 'x', 'v', 'n', 'n', 'n', 'v', 'x', 'x', 'x', 'x', 'x' },
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' } };
 
-		@SuppressWarnings("unused")
 		char tabMargueriteBelge[][] = new char[][] {
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
 				{ 'x', 'x', 'x', 'x', 'x', 'b', 'b', 'v', 'n', 'n', 'x' },
@@ -87,38 +82,54 @@ public class Application {
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' } };
 
 		final Plateau plateauJeu = new Plateau();
+		plateauJeu.chargerTab(tabAtomouche);
 
-		plateauJeu.chargerTab(tabClassique);
+		// System.out.println(plateauJeu.toString());
 
-		System.out.println(plateauJeu.toString());
+		new FenetreAbalone(plateauJeu);
 
-		final FenetreAbalone fen = new FenetreAbalone(plateauJeu);
+		// Joueur joueurNoir = new Joueur("joueurNOIR", Couleur.NOIR);
+		// Joueur joueurBlanc = new Joueur("joueurBLANC", Couleur.BLANC);
+		//
+		// Coord caseDepart;
+		// Coord caseDestination;
 
-		Joueur joueurNoir = new Joueur("joueurNOIR", Couleur.NOIR);
-		Joueur joueurBlanc = new Joueur("joueurBLANC", Couleur.BLANC);
+		// Scanner sc = new Scanner(System.in);
+		// while (true) {
+		// System.out.println("i case à deplacer ?");
+		// int i = sc.nextInt();
+		// System.out.println("j case à deplacer ?");
+		// int j = sc.nextInt();
+		// System.out.println("direction ?");
+		// int dir = sc.nextInt();
+		//
+		// Direction[] tabDir = Direction.values();
+		// try {
+		// plateauJeu.deplacerBouleDirection(tabDir[dir], new Coord(j, i));
+		// } catch (DeplacementException e) {
+		// e.printStackTrace();
+		// }
+		// }
 
-		Coord caseDepart;
-		Coord caseDestination;
-
-		while (gagnant == null) {
-			caseDepart = null;
-			caseDestination = null;
-
-			/* les actions */
-
-			while (caseDepart == null) {
-
-			}
-			// caseDepart est selectionnée
-
-			while (caseDestination == null) {
-
-			}
-			// caseDestination est selectionnée
-
-			/* vérification victoire */
-			verifierVictoire(joueurBlanc, joueurNoir);
-		}
+		// while (gagnant == null) {
+		// caseDepart = null;
+		// caseDestination = null;
+		//
+		// /* les actions */
+		//
+		// while (caseDepart == null) {
+		//
+		// }
+		// // caseDepart est selectionnée
+		//
+		// while (caseDestination == null) {
+		//
+		// }
+		// // caseDestination est selectionnée
+		//
+		// /* vérification victoire */
+		// verifierVictoire(joueurBlanc, joueurNoir);
+		// }
 
 	}
 }

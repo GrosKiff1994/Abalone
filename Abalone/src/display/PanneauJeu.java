@@ -2,6 +2,8 @@ package display;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
@@ -15,9 +17,31 @@ public class PanneauJeu extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private Plateau plateau;
 	public static final int DIMBOULE = 50;
+	static BoutonRond tableauBoutons[][];
 
 	public PanneauJeu(Plateau p) {
 
+		class listenerAnnuler extends MouseAdapter {
+
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON3)
+					for (int i = 0; i < Plateau.HEIGHT; i++) {
+						for (int j = 0; j < Plateau.WIDTH; j++) {
+							BoutonRond bout = PanneauJeu.tableauBoutons[i][j];
+							if (bout != null) {
+								bout.setVisible(true);
+								bout.setCouleurActuelle(null);
+							}
+						}
+					}
+			}
+
+		}
+
+		this.addMouseListener(new listenerAnnuler());
+
+		tableauBoutons = new BoutonRond[Plateau.HEIGHT][Plateau.WIDTH];
 		this.plateau = p;
 		this.setLayout(null);
 
@@ -27,6 +51,7 @@ public class PanneauJeu extends JPanel {
 				if (caseCourante != null) {
 					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j);
 					this.add(tmpBouton);
+					tableauBoutons[i][j] = tmpBouton;
 				}
 
 			}

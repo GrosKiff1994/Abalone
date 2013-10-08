@@ -3,11 +3,14 @@ package display;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Shape;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 
 import javax.swing.JButton;
+
+import objects.Direction;
+import objects.Plateau;
 
 public class BoutonRond extends JButton {
 	/**
@@ -19,8 +22,10 @@ public class BoutonRond extends JButton {
 
 	boolean varDist;
 
-	private static final Color couleurSelec = new Color(75, 181, 193, 200);
-	private static final Color couleurBords = new Color(0, 0, 0);
+	public static final Color couleurSelecTour = new Color(75, 181, 193, 150);
+	public static final Color couleurSelec = new Color(75, 181, 193, 200);
+	public static final Color couleurBords = new Color(0, 0, 0);
+	private Color couleurActuelle;
 
 	public BoutonRond(int rayon, int i, int j) {
 
@@ -33,25 +38,47 @@ public class BoutonRond extends JButton {
 		setSize(rayon, rayon);
 		setContentAreaFilled(false);
 
-		ActionListener monListener = new ActionListener() {
+		class listenerSelection extends MouseAdapter {
 
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+
+				if (e.getButton() != MouseEvent.BUTTON1)
+					return;
+
 				System.out.println("clic sur ligne "
 						+ ((BoutonRond) e.getSource()).getCoordI()
 						+ ", colonne "
 						+ ((BoutonRond) e.getSource()).getCoordJ());
-				((BoutonRond) e.getSource()).envoyerSignal();
-				// ((BoutonRond) e.getSource()).setVisible(false);
+
+				for (int i = 0; i < Plateau.HEIGHT; i++) {
+					for (int j = 0; j < Plateau.WIDTH; j++) {
+						BoutonRond bout = PanneauJeu.tableauBoutons[i][j];
+						if (bout != null) {
+							bout.setVisible(false);
+						}
+					}
+				}
+
+				Direction[] lesDir = Direction.values();
+				for (Direction dir : lesDir) {
+					int iDest = ((BoutonRond) e.getSource()).getCoordI()
+							+ dir.getY();
+					int jDest = ((BoutonRond) e.getSource()).getCoordJ()
+							+ dir.getX();
+
+					BoutonRond tmp = PanneauJeu.tableauBoutons[iDest][jDest];
+					if (tmp != null) {
+						tmp.couleurActuelle = couleurSelecTour;
+						tmp.setVisible(true);
+					}
+				}
 			}
 
-		};
+		}
+		;
 
-		this.addActionListener(monListener);
-	}
-
-	protected void envoyerSignal() {
-
+		this.addMouseListener(new listenerSelection());
 	}
 
 	public int getCoordI() {
@@ -62,11 +89,23 @@ public class BoutonRond extends JButton {
 		return coordJ;
 	}
 
+	public Color getCouleurActuelle() {
+		return couleurActuelle;
+	}
+
+	public void setCouleurActuelle(Color couleurActuelle) {
+		this.couleurActuelle = couleurActuelle;
+	}
+
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
 		if (getModel().isArmed()) {
-			g.setColor(couleurSelec);
+			couleurActuelle = couleurSelec;
+		}
+
+		if (couleurActuelle != null) {
+			g.setColor(couleurActuelle);
 			g.fillOval(0, 0, getSize().width, getSize().height);
 		}
 
