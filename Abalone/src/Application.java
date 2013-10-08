@@ -17,6 +17,7 @@ public class Application {
 
 	public static void main(String[] args) {
 
+		@SuppressWarnings("unused")
 		char tabVide[][] = new char[][] {
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
 				{ 'x', 'x', 'x', 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'x' },
@@ -43,6 +44,7 @@ public class Application {
 				{ 'x', 'n', 'n', 'n', 'n', 'n', 'x', 'x', 'x', 'x', 'x' },
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' } };
 
+		@SuppressWarnings("unused")
 		char tabAtomouche[][] = new char[][] {
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
 				{ 'x', 'x', 'x', 'x', 'x', 'n', 'b', 'v', 'v', 'v', 'x' },
@@ -54,6 +56,34 @@ public class Application {
 				{ 'x', 'v', 'v', 'v', 'v', 'b', 'v', 'v', 'x', 'x', 'x' },
 				{ 'x', 'b', 'n', 'b', 'v', 'v', 'n', 'x', 'x', 'x', 'x' },
 				{ 'x', 'v', 'v', 'v', 'n', 'b', 'x', 'x', 'x', 'x', 'x' },
+				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' } };
+
+		@SuppressWarnings("unused")
+		char tabCentrifugeuse[][] = new char[][] {
+				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
+				{ 'x', 'x', 'x', 'x', 'x', 'v', 'b', 'b', 'b', 'v', 'x' },
+				{ 'x', 'x', 'x', 'x', 'n', 'v', 'v', 'v', 'v', 'n', 'x' },
+				{ 'x', 'x', 'x', 'n', 'n', 'v', 'b', 'v', 'n', 'n', 'x' },
+				{ 'x', 'x', 'n', 'n', 'v', 'v', 'v', 'v', 'n', 'n', 'x' },
+				{ 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x' },
+				{ 'x', 'b', 'b', 'v', 'v', 'v', 'v', 'b', 'b', 'x', 'x' },
+				{ 'x', 'b', 'b', 'v', 'n', 'v', 'b', 'b', 'x', 'x', 'x' },
+				{ 'x', 'b', 'v', 'v', 'v', 'v', 'b', 'x', 'x', 'x', 'x' },
+				{ 'x', 'v', 'n', 'n', 'n', 'v', 'x', 'x', 'x', 'x', 'x' },
+				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' } };
+
+		@SuppressWarnings("unused")
+		char tabMargueriteBelge[][] = new char[][] {
+				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
+				{ 'x', 'x', 'x', 'x', 'x', 'b', 'b', 'v', 'n', 'n', 'x' },
+				{ 'x', 'x', 'x', 'x', 'b', 'b', 'b', 'n', 'n', 'n', 'x' },
+				{ 'x', 'x', 'x', 'v', 'b', 'b', 'v', 'n', 'n', 'v', 'x' },
+				{ 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x' },
+				{ 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x' },
+				{ 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x', 'x' },
+				{ 'x', 'v', 'n', 'n', 'v', 'b', 'b', 'v', 'x', 'x', 'x' },
+				{ 'x', 'n', 'n', 'n', 'b', 'b', 'b', 'x', 'x', 'x', 'x' },
+				{ 'x', 'n', 'n', 'v', 'b', 'b', 'x', 'x', 'x', 'x', 'x' },
 				{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' } };
 
 		final Plateau plateauJeu = new Plateau();
