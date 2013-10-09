@@ -9,6 +9,7 @@ import java.awt.geom.Ellipse2D;
 
 import javax.swing.JButton;
 
+import objects.Case;
 import objects.Direction;
 import objects.Plateau;
 
@@ -83,8 +84,13 @@ public class BoutonRond extends JButton {
 
 			@Override
 			public void mouseEntered(java.awt.event.MouseEvent e) {
-				if (((BoutonRond) e.getSource()).couleurActuelle == null) {
-					((BoutonRond) e.getSource()).couleurActuelle = couleurMouseOver;
+				int i = ((BoutonRond) e.getSource()).getCoordI();
+				int j = ((BoutonRond) e.getSource()).getCoordJ();
+				Case caseCourante = PanneauJeu.getPlateau().getCase(i, j);
+				if (caseCourante.estOccupee()) {
+					if (((BoutonRond) e.getSource()).couleurActuelle == null) {
+						((BoutonRond) e.getSource()).couleurActuelle = couleurMouseOver;
+					}
 				}
 			}
 
