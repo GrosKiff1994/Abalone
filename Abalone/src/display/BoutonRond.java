@@ -22,6 +22,7 @@ public class BoutonRond extends JButton {
 
 	boolean varDist;
 
+	public static final Color couleurMouseOver = new Color(153, 251, 111, 150);
 	public static final Color couleurSelecTour = new Color(75, 181, 193, 150);
 	public static final Color couleurSelec = new Color(75, 181, 193, 200);
 	public static final Color couleurBords = new Color(0, 0, 0);
@@ -77,6 +78,25 @@ public class BoutonRond extends JButton {
 
 		}
 		;
+
+		class listenerPassageSouris extends MouseAdapter {
+
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				if (((BoutonRond) e.getSource()).couleurActuelle == null) {
+					((BoutonRond) e.getSource()).couleurActuelle = couleurMouseOver;
+				}
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				if (((BoutonRond) e.getSource()).couleurActuelle == couleurMouseOver) {
+					((BoutonRond) e.getSource()).couleurActuelle = null;
+				}
+			}
+		}
+
+		this.addMouseListener(new listenerPassageSouris());
 
 		this.addMouseListener(new listenerSelection());
 	}
