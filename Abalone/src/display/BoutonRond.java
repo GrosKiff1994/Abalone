@@ -10,8 +10,10 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.JButton;
 
 import objects.Case;
+import objects.Coord;
 import objects.Direction;
 import objects.Plateau;
+import core.DeplacementException;
 
 public class BoutonRond extends JButton {
 	/**
@@ -20,6 +22,7 @@ public class BoutonRond extends JButton {
 	private static final long serialVersionUID = 1L;
 	private int coordI;
 	private int coordJ;
+	private static int compteurClic;
 
 	boolean varDist;
 
@@ -27,6 +30,10 @@ public class BoutonRond extends JButton {
 	public static final Color couleurSelecTour = new Color(75, 181, 193, 150);
 	public static final Color couleurSelec = new Color(75, 181, 193, 200);
 	public static final Color couleurBords = new Color(0, 0, 0);
+
+	public static int coordIDepart;
+	public static int coordJDepart;
+
 	private Color couleurActuelle;
 
 	public BoutonRond(int rayon, int i, int j) {
@@ -43,7 +50,7 @@ public class BoutonRond extends JButton {
 		class listenerSelection extends MouseAdapter {
 
 			@Override
-			public void mouseClicked(java.awt.event.MouseEvent e) {
+			public void mouseReleased(java.awt.event.MouseEvent e) {
 
 				if (e.getButton() != MouseEvent.BUTTON1)
 					return;
@@ -52,29 +59,76 @@ public class BoutonRond extends JButton {
 						+ ((BoutonRond) e.getSource()).getCoordI()
 						+ ", colonne "
 						+ ((BoutonRond) e.getSource()).getCoordJ());
-
-				for (int i = 0; i < Plateau.HEIGHT; i++) {
-					for (int j = 0; j < Plateau.WIDTH; j++) {
-						BoutonRond bout = PanneauJeu.tableauBoutons[i][j];
-						if (bout != null) {
-							bout.setVisible(false);
+				if (getCompteurClic() == 0) {
+					for (int i = 0; i < Plateau.HEIGHT; i++) {
+						for (int j = 0; j < Plateau.WIDTH; j++) {
+							BoutonRond bout = PanneauJeu.tableauBoutons[i][j];
+							if (bout != null) {
+								bout.setVisible(false);
+							}
 						}
 					}
-				}
 
-				Direction[] lesDir = Direction.values();
-				for (Direction dir : lesDir) {
-					int iDest = ((BoutonRond) e.getSource()).getCoordI()
-							+ dir.getY();
-					int jDest = ((BoutonRond) e.getSource()).getCoordJ()
-							+ dir.getX();
+					Direction[] lesDir = Direction.values();
+					for (Direction dir : lesDir) {
+						int iDest = ((BoutonRond) e.getSource()).getCoordI()
+								+ dir.getY();
+						int jDest = ((BoutonRond) e.getSource()).getCoordJ()
+								+ dir.getX();
 
-					BoutonRond tmp = PanneauJeu.tableauBoutons[iDest][jDest];
-					if (tmp != null) {
-						tmp.couleurActuelle = couleurSelecTour;
-						tmp.setVisible(true);
+						BoutonRond tmp = PanneauJeu.tableauBoutons[iDest][jDest];
+						if (tmp != null) {
+							tmp.couleurActuelle = couleurSelecTour;
+							tmp.setVisible(true);
+						}
 					}
+					coordIDepart = ((BoutonRond) e.getSource()).getCoordI();
+					coordJDepart = ((BoutonRond) e.getSource()).getCoordJ();
+					setCompteurClic(getCompteurClic() + 1);
+					System.out.println("Clic premier");
+				} else {
+					for (int i = 0; i < Plateau.HEIGHT; i++) {
+						for (int j = 0; j < Plateau.WIDTH; j++) {
+							BoutonRond bout = PanneauJeu.tableauBoutons[i][j];
+							if (bout != null) {
+								bout.setVisible(true);
+								bout.setCouleurActuelle(null);
+							}
+						}
+					}
+					int deltaI = ((BoutonRond) e.getSource()).getCoordI()
+							- coordIDepart;
+					int deltaJ = ((BoutonRond) e.getSource()).getCoordJ()
+							- coordJDepart;
+					Direction tabDir[] = Direction.values();
+					for (Direction dir : tabDir) {
+						if (dir.getCoord().equals(new Coord(deltaJ, deltaI))) {
+							try {
+								Plateau.deplacerBouleDirection(dir, new Coord(
+										coordJDepart, coordIDepart));
+							} catch (DeplacementException e1) {
+								e1.printStackTrace();
+							}
+							break;
+						}
+					}
+					// for (int i = 0; i < Plateau.HEIGHT; i++) {
+					// for (int j = 0; j < Plateau.WIDTH; j++) {
+					// BoutonRond bout = PanneauJeu.tableauBoutons[i][j];
+					// if (bout != null) {
+					// if (getPlateau().getCase(i, j).estOccupee()) {
+					// bout.setVisible(true);
+					// } else {
+					// bout.setVisible(false);
+					// }
+					// bout.setCouleurActuelle(null);
+					// }
+					// }
+					// }
+					System.out.println("Clic second");
+					setCompteurClic(getCompteurClic() - 1);
 				}
+
 			}
 
 		}
@@ -152,4 +206,13 @@ public class BoutonRond extends JButton {
 		}
 		return shape.contains(x, y);
 	}
+
+	public static int getCompteurClic() {
+		return compteurClic;
+	}
+
+	public static void setCompteurClic(int compteurClic) {
+		BoutonRond.compteurClic = compteurClic;
+	}
+
 }

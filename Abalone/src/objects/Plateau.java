@@ -6,11 +6,11 @@ public class Plateau {
 
 	public static final int HEIGHT = 11;
 	public static final int WIDTH = 11;
-	private Case tab[][];
+	private static Case tab[][];
 
 	public Plateau() {
 
-		this.tab = new Case[Plateau.HEIGHT][Plateau.WIDTH];
+		Plateau.tab = new Case[Plateau.HEIGHT][Plateau.WIDTH];
 
 	}
 
@@ -41,7 +41,7 @@ public class Plateau {
 		return tab[i][j];
 	}
 
-	public Case suivantCase(Direction dir, Coord coordCase)
+	public static Case suivantCase(Direction dir, Coord coordCase)
 			throws DeplacementException {
 		int arX = coordCase.getX() + dir.getX();
 		int arY = coordCase.getY() + dir.getY();
@@ -53,7 +53,7 @@ public class Plateau {
 		return tab[arY][arX];
 	}
 
-	public void deplacerBouleDirection(Direction dir, Coord coordCase)
+	public static void deplacerBouleDirection(Direction dir, Coord coordCase)
 			throws DeplacementException {
 		System.out.println("je deplace (" + coordCase.getX() + ";"
 				+ coordCase.getY() + ") en ajoutant (" + dir.getX() + ";"
