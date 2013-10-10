@@ -17,4 +17,8 @@ public enum Direction {
 	public int getY() {
 		return dir.getY();
 	}
+
+	public Object getCoord() {
+		return dir;
+	}
 }

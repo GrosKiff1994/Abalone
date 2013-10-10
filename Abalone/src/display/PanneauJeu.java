@@ -30,11 +30,16 @@ public class PanneauJeu extends JPanel {
 						for (int j = 0; j < Plateau.WIDTH; j++) {
 							BoutonRond bout = PanneauJeu.tableauBoutons[i][j];
 							if (bout != null) {
-								bout.setVisible(true);
+								if (getPlateau().getCase(i, j).estOccupee()) {
+									bout.setVisible(true);
+								} else {
+									bout.setVisible(false);
+								}
 								bout.setCouleurActuelle(null);
 							}
 						}
 					}
+				BoutonRond.setCompteurClic(0);
 			}
 
 		}
@@ -90,7 +95,7 @@ public class PanneauJeu extends JPanel {
 						g.setColor(Color.LIGHT_GRAY);
 						g.fillOval(j * DIMBOULE + i * DIMBOULE / 2, i
 								* (DIMBOULE - DIMBOULE / 8), DIMBOULE, DIMBOULE);
-					} // fin case occup�e
+					} // fin case occupee
 
 				} // fin case existe
 

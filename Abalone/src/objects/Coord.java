@@ -23,5 +23,9 @@ public class Coord {
 		this.y = y;
 	}
 
+	public boolean equals(Object o) {
+		return (this.x == ((Coord) o).getX() && this.y == ((Coord) o).getY());
+	}
+
 	private int x, y;
 }
