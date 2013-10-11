@@ -17,7 +17,7 @@ public class PanneauJeu extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int DIMBOULE = 50;
 	
-	private Plateau plateau;
+	protected Plateau plateau;
 	private BoutonRond tableauBoutons[][];
 
 	public PanneauJeu(Plateau p) {
@@ -26,13 +26,13 @@ public class PanneauJeu extends JPanel {
 		class listenerAnnuler extends MouseAdapter {
 
 			@Override
-			public void mouseClicked(java.awt.event.MouseEvent e) {
+			public void mouseReleased(java.awt.event.MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON3)
 					for (int i = 0; i < Plateau.HEIGHT; i++) {
 						for (int j = 0; j < Plateau.WIDTH; j++) {
 							BoutonRond bout = tableauBoutons[i][j];
 							if (bout != null) {
-								if (getPlateau().getCase(i, j).estOccupee()) {
+								if (plateau.getCase(i, j).estOccupee()) {
 									bout.setVisible(true);
 								} else {
 									bout.setVisible(false);
@@ -54,7 +54,7 @@ public class PanneauJeu extends JPanel {
 
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
-				Case caseCourante = getPlateau().getCase(i, j);
+				Case caseCourante = plateau.getCase(i, j);
 				if (caseCourante != null) {
 					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j,tableauBoutons,plateau);
 					this.add(tmpBouton);
@@ -71,7 +71,7 @@ public class PanneauJeu extends JPanel {
 		// parcours du tableau
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
-				Case caseCourante = getPlateau().getCase(i, j);
+				Case caseCourante = plateau.getCase(i, j);
 				// case existe ?
 				if (caseCourante != null) {
 					// case occupee ?
