@@ -5,21 +5,25 @@ import javax.swing.JFrame;
 import objects.Plateau;
 
 
+
 public class FenetreAbalone extends JFrame {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private PanneauJeu panelPrincipal;
 
-	public FenetreAbalone(Plateau p) {
-		PanneauJeu panelPrincipal = new PanneauJeu(p);
+	public FenetreAbalone() {
 		setSize((int) (PanneauJeu.DIMBOULE * 16.15),
 				(int) (11 * (PanneauJeu.DIMBOULE - PanneauJeu.DIMBOULE / 16)));
-		setContentPane(panelPrincipal);
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setVisible(true);
+	}
+	
+	public void setPlateau(Plateau p){
+		panelPrincipal = new PanneauJeu(p);
+		setContentPane(panelPrincipal);
 	}
 }
