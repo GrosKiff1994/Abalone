@@ -14,6 +14,7 @@ public class Partie {
 		final Plateau plateauJeu = new Plateau();
 		plateauJeu.chargerTab(Carte.tabClassique);
 		fenetre.setPlateau(plateauJeu);
+		gagnant = null;
 	}
 
 	private void verifierVictoire(Joueur joueurBlanc, Joueur joueurNoir) {
