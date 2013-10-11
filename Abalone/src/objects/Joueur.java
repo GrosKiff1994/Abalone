@@ -8,7 +8,7 @@ public class Joueur {
 
 	public Joueur(String nom, Couleur couleur) {
 		this.nom = nom;
-		this.couleur = couleur;
+		this.setCouleur(couleur);
 		boulesDuJoueurEjectees = 0;
 	}
 
@@ -26,6 +26,14 @@ public class Joueur {
 
 	public void setBoulesDuJoueurEjectees(int boulesDuJoueurEjectees) {
 		this.boulesDuJoueurEjectees = boulesDuJoueurEjectees;
+	}
+
+	public Couleur getCouleur() {
+		return couleur;
+	}
+
+	public void setCouleur(Couleur couleur) {
+		this.couleur = couleur;
 	}
 
 }

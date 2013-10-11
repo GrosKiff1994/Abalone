@@ -15,11 +15,13 @@ public class PanneauJeu extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static Plateau plateau;
 	public static final int DIMBOULE = 50;
-	static BoutonRond tableauBoutons[][];
+	
+	private Plateau plateau;
+	private BoutonRond tableauBoutons[][];
 
 	public PanneauJeu(Plateau p) {
+		this.plateau = p;
 
 		class listenerAnnuler extends MouseAdapter {
 
@@ -28,7 +30,7 @@ public class PanneauJeu extends JPanel {
 				if (e.getButton() == MouseEvent.BUTTON3)
 					for (int i = 0; i < Plateau.HEIGHT; i++) {
 						for (int j = 0; j < Plateau.WIDTH; j++) {
-							BoutonRond bout = PanneauJeu.tableauBoutons[i][j];
+							BoutonRond bout = tableauBoutons[i][j];
 							if (bout != null) {
 								if (getPlateau().getCase(i, j).estOccupee()) {
 									bout.setVisible(true);
@@ -54,7 +56,7 @@ public class PanneauJeu extends JPanel {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
 				Case caseCourante = getPlateau().getCase(i, j);
 				if (caseCourante != null) {
-					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j);
+					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j,tableauBoutons,plateau);
 					this.add(tmpBouton);
 					tableauBoutons[i][j] = tmpBouton;
 				}
@@ -108,11 +110,11 @@ public class PanneauJeu extends JPanel {
 
 	}
 
-	public static Plateau getPlateau() {
+	public Plateau getPlateau() {
 		return plateau;
 	}
 
 	public void setPlateau(Plateau plateau) {
-		PanneauJeu.plateau = plateau;
+		this.plateau = plateau;
 	}
 }

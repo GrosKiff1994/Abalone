@@ -31,13 +31,11 @@ public class BoutonRond extends JButton {
 	public static final Color couleurSelec = new Color(75, 181, 193, 200);
 	public static final Color couleurBords = new Color(0, 0, 0);
 
-	public static int coordIDepart;
-	public static int coordJDepart;
+	private static Coord depart = new Coord(0, 0);
 
 	private Color couleurActuelle;
-
-	public BoutonRond(int rayon, int i, int j) {
-
+	
+	public BoutonRond(int rayon, int i, int j, final BoutonRond tabBouton[][], final Plateau plateau) {
 		coordI = i;
 		coordJ = j;
 		int x = j * PanneauJeu.DIMBOULE + i * PanneauJeu.DIMBOULE / 2;
@@ -62,7 +60,7 @@ public class BoutonRond extends JButton {
 				if (getCompteurClic() == 0) {
 					for (int i = 0; i < Plateau.HEIGHT; i++) {
 						for (int j = 0; j < Plateau.WIDTH; j++) {
-							BoutonRond bout = PanneauJeu.tableauBoutons[i][j];
+							BoutonRond bout = tabBouton[i][j];
 							if (bout != null) {
 								bout.setVisible(false);
 							}
@@ -76,20 +74,20 @@ public class BoutonRond extends JButton {
 						int jDest = ((BoutonRond) e.getSource()).getCoordJ()
 								+ dir.getX();
 
-						BoutonRond tmp = PanneauJeu.tableauBoutons[iDest][jDest];
+						BoutonRond tmp = tabBouton[iDest][jDest];
 						if (tmp != null) {
 							tmp.couleurActuelle = couleurSelecTour;
 							tmp.setVisible(true);
 						}
 					}
-					coordIDepart = ((BoutonRond) e.getSource()).getCoordI();
-					coordJDepart = ((BoutonRond) e.getSource()).getCoordJ();
+					depart.setY(((BoutonRond) e.getSource()).getCoordI());
+					depart.setX(((BoutonRond) e.getSource()).getCoordJ());
 					setCompteurClic(getCompteurClic() + 1);
 					System.out.println("Clic premier");
 				} else {
 					for (int i = 0; i < Plateau.HEIGHT; i++) {
 						for (int j = 0; j < Plateau.WIDTH; j++) {
-							BoutonRond bout = PanneauJeu.tableauBoutons[i][j];
+							BoutonRond bout = tabBouton[i][j];
 							if (bout != null) {
 								bout.setVisible(true);
 								bout.setCouleurActuelle(null);
@@ -97,15 +95,14 @@ public class BoutonRond extends JButton {
 						}
 					}
 					int deltaI = ((BoutonRond) e.getSource()).getCoordI()
-							- coordIDepart;
+							- depart.getY();
 					int deltaJ = ((BoutonRond) e.getSource()).getCoordJ()
-							- coordJDepart;
+							- depart.getX();
 					Direction tabDir[] = Direction.values();
 					for (Direction dir : tabDir) {
 						if (dir.getCoord().equals(new Coord(deltaJ, deltaI))) {
 							try {
-								Plateau.deplacerBouleDirection(dir, new Coord(
-										coordJDepart, coordIDepart));
+								Plateau.deplacerBouleDirection(dir, depart);
 							} catch (DeplacementException e1) {
 								e1.printStackTrace();
 							}
@@ -140,7 +137,7 @@ public class BoutonRond extends JButton {
 			public void mouseEntered(java.awt.event.MouseEvent e) {
 				int i = ((BoutonRond) e.getSource()).getCoordI();
 				int j = ((BoutonRond) e.getSource()).getCoordJ();
-				Case caseCourante = PanneauJeu.getPlateau().getCase(i, j);
+				Case caseCourante = plateau.getCase(i, j);
 				if (caseCourante.estOccupee()) {
 					if (((BoutonRond) e.getSource()).couleurActuelle == null) {
 						((BoutonRond) e.getSource()).couleurActuelle = couleurMouseOver;
