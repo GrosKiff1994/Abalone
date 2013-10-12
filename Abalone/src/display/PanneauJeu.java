@@ -20,6 +20,22 @@ public class PanneauJeu extends JPanel {
 	protected Plateau plateau;
 	private BoutonRond tableauBoutons[][];
 
+	public void visibiliteBoutonVide(){
+		for (int i = 0; i < Plateau.HEIGHT; i++) {
+			for (int j = 0; j < Plateau.WIDTH; j++) {
+				BoutonRond bout = tableauBoutons[i][j];
+				if (bout != null) {
+					if (plateau.getCase(i, j).estOccupee()) {
+						bout.setVisible(true);
+					} else {
+						bout.setVisible(false);
+					}
+					bout.setCouleurActuelle(null);
+				}
+			}
+		}
+	}
+	
 	public PanneauJeu(Plateau p) {
 		this.plateau = p;
 
@@ -28,19 +44,7 @@ public class PanneauJeu extends JPanel {
 			@Override
 			public void mouseReleased(java.awt.event.MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON3)
-					for (int i = 0; i < Plateau.HEIGHT; i++) {
-						for (int j = 0; j < Plateau.WIDTH; j++) {
-							BoutonRond bout = tableauBoutons[i][j];
-							if (bout != null) {
-								if (plateau.getCase(i, j).estOccupee()) {
-									bout.setVisible(true);
-								} else {
-									bout.setVisible(false);
-								}
-								bout.setCouleurActuelle(null);
-							}
-						}
-					}
+					visibiliteBoutonVide();
 				BoutonRond.setCompteurClic(0);
 			}
 
