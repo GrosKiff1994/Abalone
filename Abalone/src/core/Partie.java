@@ -8,11 +8,14 @@ import display.FenetreAbalone;
 
 public class Partie {
 
+	public enum Etat {SELECTION,DEPLACEMENT;}
+	
 	private Joueur gagnant;
+	private Etat etat;
 
 	public Partie(FenetreAbalone fenetre) {
 		final Plateau plateauJeu = new Plateau();
-		plateauJeu.chargerTab(Carte.tabClassique);
+		plateauJeu.chargerTab(Carte.tabMargueriteBelge);
 		fenetre.setPlateau(plateauJeu);
 		gagnant = null;
 	}
@@ -27,6 +30,7 @@ public class Partie {
 
 	public void lancerPartie() {
 
+		etat = Etat.SELECTION;
 		Joueur joueurNoir = new Joueur("joueurNOIR", Couleur.NOIR);
 		Joueur joueurBlanc = new Joueur("joueurBLANC", Couleur.BLANC);
 
