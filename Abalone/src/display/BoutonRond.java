@@ -14,6 +14,7 @@ import objects.Coord;
 import objects.Direction;
 import objects.Plateau;
 import core.DeplacementException;
+import core.Partie.Etat;
 
 public class BoutonRond extends JButton {
 	/**
@@ -22,12 +23,12 @@ public class BoutonRond extends JButton {
 	private static final long serialVersionUID = 1L;
 	private int coordI;
 	private int coordJ;
-	private static int compteurClic;
+	private static Etat etat;
 
 	boolean varDist;
 
-	public static final Color couleurMouseOver = new Color(153, 251, 111, 150);
-	public static final Color couleurSelecTour = new Color(75, 181, 193, 150);
+	public static final Color couleurMouseOver = new Color(153, 251, 111, 100);
+	public static final Color couleurSelecTour = new Color(75, 181, 193, 40);
 	public static final Color couleurSelec = new Color(75, 181, 193, 200);
 	public static final Color couleurBords = new Color(0, 0, 0);
 
@@ -35,7 +36,7 @@ public class BoutonRond extends JButton {
 
 	private Color couleurActuelle;
 	
-	public BoutonRond(int rayon, int i, int j, final BoutonRond tabBouton[][], final Plateau plateau) {
+	public BoutonRond(int rayon, int i, int j, final Plateau plateau, final PanneauJeu panneau) {
 		coordI = i;
 		coordJ = j;
 		int x = j * PanneauJeu.DIMBOULE + i * PanneauJeu.DIMBOULE / 2;
@@ -57,16 +58,20 @@ public class BoutonRond extends JButton {
 						+ ((BoutonRond) e.getSource()).getCoordI()
 						+ ", colonne "
 						+ ((BoutonRond) e.getSource()).getCoordJ());
-				if (getCompteurClic() == 0) {
+				if (etat == Etat.SELECTION) {
+					// afficher les cases entourant :
+					
+					// cacher
 					for (int i = 0; i < Plateau.HEIGHT; i++) {
 						for (int j = 0; j < Plateau.WIDTH; j++) {
-							BoutonRond bout = tabBouton[i][j];
+							BoutonRond bout = panneau.getTabBouton()[i][j];
 							if (bout != null) {
 								bout.setVisible(false);
 							}
 						}
 					}
 
+					// afficher cercle
 					Direction[] lesDir = Direction.values();
 					for (Direction dir : lesDir) {
 						int iDest = ((BoutonRond) e.getSource()).getCoordI()
@@ -74,17 +79,20 @@ public class BoutonRond extends JButton {
 						int jDest = ((BoutonRond) e.getSource()).getCoordJ()
 								+ dir.getX();
 
-						BoutonRond tmp = tabBouton[iDest][jDest];
+						BoutonRond tmp = panneau.getTabBouton()[iDest][jDest];
 						if (tmp != null) {
 							tmp.couleurActuelle = couleurSelecTour;
 							tmp.setVisible(true);
 						}
 					}
+					
+					// coordonnées départ
 					depart.setY(((BoutonRond) e.getSource()).getCoordI());
 					depart.setX(((BoutonRond) e.getSource()).getCoordJ());
-					setCompteurClic(getCompteurClic() + 1);
+					etat = Etat.DEPLACEMENT;
 					System.out.println("Clic premier");
 				} else {
+					// deplacer la boule
 					int deltaI = ((BoutonRond) e.getSource()).getCoordI()
 							- depart.getY();
 					int deltaJ = ((BoutonRond) e.getSource()).getCoordJ()
@@ -100,21 +108,11 @@ public class BoutonRond extends JButton {
 							break;
 						}
 					}
-					for (int i = 0; i < Plateau.HEIGHT; i++) {
-						for (int j = 0; j < Plateau.WIDTH; j++) {
-							BoutonRond bout = tabBouton[i][j];
-							if (bout != null) {
-							 if (plateau.getCase(i, j).estOccupee()) {
-							 bout.setVisible(true);
-								 } else {
-								 bout.setVisible(false);
-								 }
-								 bout.setCouleurActuelle(null);
-							}
-						}
-					}
+					
+					panneau.visibiliteBoutonVide();
+					
 					System.out.println("Clic second");
-					setCompteurClic(getCompteurClic() - 1);
+					etat = Etat.SELECTION;
 				}
 
 			}
@@ -195,12 +193,7 @@ public class BoutonRond extends JButton {
 		return shape.contains(x, y);
 	}
 
-	public static int getCompteurClic() {
-		return compteurClic;
+	public static void setEtat(Etat etat) {
+		BoutonRond.etat = etat;
 	}
-
-	public static void setCompteurClic(int compteurClic) {
-		BoutonRond.compteurClic = compteurClic;
-	}
-
 }

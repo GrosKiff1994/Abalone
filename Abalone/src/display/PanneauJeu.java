@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import objects.Case;
 import objects.Plateau;
+import core.Partie.Etat;
 
 public class PanneauJeu extends JPanel {
 	/**
@@ -16,11 +17,11 @@ public class PanneauJeu extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	public static final int DIMBOULE = 50;
-	
+
 	protected Plateau plateau;
 	private BoutonRond tableauBoutons[][];
 
-	public void visibiliteBoutonVide(){
+	public void visibiliteBoutonVide() {
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
 				BoutonRond bout = tableauBoutons[i][j];
@@ -35,7 +36,7 @@ public class PanneauJeu extends JPanel {
 			}
 		}
 	}
-	
+
 	public PanneauJeu(Plateau p) {
 		this.plateau = p;
 
@@ -43,9 +44,10 @@ public class PanneauJeu extends JPanel {
 
 			@Override
 			public void mouseReleased(java.awt.event.MouseEvent e) {
-				if (e.getButton() == MouseEvent.BUTTON3)
+				if (e.getButton() == MouseEvent.BUTTON3) {
 					visibiliteBoutonVide();
-				BoutonRond.setCompteurClic(0);
+					BoutonRond.setEtat(Etat.SELECTION);
+				}
 			}
 
 		}
@@ -60,7 +62,8 @@ public class PanneauJeu extends JPanel {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
 				Case caseCourante = plateau.getCase(i, j);
 				if (caseCourante != null) {
-					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j,tableauBoutons,plateau);
+					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j,
+							plateau, this);
 					this.add(tmpBouton);
 					tableauBoutons[i][j] = tmpBouton;
 				}
@@ -120,5 +123,9 @@ public class PanneauJeu extends JPanel {
 
 	public void setPlateau(Plateau plateau) {
 		this.plateau = plateau;
+	}
+
+	public BoutonRond[][] getTabBouton() {
+		return tableauBoutons;
 	}
 }
