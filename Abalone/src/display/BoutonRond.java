@@ -85,15 +85,6 @@ public class BoutonRond extends JButton {
 					setCompteurClic(getCompteurClic() + 1);
 					System.out.println("Clic premier");
 				} else {
-					for (int i = 0; i < Plateau.HEIGHT; i++) {
-						for (int j = 0; j < Plateau.WIDTH; j++) {
-							BoutonRond bout = tabBouton[i][j];
-							if (bout != null) {
-								bout.setVisible(true);
-								bout.setCouleurActuelle(null);
-							}
-						}
-					}
 					int deltaI = ((BoutonRond) e.getSource()).getCoordI()
 							- depart.getY();
 					int deltaJ = ((BoutonRond) e.getSource()).getCoordJ()
@@ -109,19 +100,19 @@ public class BoutonRond extends JButton {
 							break;
 						}
 					}
-					// for (int i = 0; i < Plateau.HEIGHT; i++) {
-					// for (int j = 0; j < Plateau.WIDTH; j++) {
-					// BoutonRond bout = PanneauJeu.tableauBoutons[i][j];
-					// if (bout != null) {
-					// if (getPlateau().getCase(i, j).estOccupee()) {
-					// bout.setVisible(true);
-					// } else {
-					// bout.setVisible(false);
-					// }
-					// bout.setCouleurActuelle(null);
-					// }
-					// }
-					// }
+					for (int i = 0; i < Plateau.HEIGHT; i++) {
+						for (int j = 0; j < Plateau.WIDTH; j++) {
+							BoutonRond bout = tabBouton[i][j];
+							if (bout != null) {
+							 if (plateau.getCase(i, j).estOccupee()) {
+							 bout.setVisible(true);
+								 } else {
+								 bout.setVisible(false);
+								 }
+								 bout.setCouleurActuelle(null);
+							}
+						}
+					}
 					System.out.println("Clic second");
 					setCompteurClic(getCompteurClic() - 1);
 				}
