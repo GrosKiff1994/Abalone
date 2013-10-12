@@ -4,8 +4,6 @@ import javax.swing.JFrame;
 
 import objects.Plateau;
 
-
-
 public class FenetreAbalone extends JFrame {
 	/**
 	 * 
@@ -21,8 +19,12 @@ public class FenetreAbalone extends JFrame {
 		setResizable(false);
 		setLocationRelativeTo(null);
 	}
-	
-	public void setPlateau(Plateau p){
+
+	public PanneauJeu getPanneau() {
+		return this.panelPrincipal;
+	}
+
+	public void setPlateau(Plateau p) {
 		panelPrincipal = new PanneauJeu(p);
 		setContentPane(panelPrincipal);
 	}
