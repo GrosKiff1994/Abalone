@@ -17,7 +17,7 @@ public class Partie {
 
 	public Partie(FenetreAbalone fenetre) {
 		final Plateau plateauJeu = new Plateau();
-		plateauJeu.chargerTab(Carte.tabMargueriteBelge);
+		plateauJeu.chargerTab(Carte.tabClassique);
 		fenetre.setPlateau(plateauJeu);
 		gagnant = null;
 		fenetre.getPanneau().visibiliteBoutonVide();
