@@ -62,8 +62,7 @@ public class PanneauJeu extends JPanel {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
 				Case caseCourante = plateau.getCase(i, j);
 				if (caseCourante != null) {
-					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j,
-							plateau, this);
+					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j, this);
 					this.add(tmpBouton);
 					tableauBoutons[i][j] = tmpBouton;
 				}

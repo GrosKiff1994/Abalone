@@ -36,8 +36,7 @@ public class BoutonRond extends JButton {
 
 	private Color couleurActuelle;
 
-	public BoutonRond(int rayon, int i, int j, final Plateau plateau,
-			final PanneauJeu panneau) {
+	public BoutonRond(int rayon, int i, int j, final PanneauJeu panneau) {
 		coordI = i;
 		coordJ = j;
 		int x = j * PanneauJeu.DIMBOULE + i * PanneauJeu.DIMBOULE / 2 - 4;
@@ -102,7 +101,8 @@ public class BoutonRond extends JButton {
 					for (Direction dir : tabDir) {
 						if (dir.getCoord().equals(new Coord(deltaJ, deltaI))) {
 							try {
-								Plateau.deplacerBouleDirection(dir, depart);
+								panneau.getPlateau().deplacerBouleDirection(
+										dir, depart);
 							} catch (DeplacementException e1) {
 								e1.printStackTrace();
 							}
@@ -127,7 +127,7 @@ public class BoutonRond extends JButton {
 			public void mouseEntered(java.awt.event.MouseEvent e) {
 				int i = ((BoutonRond) e.getSource()).getCoordI();
 				int j = ((BoutonRond) e.getSource()).getCoordJ();
-				Case caseCourante = plateau.getCase(i, j);
+				Case caseCourante = panneau.getPlateau().getCase(i, j);
 				if (caseCourante.estOccupee()) {
 					if (((BoutonRond) e.getSource()).couleurActuelle == null) {
 						((BoutonRond) e.getSource()).couleurActuelle = couleurMouseOver;
