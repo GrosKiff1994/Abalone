@@ -35,12 +35,13 @@ public class BoutonRond extends JButton {
 	private static Coord depart = new Coord(0, 0);
 
 	private Color couleurActuelle;
-	
-	public BoutonRond(int rayon, int i, int j, final Plateau plateau, final PanneauJeu panneau) {
+
+	public BoutonRond(int rayon, int i, int j, final Plateau plateau,
+			final PanneauJeu panneau) {
 		coordI = i;
 		coordJ = j;
-		int x = j * PanneauJeu.DIMBOULE + i * PanneauJeu.DIMBOULE / 2;
-		int y = i * (PanneauJeu.DIMBOULE - PanneauJeu.DIMBOULE / 8);
+		int x = j * PanneauJeu.DIMBOULE + i * PanneauJeu.DIMBOULE / 2 - 4;
+		int y = i * (PanneauJeu.DIMBOULE - PanneauJeu.DIMBOULE / 8) - 4;
 
 		setLocation(x, y);
 		setSize(rayon, rayon);
@@ -60,7 +61,7 @@ public class BoutonRond extends JButton {
 						+ ((BoutonRond) e.getSource()).getCoordJ());
 				if (etat == Etat.SELECTION) {
 					// afficher les cases entourant :
-					
+
 					// cacher
 					for (int i = 0; i < Plateau.HEIGHT; i++) {
 						for (int j = 0; j < Plateau.WIDTH; j++) {
@@ -85,8 +86,8 @@ public class BoutonRond extends JButton {
 							tmp.setVisible(true);
 						}
 					}
-					
-					// coordonnées départ
+
+					// coordonnees depart
 					depart.setY(((BoutonRond) e.getSource()).getCoordI());
 					depart.setX(((BoutonRond) e.getSource()).getCoordJ());
 					etat = Etat.DEPLACEMENT;
@@ -108,9 +109,9 @@ public class BoutonRond extends JButton {
 							break;
 						}
 					}
-					
+
 					panneau.visibiliteBoutonVide();
-					
+
 					System.out.println("Clic second");
 					etat = Etat.SELECTION;
 				}
