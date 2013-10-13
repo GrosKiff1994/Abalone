@@ -6,18 +6,18 @@ public class Plateau {
 
 	public static final int HEIGHT = 11;
 	public static final int WIDTH = 11;
-	private static Case tab[][];
+	private Case tab[][];
 
 	public Plateau() {
 
-		Plateau.tab = new Case[Plateau.HEIGHT][Plateau.WIDTH];
+		this.tab = new Case[Plateau.HEIGHT][Plateau.WIDTH];
 
 	}
 
-	public void chargerTab(char tabChar[][]) {
+	public void chargerTab(char[][] carte) {
 		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
-				switch (tabChar[i][j]) {
+				switch (carte[i][j]) {
 				case 'v':
 					tab[i][j] = new Case();
 					break;
@@ -41,7 +41,7 @@ public class Plateau {
 		return tab[i][j];
 	}
 
-	public static Case suivantCase(Direction dir, Coord coordCase)
+	public Case suivantCase(Direction dir, Coord coordCase)
 			throws DeplacementException {
 		int arX = coordCase.getX() + dir.getX();
 		int arY = coordCase.getY() + dir.getY();
@@ -53,7 +53,7 @@ public class Plateau {
 		return tab[arY][arX];
 	}
 
-	public static void deplacerBouleDirection(Direction dir, Coord coordCase)
+	public void deplacerBouleDirection(Direction dir, Coord coordCase)
 			throws DeplacementException {
 		System.out.println("je deplace (" + coordCase.getX() + ";"
 				+ coordCase.getY() + ") en ajoutant (" + dir.getX() + ";"
