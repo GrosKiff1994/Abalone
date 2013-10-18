@@ -46,6 +46,8 @@ public class PanneauJeu extends JPanel {
 			public void mouseReleased(java.awt.event.MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON3) {
 					visibiliteBoutonVide();
+					System.out.println("clic droit");
+					System.out.println("etat : selection");
 					BoutonRond.setEtat(Etat.SELECTION);
 				}
 			}

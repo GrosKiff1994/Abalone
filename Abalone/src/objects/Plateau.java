@@ -55,9 +55,9 @@ public class Plateau {
 
 	public void deplacerBouleDirection(Direction dir, Coord coordCase)
 			throws DeplacementException {
-		System.out.println("je deplace (" + coordCase.getX() + ";"
-				+ coordCase.getY() + ") en ajoutant (" + dir.getX() + ";"
-				+ dir.getY() + ").");
+		System.out.println("deplacement de (" + coordCase.getX() + ";"
+				+ coordCase.getY() + ") en direction (" + dir.getX() + ";"
+				+ dir.getY() + ")");
 
 		if (coordCase.getX() < 0 || coordCase.getX() >= Plateau.WIDTH
 				|| coordCase.getY() < 0 || coordCase.getY() >= Plateau.HEIGHT) {

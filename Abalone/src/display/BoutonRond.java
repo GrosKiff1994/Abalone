@@ -54,7 +54,7 @@ public class BoutonRond extends JButton {
 				if (e.getButton() != MouseEvent.BUTTON1)
 					return;
 
-				System.out.println("clic sur ligne "
+				System.out.println("clic : ligne "
 						+ ((BoutonRond) e.getSource()).getCoordI()
 						+ ", colonne "
 						+ ((BoutonRond) e.getSource()).getCoordJ());
@@ -90,21 +90,45 @@ public class BoutonRond extends JButton {
 					depart.setY(((BoutonRond) e.getSource()).getCoordI());
 					depart.setX(((BoutonRond) e.getSource()).getCoordJ());
 					etat = Etat.DEPLACEMENT;
-					System.out.println("Clic premier");
+					System.out.println("etat : deplacement");
 				} else {
 					// deplacer la boule
 					int deltaI = ((BoutonRond) e.getSource()).getCoordI()
 							- depart.getY();
 					int deltaJ = ((BoutonRond) e.getSource()).getCoordJ()
 							- depart.getX();
+					int depI = ((BoutonRond) e.getSource()).getCoordI();
+					int depJ = ((BoutonRond) e.getSource()).getCoordJ();
+					int coeffDelta = 0;
 					Direction tabDir[] = Direction.values();
 					for (Direction dir : tabDir) {
 						if (dir.getCoord().equals(new Coord(deltaJ, deltaI))) {
-							try {
-								panneau.getPlateau().deplacerBouleDirection(
-										dir, depart);
-							} catch (DeplacementException e1) {
-								e1.printStackTrace();
+							// compte le nombre de boules a deplacer
+							while (panneau
+									.getPlateau()
+									.getCase((coeffDelta - 1) * deltaI + depI,
+											(coeffDelta - 1) * deltaJ + depJ)
+									.estOccupee()) {
+								coeffDelta++;
+							}
+							System.out.println(coeffDelta
+									+ " boule(s) a deplacer");
+
+							// la derniere boule est la premiere deplacee
+							depart.setX(depart.getX() + (coeffDelta - 1)
+									* deltaJ);
+							depart.setY(depart.getY() + (coeffDelta - 1)
+									* deltaI);
+							while (coeffDelta > 0) {
+								try {
+									coeffDelta--;
+									panneau.getPlateau()
+											.deplacerBouleDirection(dir, depart);
+									depart.setX(depart.getX() - deltaJ);
+									depart.setY(depart.getY() - deltaI);
+								} catch (DeplacementException e1) {
+									e1.printStackTrace();
+								}
 							}
 							break;
 						}
@@ -112,7 +136,7 @@ public class BoutonRond extends JButton {
 
 					panneau.visibiliteBoutonVide();
 
-					System.out.println("Clic second");
+					System.out.println("etat : selection");
 					etat = Etat.SELECTION;
 				}
 
