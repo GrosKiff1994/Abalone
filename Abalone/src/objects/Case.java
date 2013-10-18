@@ -1,12 +1,13 @@
 package objects;
 
-
 public class Case {
 
 	private Boule boule;
+	private boolean bord;
 
 	public Case() {
 		boule = null;
+		bord = false;
 	}
 
 	public void setBoule(Boule boule) {
@@ -19,6 +20,14 @@ public class Case {
 
 	public boolean estOccupee() {
 		return this.boule != null;
+	}
+
+	public void setBord(boolean b) {
+		this.bord = b;
+	}
+
+	public boolean getBord() {
+		return bord;
 	}
 
 }

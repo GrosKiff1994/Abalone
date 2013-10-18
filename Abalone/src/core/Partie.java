@@ -1,5 +1,7 @@
 package core;
 
+import objects.Couleur;
+import objects.Joueur;
 import objects.Plateau;
 import display.BoutonRond;
 import display.FenetreAbalone;
@@ -10,31 +12,33 @@ public class Partie {
 		SELECTION, DEPLACEMENT;
 	}
 
-	// private Joueur gagnant;
+	private Joueur[] joueurs = new Joueur[2];
+	private Joueur perdant;
 
 	public Partie(FenetreAbalone fenetre, char[][] tab) {
 		final Plateau plateauJeu = new Plateau();
 		plateauJeu.chargerTab(tab);
 		fenetre.setPlateau(plateauJeu);
-		// gagnant = null;
+		perdant = null;
 		fenetre.getPanneau().visibiliteBoutonVide();
 		BoutonRond.setEtat(Etat.SELECTION);
 
 	}
 
-	// private void verifierVictoire(Joueur joueurBlanc, Joueur joueurNoir) {
-	// if (joueurBlanc.getBoulesDuJoueurEjectees() >= 6)
-	// gagnant = joueurNoir;
-	//
-	// else if (joueurNoir.getBoulesDuJoueurEjectees() >= 6)
-	// gagnant = joueurBlanc;
-	// }
+	public void verifierVictoire() {
+		String chaine = "";
+
+		for (Joueur j : joueurs) {
+			chaine += j.getNom() + " : " + j.getBoulesDuJoueurEjectees() + " boules éjectées; ";
+			if (j.getBoulesDuJoueurEjectees() >= 6)
+				perdant = j;
+		}
+	}
 
 	public void lancerPartie() {
 
-		// Joueur joueurNoir = new Joueur("joueurNOIR", Couleur.NOIR);
-		// Joueur joueurBlanc = new Joueur("joueurBLANC", Couleur.BLANC);
-
+		joueurs[0] = new Joueur("joueurNOIR", Couleur.NOIR);
+		joueurs[1] = new Joueur("joueurBLANC", Couleur.BLANC);
 	}
 
 }

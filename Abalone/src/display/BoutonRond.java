@@ -11,6 +11,7 @@ import javax.swing.JButton;
 
 import objects.Case;
 import objects.Coord;
+import objects.Couleur;
 import objects.Direction;
 import objects.Plateau;
 import core.DeplacementException;
@@ -30,9 +31,9 @@ public class BoutonRond extends JButton {
 	public static final Color couleurSelec = new Color(75, 181, 193, 200);
 	public static final Color couleurBords = new Color(0, 0, 0);
 
-	private static Coord depart = new Coord(0, 0);
-
 	private Color couleurActuelle;
+
+	private static Coord depart = new Coord(0, 0);
 
 	public BoutonRond(int rayon, int i, int j, final PanneauJeu panneau) {
 		coordI = i;
@@ -75,7 +76,7 @@ public class BoutonRond extends JButton {
 						int jDest = leBouton.getCoordJ() + dir.getX();
 
 						BoutonRond tmp = panneau.getTabBouton()[iDest][jDest];
-						if (tmp != null) {
+						if (tmp != null && !panneau.getPlateau().getCase(iDest, jDest).getBord()) {
 							tmp.couleurActuelle = couleurSelecTour;
 							tmp.setVisible(true);
 						}
@@ -96,28 +97,62 @@ public class BoutonRond extends JButton {
 					for (Direction dir : tabDir) {
 						if (dir.getCoord().equals(delta)) {
 							// compte le nombre de boules a deplacer
+							int nbCouleurActuelle = 0;
+							int nbCouleurOpposee = 0;
+
+							Couleur couleurDep = panneau.getPlateau().getCase(depart.getY(), depart.getX()).getBoule()
+									.getCouleur();
+
 							while (panneau.getPlateau().getCase((coeffDelta - 1) * delta.getY() + arrive.getY(),
 									(coeffDelta - 1) * delta.getX() + arrive.getX()) != null
 									&& panneau
 											.getPlateau()
 											.getCase((coeffDelta - 1) * delta.getY() + arrive.getY(),
-													(coeffDelta - 1) * delta.getX() + arrive.getX()).estOccupee()) {
+													(coeffDelta - 1) * delta.getX() + arrive.getX()).estOccupee()
+									&& panneau
+											.getPlateau()
+											.getCase((coeffDelta - 1) * delta.getY() + arrive.getY(),
+													(coeffDelta - 1) * delta.getX() + arrive.getX()).getBoule()
+											.getCouleur() == couleurDep && nbCouleurActuelle < 4) {
+
+								nbCouleurActuelle++;
 								coeffDelta++;
 							}
+
+							while (panneau.getPlateau().getCase((coeffDelta - 1) * delta.getY() + arrive.getY(),
+									(coeffDelta - 1) * delta.getX() + arrive.getX()) != null
+									&& panneau
+											.getPlateau()
+											.getCase((coeffDelta - 1) * delta.getY() + arrive.getY(),
+													(coeffDelta - 1) * delta.getX() + arrive.getX()).estOccupee()
+									&& panneau
+											.getPlateau()
+											.getCase((coeffDelta - 1) * delta.getY() + arrive.getY(),
+													(coeffDelta - 1) * delta.getX() + arrive.getX()).getBoule()
+											.getCouleur() != couleurDep && nbCouleurOpposee < 3) {
+
+								nbCouleurOpposee++;
+								coeffDelta++;
+							}
+
 							System.out.println(coeffDelta + " boule(s) a deplacer");
 
-							// la derniere boule est la premiere deplacee
-							depart.setX(depart.getX() + (coeffDelta - 1) * delta.getX());
-							depart.setY(depart.getY() + (coeffDelta - 1) * delta.getY());
-							while (coeffDelta > 0) {
-								try {
-									coeffDelta--;
-									panneau.getPlateau().deplacerBouleDirection(dir, depart);
-									depart.setX(depart.getX() - delta.getX());
-									depart.setY(depart.getY() - delta.getY());
-								} catch (DeplacementException e1) {
-									e1.printStackTrace();
+							if (nbCouleurOpposee < nbCouleurActuelle && nbCouleurActuelle < 4) {
+
+								// la derniere boule est la premiere deplacee
+								depart.setX(depart.getX() + (coeffDelta - 1) * delta.getX());
+								depart.setY(depart.getY() + (coeffDelta - 1) * delta.getY());
+								while (coeffDelta > 0) {
+									try {
+										coeffDelta--;
+										panneau.getPlateau().deplacerBouleDirection(dir, depart);
+										depart.setX(depart.getX() - delta.getX());
+										depart.setY(depart.getY() - delta.getY());
+									} catch (DeplacementException e1) {
+										e1.printStackTrace();
+									}
 								}
+
 							}
 							break;
 						}
@@ -127,6 +162,7 @@ public class BoutonRond extends JButton {
 
 					System.out.println("etat : selection");
 					etat = Etat.SELECTION;
+
 				}
 
 			}

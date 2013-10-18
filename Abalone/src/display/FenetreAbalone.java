@@ -12,8 +12,7 @@ public class FenetreAbalone extends JFrame {
 	private PanneauJeu panelPrincipal;
 
 	public FenetreAbalone() {
-		setSize((int) (PanneauJeu.DIMBOULE * 16.15),
-				(int) (11 * (PanneauJeu.DIMBOULE - PanneauJeu.DIMBOULE / 16)));
+		setSize((int) (PanneauJeu.DIMBOULE * 16.15), (int) (11 * (PanneauJeu.DIMBOULE - PanneauJeu.DIMBOULE / 16)));
 
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
