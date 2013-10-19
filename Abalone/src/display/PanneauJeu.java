@@ -102,7 +102,11 @@ public class PanneauJeu extends JPanel {
 								* (DIMBOULE - DIMBOULE / 8) - 4, DIMBOULE,
 								DIMBOULE);
 					} else {
-						g.setColor(Color.LIGHT_GRAY);
+						if (caseCourante.getBord()) {
+							g.setColor(Color.GRAY);
+						} else {
+							g.setColor(Color.LIGHT_GRAY);
+						}
 						g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i
 								* (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE,
 								DIMBOULE);
