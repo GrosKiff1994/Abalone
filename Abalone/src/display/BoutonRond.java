@@ -235,6 +235,16 @@ public class BoutonRond extends JButton {
 						}
 					}
 
+					// vérification boule hors jeu
+					for (int i = 0; i < Plateau.HEIGHT; i++) {
+						for (int j = 0; j < Plateau.WIDTH; j++) {
+							Case[][] tabCase = Plateau.getTabCase();
+							if (tabCase[i][j].getBord()) {
+								tabCase[i][j].setBoule(null);
+								// !!!!! AJOUTER COMPTEUR BOULES JOUEUR !!!!!
+							}
+						}
+					}
 					panneau.visibiliteBoutonVide();
 
 					System.out.println("etat : selection");

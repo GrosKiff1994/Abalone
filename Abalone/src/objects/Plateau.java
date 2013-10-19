@@ -6,11 +6,11 @@ public class Plateau {
 
 	public static final int HEIGHT = 11;
 	public static final int WIDTH = 11;
-	private Case tab[][];
+	private static Case tab[][];
 
 	public Plateau() {
 
-		this.tab = new Case[Plateau.HEIGHT][Plateau.WIDTH];
+		Plateau.tab = new Case[Plateau.HEIGHT][Plateau.WIDTH];
 
 	}
 
@@ -43,7 +43,12 @@ public class Plateau {
 		return tab[i][j];
 	}
 
-	public Case suivantCase(Direction dir, Coord coordCase) throws DeplacementException {
+	public static Case[][] getTabCase() {
+		return tab;
+	}
+
+	public Case suivantCase(Direction dir, Coord coordCase)
+			throws DeplacementException {
 		int arX = coordCase.getX() + dir.getX();
 		int arY = coordCase.getY() + dir.getY();
 
@@ -54,13 +59,16 @@ public class Plateau {
 		return tab[arY][arX];
 	}
 
-	public void deplacerBouleDirection(Direction dir, Coord coordCase) throws DeplacementException {
-		System.out.println("deplacement de (" + coordCase.getX() + ";" + coordCase.getY() + ") en direction ("
-				+ dir.getX() + ";" + dir.getY() + ")");
+	public void deplacerBouleDirection(Direction dir, Coord coordCase)
+			throws DeplacementException {
+		System.out.println("deplacement de (" + coordCase.getX() + ";"
+				+ coordCase.getY() + ") en direction (" + dir.getX() + ";"
+				+ dir.getY() + ")");
 
-		if (coordCase.getX() < 0 || coordCase.getX() >= Plateau.WIDTH || coordCase.getY() < 0
-				|| coordCase.getY() >= Plateau.HEIGHT) {
-			throw new DeplacementException("case debut invalide (<0 | >" + Plateau.HEIGHT + ")");
+		if (coordCase.getX() < 0 || coordCase.getX() >= Plateau.WIDTH
+				|| coordCase.getY() < 0 || coordCase.getY() >= Plateau.HEIGHT) {
+			throw new DeplacementException("case debut invalide (<0 | >"
+					+ Plateau.HEIGHT + ")");
 		}
 
 		Case caseActuelle = tab[coordCase.getY()][coordCase.getX()];
