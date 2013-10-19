@@ -55,7 +55,8 @@ public class BoutonRond extends JButton {
 
 				BoutonRond leBouton = ((BoutonRond) e.getSource());
 
-				System.out.println("clic : ligne " + leBouton.getCoordI() + ", colonne " + leBouton.getCoordJ());
+				System.out.println("clic : ligne " + leBouton.getCoordI()
+						+ ", colonne " + leBouton.getCoordJ());
 				if (etat == Etat.SELECTION) {
 					// afficher les cases entourant :
 
@@ -76,7 +77,9 @@ public class BoutonRond extends JButton {
 						int jDest = leBouton.getCoordJ() + dir.getX();
 
 						BoutonRond tmp = panneau.getTabBouton()[iDest][jDest];
-						if (tmp != null && !panneau.getPlateau().getCase(iDest, jDest).getBord()) {
+						if (tmp != null
+								&& !panneau.getPlateau().getCase(iDest, jDest)
+										.getBord()) {
 							tmp.couleurActuelle = couleurSelecTour;
 							tmp.setVisible(true);
 						}
@@ -90,8 +93,11 @@ public class BoutonRond extends JButton {
 				} else {
 					// deplacer la boule
 
-					Coord arrive = new Coord(leBouton.getCoordJ(), leBouton.getCoordI());
-					Coord delta = new Coord(arrive.getX() - depart.getX(), arrive.getY() - depart.getY());
+					boolean deplacementPossible = true;
+					Coord arrive = new Coord(leBouton.getCoordJ(),
+							leBouton.getCoordI());
+					Coord delta = new Coord(arrive.getX() - depart.getX(),
+							arrive.getY() - depart.getY());
 					int coeffDelta = 0;
 					Direction tabDir[] = Direction.values();
 					for (Direction dir : tabDir) {
@@ -100,54 +106,125 @@ public class BoutonRond extends JButton {
 							int nbCouleurActuelle = 0;
 							int nbCouleurOpposee = 0;
 
-							Couleur couleurDep = panneau.getPlateau().getCase(depart.getY(), depart.getX()).getBoule()
-									.getCouleur();
+							Couleur couleurDep = panneau.getPlateau()
+									.getCase(depart.getY(), depart.getX())
+									.getBoule().getCouleur();
 
-							while (panneau.getPlateau().getCase((coeffDelta - 1) * delta.getY() + arrive.getY(),
-									(coeffDelta - 1) * delta.getX() + arrive.getX()) != null
+							while (panneau.getPlateau().getCase(
+									(coeffDelta - 1) * delta.getY()
+											+ arrive.getY(),
+									(coeffDelta - 1) * delta.getX()
+											+ arrive.getX()) != null
 									&& panneau
 											.getPlateau()
-											.getCase((coeffDelta - 1) * delta.getY() + arrive.getY(),
-													(coeffDelta - 1) * delta.getX() + arrive.getX()).estOccupee()
+											.getCase(
+													(coeffDelta - 1)
+															* delta.getY()
+															+ arrive.getY(),
+													(coeffDelta - 1)
+															* delta.getX()
+															+ arrive.getX())
+											.estOccupee()
 									&& panneau
 											.getPlateau()
-											.getCase((coeffDelta - 1) * delta.getY() + arrive.getY(),
-													(coeffDelta - 1) * delta.getX() + arrive.getX()).getBoule()
-											.getCouleur() == couleurDep && nbCouleurActuelle < 4) {
+											.getCase(
+													(coeffDelta - 1)
+															* delta.getY()
+															+ arrive.getY(),
+													(coeffDelta - 1)
+															* delta.getX()
+															+ arrive.getX())
+											.getBoule().getCouleur() == couleurDep
+									&& nbCouleurActuelle < 4) {
 
 								nbCouleurActuelle++;
 								coeffDelta++;
 							}
 
-							while (panneau.getPlateau().getCase((coeffDelta - 1) * delta.getY() + arrive.getY(),
-									(coeffDelta - 1) * delta.getX() + arrive.getX()) != null
+							while (panneau.getPlateau().getCase(
+									(coeffDelta - 1) * delta.getY()
+											+ arrive.getY(),
+									(coeffDelta - 1) * delta.getX()
+											+ arrive.getX()) != null
 									&& panneau
 											.getPlateau()
-											.getCase((coeffDelta - 1) * delta.getY() + arrive.getY(),
-													(coeffDelta - 1) * delta.getX() + arrive.getX()).estOccupee()
+											.getCase(
+													(coeffDelta - 1)
+															* delta.getY()
+															+ arrive.getY(),
+													(coeffDelta - 1)
+															* delta.getX()
+															+ arrive.getX())
+											.estOccupee()
 									&& panneau
 											.getPlateau()
-											.getCase((coeffDelta - 1) * delta.getY() + arrive.getY(),
-													(coeffDelta - 1) * delta.getX() + arrive.getX()).getBoule()
-											.getCouleur() != couleurDep && nbCouleurOpposee < 3) {
+											.getCase(
+													(coeffDelta - 1)
+															* delta.getY()
+															+ arrive.getY(),
+													(coeffDelta - 1)
+															* delta.getX()
+															+ arrive.getX())
+											.getBoule().getCouleur() != couleurDep
+									&& nbCouleurOpposee < 3) {
 
 								nbCouleurOpposee++;
 								coeffDelta++;
 							}
 
-							System.out.println(coeffDelta + " boule(s) a deplacer");
+							while (panneau.getPlateau().getCase(
+									(coeffDelta - 1) * delta.getY()
+											+ arrive.getY(),
+									(coeffDelta - 1) * delta.getX()
+											+ arrive.getX()) != null
+									&& panneau
+											.getPlateau()
+											.getCase(
+													(coeffDelta - 1)
+															* delta.getY()
+															+ arrive.getY(),
+													(coeffDelta - 1)
+															* delta.getX()
+															+ arrive.getX())
+											.estOccupee()
+									&& panneau
+											.getPlateau()
+											.getCase(
+													(coeffDelta - 1)
+															* delta.getY()
+															+ arrive.getY(),
+													(coeffDelta - 1)
+															* delta.getX()
+															+ arrive.getX())
+											.getBoule().getCouleur() == couleurDep
+									&& nbCouleurActuelle < 4) {
 
-							if (nbCouleurOpposee < nbCouleurActuelle && nbCouleurActuelle < 4) {
+								nbCouleurActuelle++;
+								coeffDelta++;
+								deplacementPossible = false;
+							}
 
+							if (nbCouleurOpposee < nbCouleurActuelle
+									&& nbCouleurActuelle < 4
+									&& deplacementPossible) {
+
+								System.out.println(coeffDelta
+										+ " boule(s) a deplacer");
 								// la derniere boule est la premiere deplacee
-								depart.setX(depart.getX() + (coeffDelta - 1) * delta.getX());
-								depart.setY(depart.getY() + (coeffDelta - 1) * delta.getY());
+								depart.setX(depart.getX() + (coeffDelta - 1)
+										* delta.getX());
+								depart.setY(depart.getY() + (coeffDelta - 1)
+										* delta.getY());
 								while (coeffDelta > 0) {
 									try {
 										coeffDelta--;
-										panneau.getPlateau().deplacerBouleDirection(dir, depart);
-										depart.setX(depart.getX() - delta.getX());
-										depart.setY(depart.getY() - delta.getY());
+										panneau.getPlateau()
+												.deplacerBouleDirection(dir,
+														depart);
+										depart.setX(depart.getX()
+												- delta.getX());
+										depart.setY(depart.getY()
+												- delta.getY());
 									} catch (DeplacementException e1) {
 										e1.printStackTrace();
 									}
@@ -183,13 +260,21 @@ public class BoutonRond extends JButton {
 						leBouton.couleurActuelle = couleurMouseOver;
 					}
 				}
+				if (leBouton.couleurActuelle == couleurSelecTour) {
+					leBouton.couleurActuelle = couleurMouseOver;
+				}
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				BoutonRond leBouton = ((BoutonRond) e.getSource());
 				if (leBouton.couleurActuelle == couleurMouseOver) {
-					leBouton.couleurActuelle = null;
+					if (etat == Etat.SELECTION) {
+						leBouton.couleurActuelle = null;
+					} else if (etat == Etat.DEPLACEMENT) {
+						leBouton.couleurActuelle = couleurSelecTour;
+					}
+
 				}
 			}
 		}
