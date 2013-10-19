@@ -29,7 +29,8 @@ public class Partie {
 		String chaine = "";
 
 		for (Joueur j : joueurs) {
-			chaine += j.getNom() + " : " + j.getBoulesDuJoueurEjectees() + " boules éjectées; ";
+			chaine += j.getNom() + " : " + j.getBoulesDuJoueurEjectees()
+					+ " boules éjectées; ";
 			if (j.getBoulesDuJoueurEjectees() >= 6)
 				perdant = j;
 		}
