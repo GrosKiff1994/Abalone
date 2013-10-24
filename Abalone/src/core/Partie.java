@@ -10,7 +10,8 @@ public class Partie {
 		SELECTION, DEPLACEMENT;
 	}
 
-	// private Joueur gagnant;
+	private static Joueur[] tabJoueurs = new Joueur[2];
+	private static Joueur perdant;
 
 	public Partie(FenetreAbalone fenetre, char[][] tab) {
 		final Plateau plateauJeu = new Plateau();
@@ -22,19 +23,29 @@ public class Partie {
 
 	}
 
-	// private void verifierVictoire(Joueur joueurBlanc, Joueur joueurNoir) {
-	// if (joueurBlanc.getBoulesDuJoueurEjectees() >= 6)
-	// gagnant = joueurNoir;
-	//
-	// else if (joueurNoir.getBoulesDuJoueurEjectees() >= 6)
-	// gagnant = joueurBlanc;
-	// }
+	public static void verifierVictoire() {
+		String chaine = "";
+
+		for (Joueur j : tabJoueurs) {
+			chaine += j.getNom() + " : " + j.getBoulesDuJoueurEjectees()
+					+ " boule(s) éjectée(s); \n";
+			if (j.getBoulesDuJoueurEjectees() >= 6) {
+				perdant = j;
+				System.out.println("Le joueur " + perdant + " a perdu !");
+			}
+		}
+
+		System.out.print(chaine);
+	}
 
 	public void lancerPartie() {
 
-		// Joueur joueurNoir = new Joueur("joueurNOIR", Couleur.NOIR);
-		// Joueur joueurBlanc = new Joueur("joueurBLANC", Couleur.BLANC);
+		tabJoueurs[0] = new Joueur("joueurNOIR", Couleur.NOIR);
+		tabJoueurs[1] = new Joueur("joueurBLANC", Couleur.BLANC);
+	}
 
+	public static Joueur[] getTabJoueurs() {
+		return tabJoueurs;
 	}
 
 }

@@ -103,13 +103,17 @@ public class PanneauJeu extends JPanel {
 								DIMBOULE);
 					} else {
 						if (caseCourante.getBord()) {
-							g.setColor(Color.GRAY);
+//							g.setColor(Color.GRAY);
+//							g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i
+//									* (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE,
+//									DIMBOULE);
 						} else {
 							g.setColor(Color.LIGHT_GRAY);
+							g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i
+									* (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE,
+									DIMBOULE);
 						}
-						g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i
-								* (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE,
-								DIMBOULE);
+
 					} // fin case occupee
 
 				} // fin case existe
