@@ -19,12 +19,11 @@ public class PanneauJeu extends JPanel {
 	public static final int DIMBOULE = 60;
 
 	protected Plateau plateau;
-	private BoutonRond tableauBoutons[][];
 
 	public void visibiliteBoutonVide() {
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
-				BoutonRond bout = tableauBoutons[i][j];
+				BoutonRond bout = plateau.getCase(i, j).getBouton();
 				if (bout != null) {
 					if (plateau.getCase(i, j).estOccupee()) {
 						bout.setVisible(true);
@@ -54,7 +53,6 @@ public class PanneauJeu extends JPanel {
 
 		this.addMouseListener(new listenerAnnuler());
 
-		tableauBoutons = new BoutonRond[Plateau.HEIGHT][Plateau.WIDTH];
 		this.setPlateau(p);
 		this.setLayout(null);
 
@@ -64,7 +62,7 @@ public class PanneauJeu extends JPanel {
 				if (caseCourante != null) {
 					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j, this);
 					this.add(tmpBouton);
-					tableauBoutons[i][j] = tmpBouton;
+					plateau.getCase(i, j).setBouton(tmpBouton);
 				}
 
 			}
@@ -133,9 +131,5 @@ public class PanneauJeu extends JPanel {
 
 	public void setPlateau(Plateau plateau) {
 		this.plateau = plateau;
-	}
-
-	public BoutonRond[][] getTabBouton() {
-		return tableauBoutons;
 	}
 }

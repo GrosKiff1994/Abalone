@@ -1,9 +1,12 @@
 package objects;
 
+import display.BoutonRond;
+
 public class Case {
 
 	private Boule boule;
 	private boolean bord;
+	private BoutonRond bouton;
 
 	public Case() {
 		boule = null;
@@ -28,6 +31,14 @@ public class Case {
 
 	public boolean getBord() {
 		return bord;
+	}
+
+	public void setBouton(BoutonRond bouton) {
+		this.bouton = bouton;
+	}
+
+	public BoutonRond getBouton() {
+		return bouton;
 	}
 
 }

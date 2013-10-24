@@ -32,8 +32,6 @@ public class BoutonRond extends JButton {
 	
 	private PanneauJeu panneau;
 
-	private Color couleurActuelle;
-
 	public BoutonRond(int rayon, int i, int j, final PanneauJeu panneau) {
 		this.panneau = panneau;
 		coordI = i;

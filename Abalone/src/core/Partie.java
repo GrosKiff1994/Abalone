@@ -1,5 +1,7 @@
 package core;
 
+import objects.Couleur;
+import objects.Joueur;
 import objects.Plateau;
 import display.BoutonRond;
 import display.FenetreAbalone;

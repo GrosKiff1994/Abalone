@@ -35,7 +35,7 @@ public class listenerSelection extends MouseAdapter {
 			// cacher
 			for (int i = 0; i < Plateau.HEIGHT; i++) {
 				for (int j = 0; j < Plateau.WIDTH; j++) {
-					BoutonRond bout = lePanneau.getTabBouton()[i][j];
+					BoutonRond bout = lePanneau.getPlateau().getCase(i, j).getBouton();
 					if (bout != null) {
 						bout.setVisible(false);
 					}
@@ -48,7 +48,7 @@ public class listenerSelection extends MouseAdapter {
 				int iDest = leBouton.getCoordI() + dir.getY();
 				int jDest = leBouton.getCoordJ() + dir.getX();
 
-				BoutonRond tmp = lePanneau.getTabBouton()[iDest][jDest];
+				BoutonRond tmp = lePanneau.getPlateau().getCase(iDest,jDest).getBouton();
 				if (tmp != null
 						&& !lePanneau.getPlateau().getCase(iDest, jDest)
 								.getBord()) {
