@@ -57,6 +57,7 @@ public class PanneauJeu extends JPanel {
 				if (e.getButton() == MouseEvent.BUTTON3) {
 					visibiliteBoutonVide();
 					BoutonRond.setEtat(Etat.SELECTION);
+					System.out.println("Etat : SELECTION");
 				}
 			}
 

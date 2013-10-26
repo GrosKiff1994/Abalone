@@ -3,6 +3,7 @@ package actions;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import objects.Case;
 import objects.Coord;
 import objects.Couleur;
 import objects.Direction;
@@ -36,7 +37,7 @@ public class listenerSelection extends MouseAdapter {
 				depart.setY(leBouton.getCoordI());
 				depart.setX(leBouton.getCoordJ());
 				BoutonRond.setEtat(Etat.DEPLACEMENTLIGNE);
-				System.out.println("etat : deplacement ligne");
+				System.out.println("etat : DEPLACEMENTLIGNE");
 
 				// cacher
 				lePanneau.cacherBoutons();
@@ -150,10 +151,10 @@ public class listenerSelection extends MouseAdapter {
 
 				lePanneau.visibiliteBoutonVide();
 
-				System.out.println("etat : selection");
+				System.out.println("etat : SELECTION");
 				BoutonRond.setEtat(Etat.SELECTION);
 				break;
-			case DEPLACEMENTLATERAL:
+			case DEPLACEMENTLATERAL2:
 				break;
 			default:
 				break;
@@ -176,23 +177,60 @@ public class listenerSelection extends MouseAdapter {
 				// afficher cercle voisins
 				Direction[] lesDir = Direction.values();
 				for (Direction dir : lesDir) {
-					int iDest = leBouton.getCoordI() + dir.getY();
-					int jDest = leBouton.getCoordJ() + dir.getX();
+					Case caseDest = lePanneau.getPlateau().getCase(leBouton.getCoordI() + dir.getY(), leBouton.getCoordJ() + dir.getX());
 
-					BoutonRond tmp = lePanneau.getPlateau().getCase(iDest, jDest).getBouton();
-					if (tmp != null && !lePanneau.getPlateau().getCase(iDest, jDest).getBord()
-							&& lePanneau.getPlateau().getCase(iDest, jDest).estOccupee()) {
+					BoutonRond tmp = caseDest.getBouton();
+					if (tmp != null
+							&& !caseDest.getBord()
+							&& caseDest.estOccupee()
+							&& caseDest.getBoule().getCouleur() == lePanneau.getPlateau().getCase(depart.getY(), depart.getX()).getBoule()
+									.getCouleur()) {
 						tmp.setCouleurActuelle(BoutonRond.couleurSelecTour);
 						tmp.setVisible(true);
 					}
 				}
 
-				BoutonRond.setEtat(Etat.DEPLACEMENTLATERAL);
-				System.out.println("etat : deplacement lateral");
+				BoutonRond.setEtat(Etat.SELECTION2);
+				System.out.println("etat : SELECTION2");
+				break;
+			case SELECTION2:
+				Coord bouleSecond = new Coord(leBouton.getCoordJ(), leBouton.getCoordI());
+				Case caseSecond = lePanneau.getPlateau().getCase(bouleSecond.getY(), bouleSecond.getX());
+				BoutonRond tmp = caseSecond.getBouton();
+
+				if (tmp != null && !caseSecond.getBord() && caseSecond.estOccupee()
+						&& caseSecond.getBoule().getCouleur() == lePanneau.getPlateau().getCase(depart.getY(), depart.getX()).getBoule().getCouleur()) {
+					Coord delta = new Coord(bouleSecond.getX() - depart.getX(), bouleSecond.getY() - depart.getY());
+				}
+
 				break;
 			case DEPLACEMENTLIGNE:
 				break;
-			case DEPLACEMENTLATERAL:
+			case DEPLACEMENTLATERAL2:
+				Coord arrivee = new Coord(leBouton.getCoordJ(), leBouton.getCoordI());
+				Coord delta = new Coord(arrivee.getX() - depart.getX(), arrivee.getY() - depart.getY());
+
+				lePanneau.cacherBoutons();
+				for (Direction dir : Direction.values()) {
+
+					Case caseDecalDepart = lePanneau.getPlateau().getCase(arrivee.getY() + dir.getY(), arrivee.getX() + dir.getX());
+					Case caseDecalArrivee = lePanneau.getPlateau().getCase(depart.getY() - dir.getY(), depart.getX() - dir.getX());
+					Case caseDepart = lePanneau.getPlateau().getCase(depart.getY(), depart.getX());
+					Case caseArrivee = lePanneau.getPlateau().getCase(arrivee.getY(), arrivee.getX());
+
+					if (dir.getY() == delta.getY() && dir.getX() == delta.getX()
+							&& caseDecalArrivee.getBoule().getCouleur() == caseArrivee.getBoule().getCouleur()) {
+						caseDecalArrivee.getBouton().setVisible(true);
+						break;
+					}
+
+					else if (dir.getY() == -delta.getY() && dir.getX() == -delta.getX()
+							&& caseDecalDepart.getBoule().getCouleur() == caseDepart.getBoule().getCouleur()) {
+						caseDecalDepart.getBouton().setVisible(true);
+						break;
+					}
+				}
+
 				break;
 			default:
 				break;

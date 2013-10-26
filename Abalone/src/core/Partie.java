@@ -9,7 +9,7 @@ import display.FenetreAbalone;
 public class Partie {
 
 	public enum Etat {
-		SELECTION, DEPLACEMENTLIGNE, DEPLACEMENTLATERAL;
+		SELECTION, SELECTION2, SELECTION3, DEPLACEMENTLIGNE, DEPLACEMENTLATERAL2, DEPLACEMENTLATERAL3;
 	}
 
 	private static Joueur[] tabJoueurs = new Joueur[2];

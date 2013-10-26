@@ -35,7 +35,8 @@ public class listenerPassageSouris extends MouseAdapter {
 		if (leBouton.getCouleurActuelle() == BoutonRond.couleurMouseOver) {
 			if (leBouton.getEtat() == Etat.SELECTION) {
 				leBouton.setCouleurActuelle(null);
-			} else if (leBouton.getEtat() == Etat.DEPLACEMENTLIGNE || leBouton.getEtat() == Etat.DEPLACEMENTLATERAL) {
+			} else if (leBouton.getEtat() == Etat.DEPLACEMENTLIGNE || leBouton.getEtat() == Etat.DEPLACEMENTLATERAL2
+					|| leBouton.getEtat() == Etat.SELECTION2) {
 				leBouton.setCouleurActuelle(BoutonRond.couleurSelecTour);
 			}
 
