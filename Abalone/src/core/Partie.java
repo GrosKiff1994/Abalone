@@ -9,7 +9,7 @@ import display.FenetreAbalone;
 public class Partie {
 
 	public enum Etat {
-		SELECTION, DEPLACEMENT;
+		SELECTION, DEPLACEMENTLIGNE, DEPLACEMENTLATERAL;
 	}
 
 	private static Joueur[] tabJoueurs = new Joueur[2];
@@ -29,8 +29,7 @@ public class Partie {
 		String chaine = "";
 
 		for (Joueur j : tabJoueurs) {
-			chaine += j.getNom() + " : " + j.getBoulesDuJoueurEjectees()
-					+ " boule(s) éjectée(s); \n";
+			chaine += j.getNom() + " : " + j.getBoulesDuJoueurEjectees() + " boule(s) ejectee(s); \n";
 			if (j.getBoulesDuJoueurEjectees() >= 6) {
 				perdant = j;
 				System.out.println("Le joueur " + perdant + " a perdu !");

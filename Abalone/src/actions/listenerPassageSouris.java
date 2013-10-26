@@ -14,7 +14,7 @@ public class listenerPassageSouris extends MouseAdapter {
 	public void mouseEntered(java.awt.event.MouseEvent e) {
 		BoutonRond leBouton = ((BoutonRond) e.getSource());
 		PanneauJeu lePanneau = leBouton.getPanneauJeu();
-		
+
 		int i = leBouton.getCoordI();
 		int j = leBouton.getCoordJ();
 		Case caseCourante = lePanneau.getPlateau().getCase(i, j);
@@ -31,11 +31,11 @@ public class listenerPassageSouris extends MouseAdapter {
 	@Override
 	public void mouseExited(MouseEvent e) {
 		BoutonRond leBouton = ((BoutonRond) e.getSource());
-		
+
 		if (leBouton.getCouleurActuelle() == BoutonRond.couleurMouseOver) {
 			if (leBouton.getEtat() == Etat.SELECTION) {
 				leBouton.setCouleurActuelle(null);
-			} else if (leBouton.getEtat() == Etat.DEPLACEMENT) {
+			} else if (leBouton.getEtat() == Etat.DEPLACEMENTLIGNE || leBouton.getEtat() == Etat.DEPLACEMENTLATERAL) {
 				leBouton.setCouleurActuelle(BoutonRond.couleurSelecTour);
 			}
 

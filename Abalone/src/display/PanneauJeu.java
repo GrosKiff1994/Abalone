@@ -36,6 +36,17 @@ public class PanneauJeu extends JPanel {
 		}
 	}
 
+	public void cacherBoutons() {
+		for (int i = 0; i < Plateau.HEIGHT; i++) {
+			for (int j = 0; j < Plateau.WIDTH; j++) {
+				BoutonRond bout = this.getPlateau().getCase(i, j).getBouton();
+				if (bout != null) {
+					bout.setVisible(false);
+				}
+			}
+		}
+	}
+
 	public PanneauJeu(Plateau p) {
 		this.plateau = p;
 
@@ -82,9 +93,7 @@ public class PanneauJeu extends JPanel {
 					if (caseCourante.estOccupee()) {
 
 						g.setColor(Color.BLACK);
-						g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i
-								* (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE,
-								DIMBOULE);
+						g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i * (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE, DIMBOULE);
 
 						// selon la couleur
 						switch (caseCourante.getBoule().getCouleur()) {
@@ -96,20 +105,16 @@ public class PanneauJeu extends JPanel {
 							break;
 						default:
 						}
-						g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 4, i
-								* (DIMBOULE - DIMBOULE / 8) - 4, DIMBOULE,
-								DIMBOULE);
+						g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 4, i * (DIMBOULE - DIMBOULE / 8) - 4, DIMBOULE, DIMBOULE);
 					} else {
 						if (caseCourante.getBord()) {
-//							g.setColor(Color.GRAY);
-//							g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i
-//									* (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE,
-//									DIMBOULE);
+							// g.setColor(Color.GRAY);
+							// g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i
+							// * (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE,
+							// DIMBOULE);
 						} else {
 							g.setColor(Color.LIGHT_GRAY);
-							g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i
-									* (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE,
-									DIMBOULE);
+							g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i * (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE, DIMBOULE);
 						}
 
 					} // fin case occupee
