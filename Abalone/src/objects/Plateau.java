@@ -1,11 +1,13 @@
 package objects;
 
 import core.DeplacementException;
+import core.Partie;
 
 public class Plateau {
 
 	public static final int HEIGHT = 11;
 	public static final int WIDTH = 11;
+	public static final int MAXDEPLACEMENT = 3;
 	private static Case tab[][];
 
 	public Plateau() {
@@ -43,12 +45,15 @@ public class Plateau {
 		return tab[i][j];
 	}
 
+	public Case getCase(Coord coord) {
+		return getCase(coord.getY(), coord.getX());
+	}
+
 	public static Case[][] getTabCase() {
 		return tab;
 	}
 
-	public Case suivantCase(Direction dir, Coord coordCase)
-			throws DeplacementException {
+	public Case suivantCase(Direction dir, Coord coordCase) throws DeplacementException {
 		int arX = coordCase.getX() + dir.getX();
 		int arY = coordCase.getY() + dir.getY();
 
@@ -59,16 +64,11 @@ public class Plateau {
 		return tab[arY][arX];
 	}
 
-	public void deplacerBouleDirection(Direction dir, Coord coordCase)
-			throws DeplacementException {
-		System.out.println("deplacement de (" + coordCase.getX() + ";"
-				+ coordCase.getY() + ") en direction (" + dir.getX() + ";"
-				+ dir.getY() + ")");
+	public void deplacerBouleDirection(Direction dir, Coord coordCase) throws DeplacementException {
+		System.out.println("deplacement de (" + coordCase.getX() + ";" + coordCase.getY() + ") en direction (" + dir.getX() + ";" + dir.getY() + ")");
 
-		if (coordCase.getX() < 0 || coordCase.getX() >= Plateau.WIDTH
-				|| coordCase.getY() < 0 || coordCase.getY() >= Plateau.HEIGHT) {
-			throw new DeplacementException("case debut invalide (<0 | >"
-					+ Plateau.HEIGHT + ")");
+		if (coordCase.getX() < 0 || coordCase.getX() >= Plateau.WIDTH || coordCase.getY() < 0 || coordCase.getY() >= Plateau.HEIGHT) {
+			throw new DeplacementException("case debut invalide (<0 | >" + Plateau.HEIGHT + ")");
 		}
 
 		Case caseActuelle = tab[coordCase.getY()][coordCase.getX()];
@@ -109,5 +109,22 @@ public class Plateau {
 			res += '\n';
 		}
 		return res;
+	}
+
+	public void verifierBoules() {
+		// verification boule hors jeu
+		for (int i = 0; i < Plateau.HEIGHT; i++) {
+			for (int j = 0; j < Plateau.WIDTH; j++) {
+				if (getCase(i, j).getBord() && getCase(i, j).estOccupee()) {
+					for (Joueur joueur : Partie.getTabJoueurs()) {
+						if (getCase(i, j).getBoule().getCouleur() == joueur.getCouleur()) {
+							joueur.setBoulesDuJoueurEjectees(joueur.getBoulesDuJoueurEjectees() + 1);
+						}
+					}
+					getCase(i, j).setBoule(null);
+					Partie.verifierVictoire();
+				}
+			}
+		}
 	}
 }

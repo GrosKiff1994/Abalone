@@ -7,9 +7,9 @@ import java.awt.geom.Ellipse2D;
 
 import javax.swing.JButton;
 
+import objects.Coord;
 import actions.listenerPassageSouris;
 import actions.listenerSelection;
-
 import core.Partie.Etat;
 
 public class BoutonRond extends JButton {
@@ -17,8 +17,7 @@ public class BoutonRond extends JButton {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int coordI;
-	private int coordJ;
+	private Coord coord;
 	private static Etat etat;
 
 	boolean varDist;
@@ -29,13 +28,12 @@ public class BoutonRond extends JButton {
 	public static final Color couleurBords = new Color(0, 0, 0);
 
 	private Color couleurActuelle;
-	
+
 	private PanneauJeu panneau;
 
 	public BoutonRond(int rayon, int i, int j, final PanneauJeu panneau) {
 		this.panneau = panneau;
-		coordI = i;
-		coordJ = j;
+		coord = new Coord(j, i);
 		int x = j * PanneauJeu.DIMBOULE + i * PanneauJeu.DIMBOULE / 2 - 4;
 		int y = i * (PanneauJeu.DIMBOULE - PanneauJeu.DIMBOULE / 8) - 4;
 
@@ -49,11 +47,11 @@ public class BoutonRond extends JButton {
 	}
 
 	public int getCoordI() {
-		return coordI;
+		return coord.getY();
 	}
 
 	public int getCoordJ() {
-		return coordJ;
+		return coord.getX();
 	}
 
 	public Color getCouleurActuelle() {
@@ -101,8 +99,12 @@ public class BoutonRond extends JButton {
 	public Etat getEtat() {
 		return BoutonRond.etat;
 	}
-	
-	public PanneauJeu getPanneauJeu(){
+
+	public PanneauJeu getPanneauJeu() {
 		return this.panneau;
+	}
+
+	public Coord getCoord() {
+		return coord;
 	}
 }
