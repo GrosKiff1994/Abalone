@@ -1,12 +1,12 @@
-package actions;
+package controlleur;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import objects.Case;
-import core.Partie.Etat;
-import display.BoutonRond;
-import display.PanneauJeu;
+import modele.Case;
+import vue.BoutonRond;
+import vue.PanneauJeu;
+import controlleur.Partie.Etat;
 
 public class listenerPassageSouris extends MouseAdapter {
 

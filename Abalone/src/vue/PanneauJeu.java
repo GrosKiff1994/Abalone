@@ -1,4 +1,4 @@
-package display;
+package vue;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,9 +7,11 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
-import objects.Case;
-import objects.Plateau;
-import core.Partie.Etat;
+import controlleur.Partie.Etat;
+
+import modele.Case;
+import modele.Plateau;
+
 
 public class PanneauJeu extends JPanel {
 	/**

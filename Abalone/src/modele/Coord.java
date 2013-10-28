@@ -1,4 +1,4 @@
-package objects;
+package modele;
 
 public class Coord {
 	public Coord(int x, int y) {

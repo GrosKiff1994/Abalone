@@ -1,4 +1,4 @@
-package objects;
+package modele;
 
 public class Carte {
 	public static final char tabVide[][] = new char[][] {

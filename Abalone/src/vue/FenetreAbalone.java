@@ -1,8 +1,9 @@
-package display;
+package vue;
 
 import javax.swing.JFrame;
 
-import objects.Plateau;
+import modele.Plateau;
+
 
 public class FenetreAbalone extends JFrame {
 	/**

@@ -1,7 +1,7 @@
-package objects;
+package modele;
 
-import core.DeplacementException;
-import core.Partie;
+import controlleur.DeplacementException;
+import controlleur.Partie;
 
 public class Plateau {
 

@@ -1,17 +1,16 @@
-package actions;
+package controlleur;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import objects.Case;
-import objects.Coord;
-import objects.Couleur;
-import objects.Direction;
-import objects.Plateau;
-import core.DeplacementException;
-import core.Partie.Etat;
-import display.BoutonRond;
-import display.PanneauJeu;
+import modele.Case;
+import modele.Coord;
+import modele.Couleur;
+import modele.Direction;
+import modele.Plateau;
+import vue.BoutonRond;
+import vue.PanneauJeu;
+import controlleur.Partie.Etat;
 
 public class listenerSelection extends MouseAdapter {
 	private PanneauJeu lePanneau;

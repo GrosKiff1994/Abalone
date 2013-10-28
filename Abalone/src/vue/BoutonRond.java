@@ -1,4 +1,4 @@
-package display;
+package vue;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -7,10 +7,12 @@ import java.awt.geom.Ellipse2D;
 
 import javax.swing.JButton;
 
-import objects.Coord;
-import actions.listenerPassageSouris;
-import actions.listenerSelection;
-import core.Partie.Etat;
+import controlleur.listenerPassageSouris;
+import controlleur.listenerSelection;
+import controlleur.Partie.Etat;
+
+import modele.Coord;
+
 
 public class BoutonRond extends JButton {
 	/**

@@ -1,4 +1,4 @@
-package objects;
+package modele;
 
 public enum Couleur {
 	BLANC ("Couleur blanche"),

@@ -1,6 +1,6 @@
-package objects;
+package modele;
 
-import display.BoutonRond;
+import vue.BoutonRond;
 
 public class Case {
 

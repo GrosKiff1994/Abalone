@@ -1,6 +1,6 @@
-import objects.Carte;
-import core.Partie;
-import display.FenetreAbalone;
+import controlleur.Partie;
+import modele.Carte;
+import vue.FenetreAbalone;
 
 public class Application {
 

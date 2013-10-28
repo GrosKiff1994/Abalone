@@ -1,10 +1,10 @@
-package core;
+package controlleur;
 
-import objects.Couleur;
-import objects.Joueur;
-import objects.Plateau;
-import display.BoutonRond;
-import display.FenetreAbalone;
+import modele.Couleur;
+import modele.Joueur;
+import modele.Plateau;
+import vue.BoutonRond;
+import vue.FenetreAbalone;
 
 public class Partie {
 
