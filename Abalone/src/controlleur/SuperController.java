@@ -1,20 +1,34 @@
 package controlleur;
 
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import modele.Case;
 import modele.Coord;
 import modele.Couleur;
 import modele.Direction;
+import modele.Joueur;
+import modele.Modele;
 import modele.Plateau;
 import vue.BoutonRond;
+import vue.FenetreAbalone;
 import vue.PanneauJeu;
-import controlleur.Partie.Etat;
 
-public class listenerSelection extends MouseAdapter {
-	private PanneauJeu panneau;
-	private static Coord depart;
+public class SuperController {
+
+	private static Joueur[] tabJoueurs = new Joueur[2];
+	private static Joueur perdant;
+
+	private Coord depart;
+	private FenetreAbalone fenetre;
+	private Modele modele;
+
+	public Joueur[] getTabJoueurs() {
+		return tabJoueurs;
+	}
+
+	public SuperController(Modele modele) {
+		this.modele = modele;
+	}
 
 	public int compteCouleur(Direction delta, Coord depart, Couleur couleur) {
 		return this.compteCouleur(delta, depart.getY(), depart.getX(), couleur);
@@ -25,7 +39,7 @@ public class listenerSelection extends MouseAdapter {
 
 		Coord parcours = new Coord(jDep, iDep);
 
-		Plateau plateau = panneau.getPlateau();
+		Plateau plateau = fenetre.getPanneau().getPlateau();
 
 		while (plateau.getCase(parcours) != null && plateau.getCase(parcours).estOccupee()
 				&& plateau.getCase(parcours).getBoule().getCouleur() == couleur) {
@@ -37,11 +51,43 @@ public class listenerSelection extends MouseAdapter {
 		return nbCoul;
 	}
 
-	@Override
-	public void mouseReleased(java.awt.event.MouseEvent e) {
+	public static void verifierVictoire() {
+		String chaine = "";
+
+		for (Joueur j : tabJoueurs) {
+			chaine += j.getNom() + " : " + j.getBoulesDuJoueurEjectees() + " boule(s) ejectee(s); \n";
+			if (j.getBoulesDuJoueurEjectees() >= 6) {
+				perdant = j;
+				System.out.println("Le joueur " + perdant + " a perdu !");
+
+			}
+		}
+
+		System.out.print(chaine);
+	}
+
+	public void verifierBoules() {
+		Plateau plateau = fenetre.getPanneau().getPlateau();
+		// verification boule hors jeu
+		for (int i = 0; i < Plateau.HEIGHT; i++) {
+			for (int j = 0; j < Plateau.WIDTH; j++) {
+				if (plateau.getCase(i, j).getBord() && plateau.getCase(i, j).estOccupee()) {
+					for (Joueur joueur : tabJoueurs) {
+						if (plateau.getCase(i, j).getBoule().getCouleur() == joueur.getCouleur()) {
+							joueur.setBoulesDuJoueurEjectees(joueur.getBoulesDuJoueurEjectees() + 1);
+						}
+					}
+					plateau.getCase(i, j).setBoule(null);
+					verifierVictoire();
+				}
+			}
+		}
+	}
+
+	public void sourisRelachee(MouseEvent e) {
 
 		BoutonRond bouton = ((BoutonRond) e.getSource());
-		panneau = bouton.getPanneauJeu();
+		PanneauJeu panneau = fenetre.getPanneau();
 		Plateau plateau = panneau.getPlateau();
 
 		System.out.println("clic : ligne " + bouton.getCoordI() + ", colonne " + bouton.getCoordJ());
@@ -121,11 +167,10 @@ public class listenerSelection extends MouseAdapter {
 						coordDepla.setX(coordDepla.getX() - delta.getX());
 						coordDepla.setY(coordDepla.getY() - delta.getY());
 					}
-
+					verifierBoules();
 				}
 
 				/* nettoyage et reaffichage */
-				plateau.verifierBoules();
 				panneau.visibiliteBoutonVide();
 
 				System.out.println("etat : SELECTION");
@@ -207,4 +252,34 @@ public class listenerSelection extends MouseAdapter {
 		}
 	}
 
+	public void sourisEntree(MouseEvent e) {
+		BoutonRond bouton = ((BoutonRond) e.getSource());
+
+		Case caseCourante = fenetre.getPanneau().getPlateau().getCase(bouton.getCoord());
+		if (caseCourante.estOccupee()) {
+			if (bouton.getCouleurActuelle() == null) {
+				bouton.setCouleurActuelle(BoutonRond.couleurMouseOver);
+			}
+		}
+		if (bouton.getCouleurActuelle() == BoutonRond.couleurSelecTour) {
+			bouton.setCouleurActuelle(BoutonRond.couleurMouseOver);
+		}
+	}
+
+	public void sourisSortie(MouseEvent e) {
+		BoutonRond bouton = ((BoutonRond) e.getSource());
+		Etat etat = bouton.getEtat();
+
+		if (bouton.getCouleurActuelle() == BoutonRond.couleurMouseOver) {
+			if (etat == Etat.SELECTION) {
+				bouton.setCouleurActuelle(null);
+			} else if (etat == Etat.DEPLACEMENTLIGNE || etat == Etat.DEPLACEMENTLATERAL2 || etat == Etat.SELECTION2) {
+				bouton.setCouleurActuelle(BoutonRond.couleurSelecTour);
+			}
+		}
+	}
+
+	public void setVue(FenetreAbalone fenetre) {
+		this.fenetre = fenetre;
+	}
 }

@@ -1,7 +1,6 @@
 package modele;
 
 import controlleur.DeplacementException;
-import controlleur.Partie;
 
 public class Plateau {
 
@@ -109,22 +108,5 @@ public class Plateau {
 			res += '\n';
 		}
 		return res;
-	}
-
-	public void verifierBoules() {
-		// verification boule hors jeu
-		for (int i = 0; i < Plateau.HEIGHT; i++) {
-			for (int j = 0; j < Plateau.WIDTH; j++) {
-				if (getCase(i, j).getBord() && getCase(i, j).estOccupee()) {
-					for (Joueur joueur : Partie.getTabJoueurs()) {
-						if (getCase(i, j).getBoule().getCouleur() == joueur.getCouleur()) {
-							joueur.setBoulesDuJoueurEjectees(joueur.getBoulesDuJoueurEjectees() + 1);
-						}
-					}
-					getCase(i, j).setBoule(null);
-					Partie.verifierVictoire();
-				}
-			}
-		}
 	}
 }

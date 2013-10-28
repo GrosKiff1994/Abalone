@@ -3,16 +3,15 @@ package vue;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Shape;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 
 import javax.swing.JButton;
 
-import controlleur.listenerPassageSouris;
-import controlleur.listenerSelection;
-import controlleur.Partie.Etat;
-
 import modele.Coord;
-
+import controlleur.Etat;
+import controlleur.SuperController;
 
 public class BoutonRond extends JButton {
 	/**
@@ -31,10 +30,7 @@ public class BoutonRond extends JButton {
 
 	private Color couleurActuelle;
 
-	private PanneauJeu panneau;
-
-	public BoutonRond(int rayon, int i, int j, final PanneauJeu panneau) {
-		this.panneau = panneau;
+	public BoutonRond(int rayon, int i, int j, final SuperController controller) {
 		coord = new Coord(j, i);
 		int x = j * PanneauJeu.DIMBOULE + i * PanneauJeu.DIMBOULE / 2 - 4;
 		int y = i * (PanneauJeu.DIMBOULE - PanneauJeu.DIMBOULE / 8) - 4;
@@ -42,6 +38,27 @@ public class BoutonRond extends JButton {
 		setLocation(x, y);
 		setSize(rayon, rayon);
 		setContentAreaFilled(false);
+
+		class listenerSelection extends MouseAdapter {
+
+			@Override
+			public void mouseReleased(java.awt.event.MouseEvent e) {
+				controller.sourisRelachee(e);
+			}
+		}
+
+		class listenerPassageSouris extends MouseAdapter {
+
+			@Override
+			public void mouseEntered(java.awt.event.MouseEvent e) {
+				controller.sourisEntree(e);
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				controller.sourisSortie(e);
+			}
+		}
 
 		this.addMouseListener(new listenerPassageSouris());
 
@@ -94,16 +111,12 @@ public class BoutonRond extends JButton {
 		return shape.contains(x, y);
 	}
 
-	public static void setEtat(Etat etat) {
+	public static void setEtat(controlleur.Etat etat) {
 		BoutonRond.etat = etat;
 	}
 
 	public Etat getEtat() {
 		return BoutonRond.etat;
-	}
-
-	public PanneauJeu getPanneauJeu() {
-		return this.panneau;
 	}
 
 	public Coord getCoord() {

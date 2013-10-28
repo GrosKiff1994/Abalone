@@ -7,11 +7,10 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
-import controlleur.Partie.Etat;
-
 import modele.Case;
 import modele.Plateau;
-
+import controlleur.Etat;
+import controlleur.SuperController;
 
 public class PanneauJeu extends JPanel {
 	/**
@@ -49,7 +48,7 @@ public class PanneauJeu extends JPanel {
 		}
 	}
 
-	public PanneauJeu(Plateau p) {
+	public PanneauJeu(Plateau p, SuperController controller) {
 		this.plateau = p;
 
 		class listenerAnnuler extends MouseAdapter {
@@ -74,7 +73,7 @@ public class PanneauJeu extends JPanel {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
 				Case caseCourante = plateau.getCase(i, j);
 				if (caseCourante != null) {
-					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j, this);
+					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j, controller);
 					this.add(tmpBouton);
 					plateau.getCase(i, j).setBouton(tmpBouton);
 				}
