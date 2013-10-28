@@ -13,7 +13,7 @@ import vue.PanneauJeu;
 import controlleur.Partie.Etat;
 
 public class listenerSelection extends MouseAdapter {
-	private PanneauJeu lePanneau;
+	private PanneauJeu panneau;
 	private static Coord depart;
 
 	public int compteCouleur(Direction delta, Coord depart, Couleur couleur) {
@@ -25,8 +25,10 @@ public class listenerSelection extends MouseAdapter {
 
 		Coord parcours = new Coord(jDep, iDep);
 
-		while (lePanneau.getPlateau().getCase(parcours) != null && lePanneau.getPlateau().getCase(parcours).estOccupee()
-				&& lePanneau.getPlateau().getCase(parcours).getBoule().getCouleur() == couleur) {
+		Plateau plateau = panneau.getPlateau();
+
+		while (plateau.getCase(parcours) != null && plateau.getCase(parcours).estOccupee()
+				&& plateau.getCase(parcours).getBoule().getCouleur() == couleur) {
 
 			nbCoul++;
 			parcours.setX(parcours.getX() + delta.getX());
@@ -38,32 +40,33 @@ public class listenerSelection extends MouseAdapter {
 	@Override
 	public void mouseReleased(java.awt.event.MouseEvent e) {
 
-		BoutonRond leBouton = ((BoutonRond) e.getSource());
-		lePanneau = leBouton.getPanneauJeu();
+		BoutonRond bouton = ((BoutonRond) e.getSource());
+		panneau = bouton.getPanneauJeu();
+		Plateau plateau = panneau.getPlateau();
 
-		System.out.println("clic : ligne " + leBouton.getCoordI() + ", colonne " + leBouton.getCoordJ());
+		System.out.println("clic : ligne " + bouton.getCoordI() + ", colonne " + bouton.getCoordJ());
 
 		switch (e.getButton()) {
 		case MouseEvent.BUTTON1:
 
-			switch (leBouton.getEtat()) {
+			switch (bouton.getEtat()) {
 
 			case SELECTION:
 				// coordonnees depart
-				depart = leBouton.getCoord();
+				depart = bouton.getCoord();
 				BoutonRond.setEtat(Etat.DEPLACEMENTLIGNE);
 				System.out.println("etat : DEPLACEMENTLIGNE");
 
 				// cacher
-				lePanneau.cacherBoutons();
+				panneau.cacherBoutons();
 
 				// afficher cercle voisins
 				Direction[] lesDir = Direction.values();
 				for (Direction dir : lesDir) {
-					Coord dest = new Coord(leBouton.getCoordJ() + dir.getX(), leBouton.getCoordI() + dir.getY());
+					Coord dest = new Coord(bouton.getCoordJ() + dir.getX(), bouton.getCoordI() + dir.getY());
 
-					BoutonRond tmp = lePanneau.getPlateau().getCase(dest).getBouton();
-					if (tmp != null && !lePanneau.getPlateau().getCase(dest).getBord()) {
+					BoutonRond tmp = plateau.getCase(dest).getBouton();
+					if (tmp != null && !plateau.getCase(dest).getBord()) {
 						tmp.setCouleurActuelle(BoutonRond.couleurSelecTour);
 						tmp.setVisible(true);
 					}
@@ -71,17 +74,17 @@ public class listenerSelection extends MouseAdapter {
 
 				break;
 			case DEPLACEMENTLIGNE:
-				Coord arrive = leBouton.getCoord();
+				Coord arrive = bouton.getCoord();
 				Coord delta = new Coord(arrive.getX() - depart.getX(), arrive.getY() - depart.getY());
 				Direction dir = Direction.toDirection(delta);
 
 				/* premiere ligne de boules */
-				Couleur couleurDepart = lePanneau.getPlateau().getCase(depart).getBoule().getCouleur();
+				Couleur couleurDepart = plateau.getCase(depart).getBoule().getCouleur();
 				int nbCouleurActuelle = compteCouleur(dir, depart, couleurDepart);
 				int nbCouleurOpposee = 0;
 
-				Case caseDeFinCouleurActuelle = lePanneau.getPlateau().getCase(depart.getY() + nbCouleurActuelle * delta.getY(),
-						depart.getX() + nbCouleurActuelle * delta.getX());
+				Case caseDeFinCouleurActuelle = plateau.getCase(depart.getY() + nbCouleurActuelle * delta.getY(), depart.getX() + nbCouleurActuelle
+						* delta.getX());
 
 				/* seconde ligne de boules */
 				if (caseDeFinCouleurActuelle.estOccupee()) {
@@ -94,8 +97,7 @@ public class listenerSelection extends MouseAdapter {
 				boolean deplacementPossible = true;
 
 				// verification de la case qui suit la derniere
-				Case caseFinale = lePanneau.getPlateau()
-						.getCase(depart.getY() + coeffDelta * delta.getY(), depart.getX() + coeffDelta * delta.getX());
+				Case caseFinale = plateau.getCase(depart.getY() + coeffDelta * delta.getY(), depart.getX() + coeffDelta * delta.getX());
 				if (caseFinale != null && caseFinale.estOccupee()) {
 					deplacementPossible = false;
 				}
@@ -110,7 +112,7 @@ public class listenerSelection extends MouseAdapter {
 					while (coeffDelta > 0) {
 						coeffDelta--;
 						try {
-							lePanneau.getPlateau().deplacerBouleDirection(Direction.toDirection(delta), coordDepla);
+							plateau.deplacerBouleDirection(Direction.toDirection(delta), coordDepla);
 
 						} catch (DeplacementException e1) {
 							e1.printStackTrace();
@@ -123,8 +125,8 @@ public class listenerSelection extends MouseAdapter {
 				}
 
 				/* nettoyage et reaffichage */
-				lePanneau.getPlateau().verifierBoules();
-				lePanneau.visibiliteBoutonVide();
+				plateau.verifierBoules();
+				panneau.visibiliteBoutonVide();
 
 				System.out.println("etat : SELECTION");
 				BoutonRond.setEtat(Etat.SELECTION);
@@ -137,26 +139,25 @@ public class listenerSelection extends MouseAdapter {
 
 			break;
 		case MouseEvent.BUTTON3:
-			switch (leBouton.getEtat()) {
+			switch (bouton.getEtat()) {
 			case SELECTION:
 				// coordonnees depart
-				depart.setY(leBouton.getCoordI());
-				depart.setX(leBouton.getCoordJ());
+				depart = bouton.getCoord();
 
-				lePanneau.cacherBoutons();
+				panneau.cacherBoutons();
 
-				BoutonRond boutonDep = lePanneau.getPlateau().getCase(depart).getBouton();
+				BoutonRond boutonDep = plateau.getCase(depart).getBouton();
 				boutonDep.setVisible(true);
 				boutonDep.setCouleurActuelle(BoutonRond.couleurSelec);
 
 				// afficher cercle voisins
 				Direction[] lesDir = Direction.values();
 				for (Direction dir : lesDir) {
-					Case caseDest = lePanneau.getPlateau().getCase(leBouton.getCoordI() + dir.getY(), leBouton.getCoordJ() + dir.getX());
+					Case caseDest = plateau.getCase(bouton.getCoordI() + dir.getY(), bouton.getCoordJ() + dir.getX());
 
 					BoutonRond tmp = caseDest.getBouton();
 					if (tmp != null && !caseDest.getBord() && caseDest.estOccupee()
-							&& caseDest.getBoule().getCouleur() == lePanneau.getPlateau().getCase(depart).getBoule().getCouleur()) {
+							&& caseDest.getBoule().getCouleur() == plateau.getCase(depart).getBoule().getCouleur()) {
 						tmp.setCouleurActuelle(BoutonRond.couleurSelecTour);
 						tmp.setVisible(true);
 					}
@@ -166,12 +167,12 @@ public class listenerSelection extends MouseAdapter {
 				System.out.println("etat : SELECTION2");
 				break;
 			case SELECTION2:
-				Coord bouleSecond = leBouton.getCoord();
-				Case caseSecond = lePanneau.getPlateau().getCase(bouleSecond);
+				Coord bouleSecond = bouton.getCoord();
+				Case caseSecond = plateau.getCase(bouleSecond);
 				BoutonRond tmp = caseSecond.getBouton();
 
 				if (tmp != null && !caseSecond.getBord() && caseSecond.estOccupee()
-						&& caseSecond.getBoule().getCouleur() == lePanneau.getPlateau().getCase(depart).getBoule().getCouleur()) {
+						&& caseSecond.getBoule().getCouleur() == plateau.getCase(depart).getBoule().getCouleur()) {
 					Coord delta = new Coord(bouleSecond.getX() - depart.getX(), bouleSecond.getY() - depart.getY());
 				}
 
@@ -179,15 +180,16 @@ public class listenerSelection extends MouseAdapter {
 			case DEPLACEMENTLIGNE:
 				break;
 			case DEPLACEMENTLATERAL2:
-				Coord arrivee = new Coord(leBouton.getCoordJ(), leBouton.getCoordI());
+				Coord arrivee = new Coord(bouton.getCoordJ(), bouton.getCoordI());
 				Coord delta = new Coord(arrivee.getX() - depart.getX(), arrivee.getY() - depart.getY());
 
-				lePanneau.cacherBoutons();
+				panneau.cacherBoutons();
 
-				Case caseDecalDepart = lePanneau.getPlateau().getCase(arrivee.getY() + delta.getY(), arrivee.getX() + delta.getX());
-				Case caseDecalArrivee = lePanneau.getPlateau().getCase(depart.getY() - delta.getY(), depart.getX() - delta.getX());
-				Case caseDepart = lePanneau.getPlateau().getCase(depart);
-				Case caseArrivee = lePanneau.getPlateau().getCase(arrivee);
+				/* caseDecalDepart - caseDepart - caseArrivee - caseDecalArrivee */
+				Case caseDecalDepart = plateau.getCase(arrivee.getY() + delta.getY(), arrivee.getX() + delta.getX());
+				Case caseDecalArrivee = plateau.getCase(depart.getY() - delta.getY(), depart.getX() - delta.getX());
+				Case caseDepart = plateau.getCase(depart);
+				Case caseArrivee = plateau.getCase(arrivee);
 
 				if (caseDecalArrivee.getBoule().getCouleur() == caseArrivee.getBoule().getCouleur()) {
 					caseDecalArrivee.getBouton().setVisible(true);
@@ -204,4 +206,5 @@ public class listenerSelection extends MouseAdapter {
 			break;
 		}
 	}
+
 }

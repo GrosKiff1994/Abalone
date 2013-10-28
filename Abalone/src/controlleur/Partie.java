@@ -14,11 +14,13 @@ public class Partie {
 
 	private static Joueur[] tabJoueurs = new Joueur[2];
 	private static Joueur perdant;
+	private FenetreAbalone fenetre;
 
 	public Partie(FenetreAbalone fenetre, char[][] tab) {
+		this.fenetre = fenetre;
 		final Plateau plateauJeu = new Plateau();
 		plateauJeu.chargerTab(tab);
-		fenetre.setPlateau(plateauJeu);
+		this.fenetre.setPlateau(plateauJeu);
 		// gagnant = null;
 		fenetre.getPanneau().visibiliteBoutonVide();
 		BoutonRond.setEtat(Etat.SELECTION);
@@ -33,6 +35,7 @@ public class Partie {
 			if (j.getBoulesDuJoueurEjectees() >= 6) {
 				perdant = j;
 				System.out.println("Le joueur " + perdant + " a perdu !");
+
 			}
 		}
 

@@ -12,32 +12,30 @@ public class listenerPassageSouris extends MouseAdapter {
 
 	@Override
 	public void mouseEntered(java.awt.event.MouseEvent e) {
-		BoutonRond leBouton = ((BoutonRond) e.getSource());
-		PanneauJeu lePanneau = leBouton.getPanneauJeu();
+		BoutonRond bouton = ((BoutonRond) e.getSource());
+		PanneauJeu panneau = bouton.getPanneauJeu();
 
-		int i = leBouton.getCoordI();
-		int j = leBouton.getCoordJ();
-		Case caseCourante = lePanneau.getPlateau().getCase(i, j);
+		Case caseCourante = panneau.getPlateau().getCase(bouton.getCoord());
 		if (caseCourante.estOccupee()) {
-			if (leBouton.getCouleurActuelle() == null) {
-				leBouton.setCouleurActuelle(BoutonRond.couleurMouseOver);
+			if (bouton.getCouleurActuelle() == null) {
+				bouton.setCouleurActuelle(BoutonRond.couleurMouseOver);
 			}
 		}
-		if (leBouton.getCouleurActuelle() == BoutonRond.couleurSelecTour) {
-			leBouton.setCouleurActuelle(BoutonRond.couleurMouseOver);
+		if (bouton.getCouleurActuelle() == BoutonRond.couleurSelecTour) {
+			bouton.setCouleurActuelle(BoutonRond.couleurMouseOver);
 		}
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		BoutonRond leBouton = ((BoutonRond) e.getSource());
+		BoutonRond bouton = ((BoutonRond) e.getSource());
+		Etat etat = bouton.getEtat();
 
-		if (leBouton.getCouleurActuelle() == BoutonRond.couleurMouseOver) {
-			if (leBouton.getEtat() == Etat.SELECTION) {
-				leBouton.setCouleurActuelle(null);
-			} else if (leBouton.getEtat() == Etat.DEPLACEMENTLIGNE || leBouton.getEtat() == Etat.DEPLACEMENTLATERAL2
-					|| leBouton.getEtat() == Etat.SELECTION2) {
-				leBouton.setCouleurActuelle(BoutonRond.couleurSelecTour);
+		if (bouton.getCouleurActuelle() == BoutonRond.couleurMouseOver) {
+			if (etat == Etat.SELECTION) {
+				bouton.setCouleurActuelle(null);
+			} else if (etat == Etat.DEPLACEMENTLIGNE || etat == Etat.DEPLACEMENTLATERAL2 || etat == Etat.SELECTION2) {
+				bouton.setCouleurActuelle(BoutonRond.couleurSelecTour);
 			}
 
 		}
