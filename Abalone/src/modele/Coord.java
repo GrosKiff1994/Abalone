@@ -1,6 +1,8 @@
 package modele;
 
 public class Coord {
+	private int x, y;
+
 	public Coord(int x, int y) {
 		super();
 		this.x = x;
@@ -27,5 +29,7 @@ public class Coord {
 		return (this.x == ((Coord) o).getX() && this.y == ((Coord) o).getY());
 	}
 
-	private int x, y;
+	public CoordDouble castCoordDouble() {
+		return new CoordDouble(this.getX(), this.getY());
+	}
 }

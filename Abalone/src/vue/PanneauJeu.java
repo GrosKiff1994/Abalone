@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JPanel;
 
 import modele.Case;
+import modele.CoordDouble;
 import modele.Plateau;
 import controlleur.Etat;
 import controlleur.SuperController;
@@ -93,9 +94,11 @@ public class PanneauJeu extends JPanel {
 				if (caseCourante != null) {
 					// case occupee ?
 					if (caseCourante.estOccupee()) {
+						CoordDouble coord = caseCourante.getBoule().getCoord();
 
 						g.setColor(Color.BLACK);
-						g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i * (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE, DIMBOULE);
+						g.fillOval((int) (coord.getX() * DIMBOULE + coord.getY() * DIMBOULE / 2 - 2),
+								(int) (coord.getY() * (DIMBOULE - DIMBOULE / 8) - 2), DIMBOULE, DIMBOULE);
 
 						// selon la couleur
 						switch (caseCourante.getBoule().getCouleur()) {
@@ -107,7 +110,8 @@ public class PanneauJeu extends JPanel {
 							break;
 						default:
 						}
-						g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 4, i * (DIMBOULE - DIMBOULE / 8) - 4, DIMBOULE, DIMBOULE);
+						g.fillOval((int) (coord.getX() * DIMBOULE + coord.getY() * DIMBOULE / 2 - 4),
+								(int) (coord.getY() * (DIMBOULE - DIMBOULE / 8) - 4), DIMBOULE, DIMBOULE);
 					} else {
 						if (caseCourante.getBord()) {
 							// g.setColor(Color.GRAY);

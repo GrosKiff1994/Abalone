@@ -1,9 +1,3 @@
-/actions
-/brouillon
-/core
-/display
-/objects
-/vue
-/modele
 /controlleur
-/observer
+/modele
+/vue

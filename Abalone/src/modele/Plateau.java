@@ -1,5 +1,7 @@
 package modele;
 
+import java.util.HashSet;
+
 import controlleur.DeplacementException;
 
 public class Plateau {
@@ -8,27 +10,36 @@ public class Plateau {
 	public static final int WIDTH = 11;
 	public static final int MAXDEPLACEMENT = 3;
 	private static Case tab[][];
+	private HashSet<Boule> setBoules;
 
 	public Plateau() {
 
 		Plateau.tab = new Case[Plateau.HEIGHT][Plateau.WIDTH];
+		setBoules = new HashSet<Boule>();
 
 	}
 
 	public void chargerTab(char[][] carte) {
 		for (int i = 0; i < HEIGHT; i++) {
 			for (int j = 0; j < WIDTH; j++) {
+				Boule bouleTmp;
 				switch (carte[i][j]) {
 				case 'v':
 					tab[i][j] = new Case();
 					break;
 				case 'b':
 					tab[i][j] = new Case();
-					tab[i][j].setBoule(new Boule(Couleur.BLANC));
+					bouleTmp = new Boule(Couleur.BLANC);
+					tab[i][j].setBoule(bouleTmp);
+					bouleTmp.getCoord().setCoord((double) i, (double) j);
+					setBoules.add(bouleTmp);
 					break;
 				case 'n':
 					tab[i][j] = new Case();
-					tab[i][j].setBoule(new Boule(Couleur.NOIR));
+					bouleTmp = new Boule(Couleur.NOIR);
+					tab[i][j].setBoule(bouleTmp);
+					bouleTmp.getCoord().setCoord((double) i, (double) j);
+					setBoules.add(bouleTmp);
 					break;
 				case 'x':
 					tab[i][j] = new Case();
@@ -52,7 +63,7 @@ public class Plateau {
 		return tab;
 	}
 
-	public Case suivantCase(Direction dir, Coord coordCase) throws DeplacementException {
+	public Coord coordCaseSuivant(Direction dir, Coord coordCase) throws DeplacementException {
 		int arX = coordCase.getX() + dir.getX();
 		int arY = coordCase.getY() + dir.getY();
 
@@ -60,7 +71,7 @@ public class Plateau {
 			throw new DeplacementException("suivant invalide");
 		}
 
-		return tab[arY][arX];
+		return new Coord(arX, arY);
 	}
 
 	public void deplacerBouleDirection(Direction dir, Coord coordCase) throws DeplacementException {
@@ -71,15 +82,18 @@ public class Plateau {
 		}
 
 		Case caseActuelle = tab[coordCase.getY()][coordCase.getX()];
-		Case caseSuivante = suivantCase(dir, coordCase);
+		Coord coordCaseSuivante = coordCaseSuivant(dir, coordCase);
 
 		if (!caseActuelle.estOccupee()) {
 			throw new DeplacementException("case debut non occupee");
 		}
-		if (caseSuivante.estOccupee()) {
+		if (this.getCase(coordCaseSuivante).estOccupee()) {
 			throw new DeplacementException("case arrivee occcupee");
 		}
-		caseSuivante.setBoule(caseActuelle.getBoule());
+
+		Boule bouleADeplacer = caseActuelle.getBoule();
+		bouleADeplacer.getCoord().setCoord(coordCaseSuivante.getY(), coordCaseSuivante.getX());
+		this.getCase(coordCaseSuivante).setBoule(caseActuelle.getBoule());
 		caseActuelle.setBoule(null);
 	}
 
