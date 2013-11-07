@@ -1,4 +1,4 @@
-package controlleur;
+package controleur;
 
 import java.awt.event.MouseEvent;
 
@@ -14,6 +14,9 @@ import vue.FenetreAbalone;
 import vue.PanneauJeu;
 
 public class SuperController {
+
+	public static final int CLICGAUCHE = MouseEvent.BUTTON1;
+	public static final int CLICDROIT = MouseEvent.BUTTON3;
 
 	private static Joueur[] tabJoueurs = new Joueur[2];
 	private static Joueur perdant;
@@ -92,22 +95,21 @@ public class SuperController {
 
 		System.out.println("clic : ligne " + bouton.getCoordI() + ", colonne " + bouton.getCoordJ());
 
-		switch (e.getButton()) {
-		case MouseEvent.BUTTON1:
+		Direction[] lesDir = Direction.values();
 
-			switch (bouton.getEtat()) {
-
-			case SELECTION:
+		switch (bouton.getEtat()) {
+		case NORMAL:
+			switch (e.getButton()) {
+			case CLICGAUCHE:
 				// coordonnees depart
 				depart = bouton.getCoord();
-				BoutonRond.setEtat(Etat.DEPLACEMENTLIGNE);
+				BoutonRond.setEtat(Etat.SELECTIONLIGNE);
 				System.out.println("etat : DEPLACEMENTLIGNE");
 
 				// cacher
 				panneau.cacherBoutons();
 
 				// afficher cercle voisins
-				Direction[] lesDir = Direction.values();
 				for (Direction dir : lesDir) {
 					Coord dest = new Coord(bouton.getCoordJ() + dir.getX(), bouton.getCoordI() + dir.getY());
 
@@ -117,9 +119,39 @@ public class SuperController {
 						tmp.setVisible(true);
 					}
 				}
-
 				break;
-			case DEPLACEMENTLIGNE:
+			case CLICDROIT:
+				// coordonnees depart
+				depart = bouton.getCoord();
+
+				panneau.cacherBoutons();
+
+				BoutonRond boutonDep = plateau.getCase(depart).getBouton();
+				boutonDep.setVisible(true);
+				boutonDep.setCouleurActuelle(BoutonRond.couleurSelec);
+
+				// afficher cercle voisins
+				for (Direction dir : lesDir) {
+					Case caseDest = plateau.getCase(bouton.getCoordI() + dir.getY(), bouton.getCoordJ() + dir.getX());
+
+					BoutonRond tmp = caseDest.getBouton();
+					if (tmp != null && !caseDest.getBord() && caseDest.estOccupee()
+							&& caseDest.getBoule().getCouleur() == plateau.getCase(depart).getBoule().getCouleur()) {
+						tmp.setCouleurActuelle(BoutonRond.couleurSelecTour);
+						tmp.setVisible(true);
+					}
+				}
+
+				BoutonRond.setEtat(Etat.SELECTIONLATERAL);
+				System.out.println("etat : SELECTIONLATERAL");
+				break;
+			default:
+				break;
+			}
+			break;
+		case SELECTIONLIGNE:
+			switch (e.getButton()) {
+			case CLICGAUCHE:
 				Coord arrive = bouton.getCoord();
 				Coord delta = new Coord(arrive.getX() - depart.getX(), arrive.getY() - depart.getY());
 				Direction dir = Direction.toDirection(delta);
@@ -129,8 +161,8 @@ public class SuperController {
 				int nbCouleurActuelle = compteCouleur(dir, depart, couleurDepart);
 				int nbCouleurOpposee = 0;
 
-				Case caseDeFinCouleurActuelle = plateau.getCase(depart.getY() + nbCouleurActuelle * delta.getY(), depart.getX() + nbCouleurActuelle
-						* delta.getX());
+				Case caseDeFinCouleurActuelle = plateau.getCase(depart.getY() + nbCouleurActuelle * delta.getY(),
+						depart.getX() + nbCouleurActuelle * delta.getX());
 
 				/* seconde ligne de boules */
 				if (caseDeFinCouleurActuelle.estOccupee()) {
@@ -143,88 +175,35 @@ public class SuperController {
 				boolean deplacementPossible = true;
 
 				// verification de la case qui suit la derniere
-				Case caseFinale = plateau.getCase(depart.getY() + coeffDelta * delta.getY(), depart.getX() + coeffDelta * delta.getX());
+				Case caseFinale = plateau.getCase(depart.getY() + coeffDelta * delta.getY(), depart.getX() + coeffDelta
+						* delta.getX());
 				if (caseFinale != null && caseFinale.estOccupee()) {
 					deplacementPossible = false;
 				}
 
-				System.out.println("nbCouleurAcuelle = " + nbCouleurActuelle + ", nbCouleurOpposee = " + nbCouleurOpposee);
+				System.out.println("nbCouleurAcuelle = " + nbCouleurActuelle + ", nbCouleurOpposee = "
+						+ nbCouleurOpposee);
 
 				// deplacement reel
-				if (nbCouleurActuelle <= Plateau.MAXDEPLACEMENT && nbCouleurOpposee < nbCouleurActuelle && deplacementPossible) {
-					System.out.println(coeffDelta + " boule(s) a deplacer");
-					// la derniere boule est la premiere deplacee
-					Coord coordDepla = new Coord(depart.getX() + (coeffDelta - 1) * delta.getX(), depart.getY() + (coeffDelta - 1) * delta.getY());
-					while (coeffDelta > 0) {
-						coeffDelta--;
-						try {
-							plateau.deplacerBouleDirection(Direction.toDirection(delta), coordDepla);
-
-						} catch (DeplacementException e1) {
-							e1.printStackTrace();
-						}
-
-						coordDepla.setX(coordDepla.getX() - delta.getX());
-						coordDepla.setY(coordDepla.getY() - delta.getY());
-					}
+				if (nbCouleurActuelle <= Plateau.MAXDEPLACEMENT && nbCouleurOpposee < nbCouleurActuelle
+						&& deplacementPossible) {
+					deplacerLigneBoules(coeffDelta, delta);
 					verifierBoules();
 				}
 
 				/* nettoyage et reaffichage */
 				panneau.visibiliteBoutonVide();
 
-				System.out.println("etat : SELECTION");
-				BoutonRond.setEtat(Etat.SELECTION);
-				break;
-			case DEPLACEMENTLATERAL2:
+				System.out.println("etat : NORMAL");
+				BoutonRond.setEtat(Etat.NORMAL);
 				break;
 			default:
 				break;
 			}
-
 			break;
-		case MouseEvent.BUTTON3:
-			switch (bouton.getEtat()) {
-			case SELECTION:
-				// coordonnees depart
-				depart = bouton.getCoord();
-
-				panneau.cacherBoutons();
-
-				BoutonRond boutonDep = plateau.getCase(depart).getBouton();
-				boutonDep.setVisible(true);
-				boutonDep.setCouleurActuelle(BoutonRond.couleurSelec);
-
-				// afficher cercle voisins
-				Direction[] lesDir = Direction.values();
-				for (Direction dir : lesDir) {
-					Case caseDest = plateau.getCase(bouton.getCoordI() + dir.getY(), bouton.getCoordJ() + dir.getX());
-
-					BoutonRond tmp = caseDest.getBouton();
-					if (tmp != null && !caseDest.getBord() && caseDest.estOccupee()
-							&& caseDest.getBoule().getCouleur() == plateau.getCase(depart).getBoule().getCouleur()) {
-						tmp.setCouleurActuelle(BoutonRond.couleurSelecTour);
-						tmp.setVisible(true);
-					}
-				}
-
-				BoutonRond.setEtat(Etat.SELECTION2);
-				System.out.println("etat : SELECTION2");
-				break;
-			case SELECTION2:
-				Coord bouleSecond = bouton.getCoord();
-				Case caseSecond = plateau.getCase(bouleSecond);
-				BoutonRond tmp = caseSecond.getBouton();
-
-				if (tmp != null && !caseSecond.getBord() && caseSecond.estOccupee()
-						&& caseSecond.getBoule().getCouleur() == plateau.getCase(depart).getBoule().getCouleur()) {
-					Coord delta = new Coord(bouleSecond.getX() - depart.getX(), bouleSecond.getY() - depart.getY());
-				}
-
-				break;
-			case DEPLACEMENTLIGNE:
-				break;
-			case DEPLACEMENTLATERAL2:
+		case SELECTIONLATERAL:
+			switch (e.getButton()) {
+			case CLICDROIT:
 				Coord arrivee = new Coord(bouton.getCoordJ(), bouton.getCoordI());
 				Coord delta = new Coord(arrivee.getX() - depart.getX(), arrivee.getY() - depart.getY());
 
@@ -236,19 +215,69 @@ public class SuperController {
 				Case caseDepart = plateau.getCase(depart);
 				Case caseArrivee = plateau.getCase(arrivee);
 
-				if (caseDecalArrivee.getBoule().getCouleur() == caseArrivee.getBoule().getCouleur()) {
+				if (caseDecalArrivee.estOccupee()
+						&& caseDecalArrivee.getBoule().getCouleur() == caseArrivee.getBoule().getCouleur()) {
 					caseDecalArrivee.getBouton().setVisible(true);
 				}
 
-				if (caseDecalDepart.getBoule().getCouleur() == caseDepart.getBoule().getCouleur()) {
+				if (caseDecalDepart.estOccupee()
+						&& caseDecalDepart.getBoule().getCouleur() == caseDepart.getBoule().getCouleur()) {
 					caseDecalDepart.getBouton().setVisible(true);
 				}
-
 				break;
 			default:
 				break;
 			}
 			break;
+		case SELECTIONLATERAL2:
+			switch (e.getButton()) {
+			case CLICGAUCHE:
+				break;
+			case CLICDROIT:
+				Coord coordBoule3 = bouton.getCoord();
+				Case caseBoule3 = plateau.getCase(coordBoule3);
+				BoutonRond tmp = caseBoule3.getBouton();
+
+				System.out.println("etat : NORMAL");
+				BoutonRond.setEtat(Etat.NORMAL);
+				break;
+			default:
+				break;
+			}
+			break;
+		case SELECTIONLATERAL3:
+			switch (e.getButton()) {
+			case CLICGAUCHE:
+				break;
+			default:
+				break;
+			}
+			break;
+		default:
+			break;
+
+		}
+	}
+
+	private void deplacerLigneBoules(int nbBoules, Coord delta) {
+		PanneauJeu panneau = fenetre.getPanneau();
+		Plateau plateau = panneau.getPlateau();
+
+		System.out.println(nbBoules + " boule(s) a deplacer");
+		// la derniere boule est la premiere deplacee
+		Coord coordDepla = new Coord(depart.getX() + (nbBoules - 1) * delta.getX(), depart.getY() + (nbBoules - 1)
+				* delta.getY());
+		while (nbBoules > 0) {
+			nbBoules--;
+			try {
+				plateau.deplacerBouleDirection(Direction.toDirection(delta), coordDepla);
+
+			} catch (DeplacementException e1) {
+				e1.printStackTrace();
+			}
+
+			coordDepla.setX(coordDepla.getX() - delta.getX());
+			coordDepla.setY(coordDepla.getY() - delta.getY());
 		}
 	}
 
@@ -271,9 +300,10 @@ public class SuperController {
 		Etat etat = bouton.getEtat();
 
 		if (bouton.getCouleurActuelle() == BoutonRond.couleurMouseOver) {
-			if (etat == Etat.SELECTION) {
+			if (etat == Etat.NORMAL) {
 				bouton.setCouleurActuelle(null);
-			} else if (etat == Etat.DEPLACEMENTLIGNE || etat == Etat.DEPLACEMENTLATERAL2 || etat == Etat.SELECTION2) {
+			} else if (etat == Etat.SELECTIONLIGNE || etat == Etat.SELECTIONLATERAL || etat == Etat.SELECTIONLATERAL2
+					|| etat == Etat.SELECTIONLATERAL3) {
 				bouton.setCouleurActuelle(BoutonRond.couleurSelecTour);
 			}
 		}

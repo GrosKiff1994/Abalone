@@ -10,8 +10,8 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.JButton;
 
 import modele.Coord;
-import controlleur.Etat;
-import controlleur.SuperController;
+import controleur.Etat;
+import controleur.SuperController;
 
 public class BoutonRond extends JButton {
 	/**
@@ -111,7 +111,7 @@ public class BoutonRond extends JButton {
 		return shape.contains(x, y);
 	}
 
-	public static void setEtat(controlleur.Etat etat) {
+	public static void setEtat(controleur.Etat etat) {
 		BoutonRond.etat = etat;
 	}
 

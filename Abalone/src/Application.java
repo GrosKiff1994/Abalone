@@ -5,7 +5,7 @@ import modele.Modele;
 import modele.Plateau;
 import vue.BoutonRond;
 import vue.FenetreAbalone;
-import controlleur.SuperController;
+import controleur.SuperController;
 
 public class Application {
 
@@ -20,10 +20,10 @@ public class Application {
 		modele.setVue(fenetre);
 
 		Plateau plateauJeu = new Plateau();
-		plateauJeu.chargerTab(Carte.tabClassique);
+		plateauJeu.chargerTab(Carte.tabTest);
 		fenetre.setPlateau(plateauJeu);
 		fenetre.getPanneau().visibiliteBoutonVide();
-		BoutonRond.setEtat(controlleur.Etat.SELECTION);
+		BoutonRond.setEtat(controleur.Etat.NORMAL);
 
 		controller.getTabJoueurs()[0] = new Joueur("joueurNOIR", Couleur.NOIR);
 		controller.getTabJoueurs()[1] = new Joueur("joueurBLANC", Couleur.BLANC);

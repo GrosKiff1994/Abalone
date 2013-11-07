@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 
 import modele.Modele;
 import modele.Plateau;
-import controlleur.SuperController;
+import controleur.SuperController;
 
 public class FenetreAbalone extends JFrame {
 	/**

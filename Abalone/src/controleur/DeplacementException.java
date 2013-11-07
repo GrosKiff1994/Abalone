@@ -1,4 +1,4 @@
-package controlleur;
+package controleur;
 
 public class DeplacementException extends Exception {
 

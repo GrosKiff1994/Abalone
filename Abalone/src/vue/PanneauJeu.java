@@ -10,8 +10,8 @@ import javax.swing.JPanel;
 import modele.Case;
 import modele.CoordDouble;
 import modele.Plateau;
-import controlleur.Etat;
-import controlleur.SuperController;
+import controleur.Etat;
+import controleur.SuperController;
 
 public class PanneauJeu extends JPanel {
 	/**
@@ -58,7 +58,7 @@ public class PanneauJeu extends JPanel {
 			public void mouseReleased(java.awt.event.MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON3) {
 					visibiliteBoutonVide();
-					BoutonRond.setEtat(Etat.SELECTION);
+					BoutonRond.setEtat(Etat.NORMAL);
 					System.out.println("Etat : SELECTION");
 				}
 			}

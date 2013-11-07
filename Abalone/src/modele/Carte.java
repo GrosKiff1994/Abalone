@@ -1,8 +1,7 @@
 package modele;
 
 public class Carte {
-	public static final char tabVide[][] = new char[][] {
-			{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
+	public static final char tabVide[][] = new char[][] { { 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
 			{ 'x', 'x', 'x', 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'x' },
 			{ 'x', 'x', 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'x' },
 			{ 'x', 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x' },
@@ -10,6 +9,18 @@ public class Carte {
 			{ 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x' },
 			{ 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x', 'x' },
 			{ 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x', 'x', 'x' },
+			{ 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'x', 'x', 'x', 'x' },
+			{ 'x', 'v', 'v', 'v', 'v', 'v', 'x', 'x', 'x', 'x', 'x' },
+			{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' } };
+
+	public static final char tabTest[][] = new char[][] { { 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' },
+			{ 'x', 'x', 'x', 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'x' },
+			{ 'x', 'x', 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'x' },
+			{ 'x', 'x', 'x', 'v', 'b', 'b', 'b', 'b', 'b', 'v', 'x' },
+			{ 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x' },
+			{ 'x', 'v', 'v', 'n', 'n', 'b', 'b', 'n', 'v', 'v', 'x' },
+			{ 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'v', 'x', 'x' },
+			{ 'x', 'v', 'n', 'n', 'n', 'n', 'n', 'v', 'x', 'x', 'x' },
 			{ 'x', 'v', 'v', 'v', 'v', 'v', 'v', 'x', 'x', 'x', 'x' },
 			{ 'x', 'v', 'v', 'v', 'v', 'v', 'x', 'x', 'x', 'x', 'x' },
 			{ 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x' } };

@@ -2,7 +2,7 @@ package modele;
 
 import java.util.HashSet;
 
-import controlleur.DeplacementException;
+import controleur.DeplacementException;
 
 public class Plateau {
 
