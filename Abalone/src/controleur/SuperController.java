@@ -210,12 +210,13 @@ public class SuperController {
 				panneau.cacherBoutons();
 
 				/* caseDecalDepart - caseDepart - caseArrivee - caseDecalArrivee */
-				Case caseDecalDepart = plateau.getCase(arrivee.getY() + delta.getY(), arrivee.getX() + delta.getX());
-				Case caseDecalArrivee = plateau.getCase(depart.getY() - delta.getY(), depart.getX() - delta.getX());
+				Case caseDecalArrivee = plateau.getCase(arrivee.getY() + delta.getY(), arrivee.getX() + delta.getX());
+				Case caseDecalDepart = plateau.getCase(depart.getY() - delta.getY(), depart.getX() - delta.getX());
 				Case caseDepart = plateau.getCase(depart);
 				Case caseArrivee = plateau.getCase(arrivee);
 
 				/* affichage des boutons decal */
+
 				if (caseDecalArrivee.estOccupee()
 						&& caseDecalArrivee.getBoule().getCouleur() == caseArrivee.getBoule().getCouleur()) {
 					caseDecalArrivee.getBouton().setCouleurActuelle(BoutonRond.couleurLigne);
