@@ -115,7 +115,7 @@ public class SuperController {
 
 					BoutonRond tmp = plateau.getCase(dest).getBouton();
 					if (tmp != null && !plateau.getCase(dest).getBord()) {
-						tmp.setCouleurActuelle(BoutonRond.couleurSelecTour);
+						tmp.setCouleurActuelle(BoutonRond.couleurLigne);
 						tmp.setVisible(true);
 					}
 				}
@@ -137,7 +137,7 @@ public class SuperController {
 					BoutonRond tmp = caseDest.getBouton();
 					if (tmp != null && !caseDest.getBord() && caseDest.estOccupee()
 							&& caseDest.getBoule().getCouleur() == plateau.getCase(depart).getBoule().getCouleur()) {
-						tmp.setCouleurActuelle(BoutonRond.couleurSelecTour);
+						tmp.setCouleurActuelle(BoutonRond.couleurLigne);
 						tmp.setVisible(true);
 					}
 				}
@@ -215,15 +215,44 @@ public class SuperController {
 				Case caseDepart = plateau.getCase(depart);
 				Case caseArrivee = plateau.getCase(arrivee);
 
+				/* affichage des boutons decal */
 				if (caseDecalArrivee.estOccupee()
 						&& caseDecalArrivee.getBoule().getCouleur() == caseArrivee.getBoule().getCouleur()) {
+					caseDecalArrivee.getBouton().setCouleurActuelle(BoutonRond.couleurLigne);
 					caseDecalArrivee.getBouton().setVisible(true);
 				}
 
 				if (caseDecalDepart.estOccupee()
 						&& caseDecalDepart.getBoule().getCouleur() == caseDepart.getBoule().getCouleur()) {
+					caseDecalArrivee.getBouton().setCouleurActuelle(BoutonRond.couleurLigne);
 					caseDecalDepart.getBouton().setVisible(true);
 				}
+
+				Case caseDest;
+				BoutonRond tmp;
+
+				/* affichage des boutons lateraux */
+				for (Direction dir : lesDir) {
+
+					caseDest = plateau.getCase(caseDepart.getBouton().getCoordI() + dir.getY(), caseDepart.getBouton()
+							.getCoordJ() + dir.getX());
+
+					tmp = caseDest.getBouton();
+					if (tmp != null && !caseDest.getBord() && !caseDest.estOccupee()) {
+						tmp.setCouleurActuelle(BoutonRond.couleurLateral);
+						tmp.setVisible(true);
+					}
+
+					caseDest = plateau.getCase(caseArrivee.getBouton().getCoordI() + dir.getY(), caseArrivee
+							.getBouton().getCoordJ() + dir.getX());
+
+					tmp = caseDest.getBouton();
+					if (tmp != null && !caseDest.getBord() && !caseDest.estOccupee()) {
+						tmp.setCouleurActuelle(BoutonRond.couleurLateral);
+						tmp.setVisible(true);
+					}
+				}
+
 				break;
 			default:
 				break;
@@ -290,7 +319,7 @@ public class SuperController {
 				bouton.setCouleurActuelle(BoutonRond.couleurMouseOver);
 			}
 		}
-		if (bouton.getCouleurActuelle() == BoutonRond.couleurSelecTour) {
+		if (bouton.getCouleurActuelle() == BoutonRond.couleurLigne) {
 			bouton.setCouleurActuelle(BoutonRond.couleurMouseOver);
 		}
 	}
@@ -304,7 +333,7 @@ public class SuperController {
 				bouton.setCouleurActuelle(null);
 			} else if (etat == Etat.SELECTIONLIGNE || etat == Etat.SELECTIONLATERAL || etat == Etat.SELECTIONLATERAL2
 					|| etat == Etat.SELECTIONLATERAL3) {
-				bouton.setCouleurActuelle(BoutonRond.couleurSelecTour);
+				bouton.setCouleurActuelle(BoutonRond.couleurLigne);
 			}
 		}
 	}

@@ -24,7 +24,8 @@ public class BoutonRond extends JButton {
 	boolean varDist;
 
 	public static final Color couleurMouseOver = new Color(153, 251, 111, 100);
-	public static final Color couleurSelecTour = new Color(75, 181, 193, 40);
+	public static final Color couleurLigne = new Color(75, 181, 193, 40);
+	public static final Color couleurLateral = new Color(60, 160, 173, 40);
 	public static final Color couleurSelec = new Color(75, 181, 193, 200);
 	public static final Color couleurBords = new Color(0, 0, 0);
 
