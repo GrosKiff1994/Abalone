@@ -1,4 +1,5 @@
-package modele;
+package Utilitaire;
+
 
 public class Coord {
 	private int x, y;

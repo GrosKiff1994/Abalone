@@ -3,7 +3,6 @@ package vue;
 import javax.swing.JFrame;
 
 import modele.Modele;
-import modele.Plateau;
 import controleur.SuperController;
 
 public class FenetreAbalone extends JFrame {
@@ -28,8 +27,8 @@ public class FenetreAbalone extends JFrame {
 		return this.panelPrincipal;
 	}
 
-	public void setPlateau(Plateau p) {
-		panelPrincipal = new PanneauJeu(p, controller);
+	public void creerPanneau() {
+		panelPrincipal = new PanneauJeu(modele, controller);
 		setContentPane(panelPrincipal);
 	}
 

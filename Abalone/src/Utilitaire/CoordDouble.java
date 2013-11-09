@@ -1,4 +1,5 @@
-package modele;
+package Utilitaire;
+
 
 public class CoordDouble {
 	private double x, y;

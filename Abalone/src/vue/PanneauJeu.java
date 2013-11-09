@@ -7,8 +7,10 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
+import Utilitaire.CoordDouble;
+
 import modele.Case;
-import modele.CoordDouble;
+import modele.Modele;
 import modele.Plateau;
 import controleur.Etat;
 import controleur.SuperController;
@@ -20,14 +22,14 @@ public class PanneauJeu extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int DIMBOULE = 60;
 
-	protected Plateau plateau;
+	protected Modele modele;
 
 	public void visibiliteBoutonVide() {
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
-				BoutonRond bout = plateau.getCase(i, j).getBouton();
+				BoutonRond bout = modele.getPlateau().getCase(i, j).getBouton();
 				if (bout != null) {
-					if (plateau.getCase(i, j).estOccupee()) {
+					if (modele.getPlateau().getCase(i, j).estOccupee()) {
 						bout.setVisible(true);
 					} else {
 						bout.setVisible(false);
@@ -41,7 +43,7 @@ public class PanneauJeu extends JPanel {
 	public void cacherBoutons() {
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
-				BoutonRond bout = this.getPlateau().getCase(i, j).getBouton();
+				BoutonRond bout = modele.getPlateau().getCase(i, j).getBouton();
 				if (bout != null) {
 					bout.setVisible(false);
 				}
@@ -49,8 +51,8 @@ public class PanneauJeu extends JPanel {
 		}
 	}
 
-	public PanneauJeu(Plateau p, SuperController controller) {
-		this.plateau = p;
+	public PanneauJeu(Modele modele, final SuperController controller) {
+		this.modele = modele;
 
 		class listenerAnnuler extends MouseAdapter {
 
@@ -58,7 +60,7 @@ public class PanneauJeu extends JPanel {
 			public void mouseReleased(java.awt.event.MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON3) {
 					visibiliteBoutonVide();
-					BoutonRond.setEtat(Etat.NORMAL);
+					controller.setEtat(Etat.NORMAL);
 					System.out.println("Etat : SELECTION");
 				}
 			}
@@ -67,16 +69,15 @@ public class PanneauJeu extends JPanel {
 
 		this.addMouseListener(new listenerAnnuler());
 
-		this.setPlateau(p);
 		this.setLayout(null);
 
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
-				Case caseCourante = plateau.getCase(i, j);
+				Case caseCourante = modele.getPlateau().getCase(i, j);
 				if (caseCourante != null) {
 					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j, controller);
 					this.add(tmpBouton);
-					plateau.getCase(i, j).setBouton(tmpBouton);
+					modele.getPlateau().getCase(i, j).setBouton(tmpBouton);
 				}
 
 			}
@@ -89,7 +90,7 @@ public class PanneauJeu extends JPanel {
 		// parcours du tableau
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
-				Case caseCourante = plateau.getCase(i, j);
+				Case caseCourante = modele.getPlateau().getCase(i, j);
 				// case existe ?
 				if (caseCourante != null) {
 					// case occupee ?
@@ -120,7 +121,8 @@ public class PanneauJeu extends JPanel {
 							// DIMBOULE);
 						} else {
 							g.setColor(Color.LIGHT_GRAY);
-							g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i * (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE, DIMBOULE);
+							g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i * (DIMBOULE - DIMBOULE / 8) - 2,
+									DIMBOULE, DIMBOULE);
 						}
 
 					} // fin case occupee
@@ -134,13 +136,5 @@ public class PanneauJeu extends JPanel {
 			}
 		}
 
-	}
-
-	public Plateau getPlateau() {
-		return plateau;
-	}
-
-	public void setPlateau(Plateau plateau) {
-		this.plateau = plateau;
 	}
 }

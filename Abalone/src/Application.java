@@ -3,7 +3,6 @@ import modele.Couleur;
 import modele.Joueur;
 import modele.Modele;
 import modele.Plateau;
-import vue.BoutonRond;
 import vue.FenetreAbalone;
 import controleur.SuperController;
 
@@ -21,9 +20,10 @@ public class Application {
 
 		Plateau plateauJeu = new Plateau();
 		plateauJeu.chargerTab(Carte.tabTest);
-		fenetre.setPlateau(plateauJeu);
+		modele.setPlateau(plateauJeu);
+		fenetre.creerPanneau();
 		fenetre.getPanneau().visibiliteBoutonVide();
-		BoutonRond.setEtat(controleur.Etat.NORMAL);
+		controller.setEtat(controleur.Etat.NORMAL);
 
 		controller.getTabJoueurs()[0] = new Joueur("joueurNOIR", Couleur.NOIR);
 		controller.getTabJoueurs()[1] = new Joueur("joueurBLANC", Couleur.BLANC);

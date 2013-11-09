@@ -9,8 +9,8 @@ import java.awt.geom.Ellipse2D;
 
 import javax.swing.JButton;
 
-import modele.Coord;
-import controleur.Etat;
+import Utilitaire.Coord;
+
 import controleur.SuperController;
 
 public class BoutonRond extends JButton {
@@ -19,7 +19,6 @@ public class BoutonRond extends JButton {
 	 */
 	private static final long serialVersionUID = 1L;
 	private Coord coord;
-	private static Etat etat;
 
 	boolean varDist;
 
@@ -110,14 +109,6 @@ public class BoutonRond extends JButton {
 			shape = new Ellipse2D.Float(0, 0, getWidth(), getHeight());
 		}
 		return shape.contains(x, y);
-	}
-
-	public static void setEtat(controleur.Etat etat) {
-		BoutonRond.etat = etat;
-	}
-
-	public Etat getEtat() {
-		return BoutonRond.etat;
 	}
 
 	public Coord getCoord() {

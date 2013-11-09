@@ -1,5 +1,7 @@
 package modele;
 
+import Utilitaire.CoordDouble;
+
 public class Boule {
 
 	private Couleur couleur;

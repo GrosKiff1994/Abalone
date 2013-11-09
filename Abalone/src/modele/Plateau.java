@@ -2,6 +2,8 @@ package modele;
 
 import java.util.HashSet;
 
+import Utilitaire.Coord;
+
 import controleur.DeplacementException;
 
 public class Plateau {

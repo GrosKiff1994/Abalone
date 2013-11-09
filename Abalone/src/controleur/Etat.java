@@ -1,14 +1,14 @@
 package controleur;
 
 public enum Etat {
-	/* état de base */
+	/* Ã©tat de base */
 	NORMAL,
-	/* après clic gauche sur boule */
+	/* aprÃ¨s clic gauche sur boule */
 	SELECTIONLIGNE,
-	/* après 1er clic droit */
+	/* aprÃ¨s 1er clic droit */
 	SELECTIONLATERAL,
-	/* après 2nd clic droit */
+	/* aprÃ¨s 2nd clic droit */
 	SELECTIONLATERAL2,
-	/* après 3ème clic droit */
+	/* aprÃ¨s 3Ã¨me clic droit */
 	SELECTIONLATERAL3;
 }

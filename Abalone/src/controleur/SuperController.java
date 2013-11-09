@@ -2,8 +2,9 @@ package controleur;
 
 import java.awt.event.MouseEvent;
 
+import Utilitaire.Coord;
+
 import modele.Case;
-import modele.Coord;
 import modele.Couleur;
 import modele.Direction;
 import modele.Joueur;
@@ -24,9 +25,18 @@ public class SuperController {
 	private Coord depart;
 	private FenetreAbalone fenetre;
 	private Modele modele;
+	private Etat etat;
 
 	public Joueur[] getTabJoueurs() {
 		return tabJoueurs;
+	}
+
+	public void setEtat(controleur.Etat etat) {
+		this.etat = etat;
+	}
+
+	public Etat getEtat() {
+		return this.etat;
 	}
 
 	public SuperController(Modele modele) {
@@ -42,7 +52,7 @@ public class SuperController {
 
 		Coord parcours = new Coord(jDep, iDep);
 
-		Plateau plateau = fenetre.getPanneau().getPlateau();
+		Plateau plateau = modele.getPlateau();
 
 		while (plateau.getCase(parcours) != null && plateau.getCase(parcours).estOccupee()
 				&& plateau.getCase(parcours).getBoule().getCouleur() == couleur) {
@@ -70,7 +80,7 @@ public class SuperController {
 	}
 
 	public void verifierBoules() {
-		Plateau plateau = fenetre.getPanneau().getPlateau();
+		Plateau plateau = modele.getPlateau();
 		// verification boule hors jeu
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
@@ -91,19 +101,19 @@ public class SuperController {
 
 		BoutonRond bouton = ((BoutonRond) e.getSource());
 		PanneauJeu panneau = fenetre.getPanneau();
-		Plateau plateau = panneau.getPlateau();
+		Plateau plateau = modele.getPlateau();
 
 		System.out.println("clic : ligne " + bouton.getCoordI() + ", colonne " + bouton.getCoordJ());
 
 		Direction[] lesDir = Direction.values();
 
-		switch (bouton.getEtat()) {
+		switch (etat) {
 		case NORMAL:
 			switch (e.getButton()) {
 			case CLICGAUCHE:
 				// coordonnees depart
 				depart = bouton.getCoord();
-				BoutonRond.setEtat(Etat.SELECTIONLIGNE);
+				etat = Etat.SELECTIONLIGNE;
 				System.out.println("etat : DEPLACEMENTLIGNE");
 
 				// cacher
@@ -142,7 +152,7 @@ public class SuperController {
 					}
 				}
 
-				BoutonRond.setEtat(Etat.SELECTIONLATERAL);
+				etat = Etat.SELECTIONLATERAL;
 				System.out.println("etat : SELECTIONLATERAL");
 				break;
 			default:
@@ -195,7 +205,7 @@ public class SuperController {
 				panneau.visibiliteBoutonVide();
 
 				System.out.println("etat : NORMAL");
-				BoutonRond.setEtat(Etat.NORMAL);
+				etat = Etat.NORMAL;
 				break;
 			default:
 				break;
@@ -254,6 +264,9 @@ public class SuperController {
 					}
 				}
 
+				System.out.println("etat : SELECTIONLATERAL2");
+				etat = Etat.SELECTIONLATERAL2;
+
 				break;
 			default:
 				break;
@@ -262,14 +275,15 @@ public class SuperController {
 		case SELECTIONLATERAL2:
 			switch (e.getButton()) {
 			case CLICGAUCHE:
+				/* déplacer les 2 boules */
 				break;
 			case CLICDROIT:
 				Coord coordBoule3 = bouton.getCoord();
 				Case caseBoule3 = plateau.getCase(coordBoule3);
 				BoutonRond tmp = caseBoule3.getBouton();
 
-				System.out.println("etat : NORMAL");
-				BoutonRond.setEtat(Etat.NORMAL);
+				System.out.println("etat : SELECTIONLATERAL3");
+				etat = Etat.SELECTIONLATERAL3;
 				break;
 			default:
 				break;
@@ -290,8 +304,7 @@ public class SuperController {
 	}
 
 	private void deplacerLigneBoules(int nbBoules, Coord delta) {
-		PanneauJeu panneau = fenetre.getPanneau();
-		Plateau plateau = panneau.getPlateau();
+		Plateau plateau = modele.getPlateau();
 
 		System.out.println(nbBoules + " boule(s) a deplacer");
 		// la derniere boule est la premiere deplacee
@@ -314,7 +327,7 @@ public class SuperController {
 	public void sourisEntree(MouseEvent e) {
 		BoutonRond bouton = ((BoutonRond) e.getSource());
 
-		Case caseCourante = fenetre.getPanneau().getPlateau().getCase(bouton.getCoord());
+		Case caseCourante = modele.getPlateau().getCase(bouton.getCoord());
 		if (caseCourante.estOccupee()) {
 			if (bouton.getCouleurActuelle() == null) {
 				bouton.setCouleurActuelle(BoutonRond.couleurMouseOver);
@@ -327,7 +340,6 @@ public class SuperController {
 
 	public void sourisSortie(MouseEvent e) {
 		BoutonRond bouton = ((BoutonRond) e.getSource());
-		Etat etat = bouton.getEtat();
 
 		if (bouton.getCouleurActuelle() == BoutonRond.couleurMouseOver) {
 			if (etat == Etat.NORMAL) {
