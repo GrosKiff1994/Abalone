@@ -28,11 +28,15 @@ public class FenetreAbalone extends JFrame {
 	}
 
 	public void creerPanneau() {
-		panelPrincipal = new PanneauJeu(modele, controller);
+		panelPrincipal = new PanneauJeu(this, controller);
 		setContentPane(panelPrincipal);
 	}
 
 	public void setController(SuperController controller) {
 		this.controller = controller;
+	}
+
+	public Modele getModele() {
+		return modele;
 	}
 }

@@ -2,8 +2,6 @@ package controleur;
 
 import java.awt.event.MouseEvent;
 
-import Utilitaire.Coord;
-
 import modele.Case;
 import modele.Couleur;
 import modele.Direction;
@@ -13,23 +11,17 @@ import modele.Plateau;
 import vue.BoutonRond;
 import vue.FenetreAbalone;
 import vue.PanneauJeu;
+import Utilitaire.Coord;
 
 public class SuperController {
 
 	public static final int CLICGAUCHE = MouseEvent.BUTTON1;
 	public static final int CLICDROIT = MouseEvent.BUTTON3;
 
-	private static Joueur[] tabJoueurs = new Joueur[2];
-	private static Joueur perdant;
-
 	private Coord depart;
 	private FenetreAbalone fenetre;
 	private Modele modele;
 	private Etat etat;
-
-	public Joueur[] getTabJoueurs() {
-		return tabJoueurs;
-	}
 
 	public void setEtat(controleur.Etat etat) {
 		this.etat = etat;
@@ -64,34 +56,19 @@ public class SuperController {
 		return nbCoul;
 	}
 
-	public static void verifierVictoire() {
-		String chaine = "";
-
-		for (Joueur j : tabJoueurs) {
-			chaine += j.getNom() + " : " + j.getBoulesDuJoueurEjectees() + " boule(s) ejectee(s); \n";
-			if (j.getBoulesDuJoueurEjectees() >= 6) {
-				perdant = j;
-				System.out.println("Le joueur " + perdant + " a perdu !");
-
-			}
-		}
-
-		System.out.print(chaine);
-	}
-
 	public void verifierBoules() {
 		Plateau plateau = modele.getPlateau();
 		// verification boule hors jeu
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
 				if (plateau.getCase(i, j).getBord() && plateau.getCase(i, j).estOccupee()) {
-					for (Joueur joueur : tabJoueurs) {
+					for (Joueur joueur : modele.getTabJoueurs()) {
 						if (plateau.getCase(i, j).getBoule().getCouleur() == joueur.getCouleur()) {
 							joueur.setBoulesDuJoueurEjectees(joueur.getBoulesDuJoueurEjectees() + 1);
 						}
 					}
 					plateau.getCase(i, j).setBoule(null);
-					verifierVictoire();
+					modele.verifierVictoire();
 				}
 			}
 		}

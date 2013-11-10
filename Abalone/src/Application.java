@@ -25,8 +25,8 @@ public class Application {
 		fenetre.getPanneau().visibiliteBoutonVide();
 		controller.setEtat(controleur.Etat.NORMAL);
 
-		controller.getTabJoueurs()[0] = new Joueur("joueurNOIR", Couleur.NOIR);
-		controller.getTabJoueurs()[1] = new Joueur("joueurBLANC", Couleur.BLANC);
+		modele.getTabJoueurs()[0] = new Joueur("joueurNOIR", Couleur.NOIR);
+		modele.getTabJoueurs()[1] = new Joueur("joueurBLANC", Couleur.BLANC);
 
 		fenetre.setTitle("Abalone");
 		fenetre.setVisible(true);
