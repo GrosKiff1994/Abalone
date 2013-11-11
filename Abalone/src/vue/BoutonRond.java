@@ -10,7 +10,7 @@ import java.awt.geom.Ellipse2D;
 import javax.swing.JButton;
 
 import Utilitaire.Coord;
-import controleur.SuperController;
+import controleur.Etat;
 
 public class BoutonRond extends JButton {
 	/**
@@ -21,16 +21,44 @@ public class BoutonRond extends JButton {
 
 	boolean varDist;
 
+	public static final Color couleurTransparent = new Color(0, 0, 0, 0);
 	public static final Color couleurMouseOver = new Color(153, 251, 111, 100);
 	public static final Color couleurLigne = new Color(75, 181, 193, 40);
-	public static final Color couleurLateralDeplac = new Color(60, 160, 173, 40);
-	public static final Color couleurLateralSelec = new Color(255, 160, 173, 40);
+	public static final Color couleurLateralDeplac = new Color(255, 160, 173, 40);
+	public static final Color couleurLateralSelec = new Color(60, 160, 173, 40);
 	public static final Color couleurSelec = new Color(75, 181, 193, 200);
 	public static final Color couleurBords = new Color(0, 0, 0);
 
 	private Color couleurActuelle;
+	private FenetreAbalone fenetre;
 
-	public BoutonRond(int rayon, int i, int j, final SuperController controller) {
+	Shape shape;
+
+	/* flags du bouton */
+	private boolean mouseOver;
+	private boolean cliquableDroit;
+	private boolean cliquableGauche;
+	private boolean selectionne;
+
+	public boolean isMouseOver() {
+		return mouseOver;
+	}
+
+	public boolean isCliquableDroit() {
+		return cliquableDroit;
+	}
+
+	public boolean isCliquableGauche() {
+		return cliquableGauche;
+	}
+
+	public boolean isSelectionne() {
+		return selectionne;
+	}
+
+	public BoutonRond(int rayon, int i, int j, final FenetreAbalone fenetre) {
+		this.fenetre = fenetre;
+
 		coord = new Coord(j, i);
 		int x = j * PanneauJeu.DIMBOULE + i * PanneauJeu.DIMBOULE / 2 - 4;
 		int y = i * (PanneauJeu.DIMBOULE - PanneauJeu.DIMBOULE / 8) - 4;
@@ -43,7 +71,7 @@ public class BoutonRond extends JButton {
 
 			@Override
 			public void mouseReleased(java.awt.event.MouseEvent e) {
-				controller.sourisRelachee(e);
+				fenetre.getController().sourisRelachee(e);
 			}
 		}
 
@@ -51,12 +79,12 @@ public class BoutonRond extends JButton {
 
 			@Override
 			public void mouseEntered(java.awt.event.MouseEvent e) {
-				controller.sourisEntree(e);
+				fenetre.getController().sourisEntree(e);
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				controller.sourisSortie(e);
+				fenetre.getController().sourisSortie(e);
 			}
 		}
 
@@ -86,6 +114,20 @@ public class BoutonRond extends JButton {
 
 		if (getModel().isArmed()) {
 			couleurActuelle = couleurSelec;
+		} else if (mouseOver) {
+			couleurActuelle = couleurMouseOver;
+		} else if (selectionne) {
+			couleurActuelle = couleurSelec;
+		} else if (cliquableDroit) {
+			couleurActuelle = couleurLateralSelec;
+		} else if (cliquableGauche && fenetre.getController().getEtat() == Etat.SELECTIONLIGNE) {
+			couleurActuelle = couleurLigne;
+		} else if (cliquableGauche) {
+			couleurActuelle = couleurLateralDeplac;
+		} else if (isVisible() && fenetre.getController().getEtat() != Etat.NORMAL) {
+			couleurActuelle = couleurLigne;
+		} else {
+			couleurActuelle = couleurTransparent;
 		}
 
 		if (couleurActuelle != null) {
@@ -100,8 +142,6 @@ public class BoutonRond extends JButton {
 		g.drawOval(0, 0, getSize().width, getSize().height);
 	}
 
-	Shape shape;
-
 	public boolean contains(int x, int y) {
 		// If the button has changed size,
 		// make a new shape object.
@@ -113,5 +153,21 @@ public class BoutonRond extends JButton {
 
 	public Coord getCoord() {
 		return coord;
+	}
+
+	public void setMouseOver(boolean b) {
+		this.mouseOver = b;
+	}
+
+	public void setCliquableDroit(boolean b) {
+		this.cliquableDroit = b;
+	}
+
+	public void setCliquableGauche(boolean b) {
+		this.cliquableGauche = b;
+	}
+
+	public void setSelectionne(boolean b) {
+		this.selectionne = b;
 	}
 }

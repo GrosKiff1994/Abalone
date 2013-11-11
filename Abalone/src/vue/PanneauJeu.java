@@ -32,7 +32,8 @@ public class PanneauJeu extends JPanel {
 					} else {
 						bout.setVisible(false);
 					}
-					bout.setCouleurActuelle(null);
+					bout.setCliquableDroit(false);
+					bout.setCliquableGauche(false);
 				}
 			}
 		}
@@ -44,6 +45,9 @@ public class PanneauJeu extends JPanel {
 				BoutonRond bout = fenetre.getModele().getPlateau().getCase(i, j).getBouton();
 				if (bout != null) {
 					bout.setVisible(false);
+					bout.setCliquableDroit(false);
+					bout.setCliquableGauche(false);
+					bout.setSelectionne(false);
 				}
 			}
 		}
@@ -57,6 +61,7 @@ public class PanneauJeu extends JPanel {
 			@Override
 			public void mouseReleased(java.awt.event.MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON3) {
+					cacherBoutons();
 					visibiliteBoutonVide();
 					controller.setEtat(Etat.NORMAL);
 					System.out.println("Etat : SELECTION");
@@ -73,7 +78,7 @@ public class PanneauJeu extends JPanel {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
 				Case caseCourante = fenetre.getModele().getPlateau().getCase(i, j);
 				if (caseCourante != null) {
-					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j, controller);
+					BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j, fenetre);
 					this.add(tmpBouton);
 					fenetre.getModele().getPlateau().getCase(i, j).setBouton(tmpBouton);
 				}

@@ -36,6 +36,10 @@ public class FenetreAbalone extends JFrame {
 		this.controller = controller;
 	}
 
+	public SuperController getController() {
+		return this.controller;
+	}
+
 	public Modele getModele() {
 		return modele;
 	}
