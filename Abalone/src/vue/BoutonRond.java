@@ -130,10 +130,8 @@ public class BoutonRond extends JButton {
 			couleurActuelle = couleurTransparent;
 		}
 
-		if (couleurActuelle != null) {
-			g.setColor(couleurActuelle);
-			g.fillOval(0, 0, getSize().width, getSize().height);
-		}
+		g.setColor(couleurActuelle);
+		g.fillOval(0, 0, getSize().width, getSize().height);
 
 	}
 
@@ -170,4 +168,12 @@ public class BoutonRond extends JButton {
 	public void setSelectionne(boolean b) {
 		this.selectionne = b;
 	}
+
+	@Override
+	public String toString() {
+		return "BoutonRond [coord=" + coord + ", couleurActuelle=" + couleurActuelle + ", mouseOver=" + mouseOver
+				+ ", cliquableDroit=" + cliquableDroit + ", cliquableGauche=" + cliquableGauche + ", selectionne="
+				+ selectionne + "]";
+	}
+
 }

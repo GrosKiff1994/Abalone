@@ -1,6 +1,5 @@
 package Utilitaire;
 
-
 public class Coord {
 	private int x, y;
 
@@ -33,4 +32,10 @@ public class Coord {
 	public CoordDouble castCoordDouble() {
 		return new CoordDouble(this.getX(), this.getY());
 	}
+
+	@Override
+	public String toString() {
+		return "Coord [x=" + x + ", y=" + y + "]";
+	}
+
 }
