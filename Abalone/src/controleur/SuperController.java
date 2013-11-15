@@ -87,6 +87,8 @@ public class SuperController {
 
 		Direction[] lesDir = Direction.values();
 
+		BoutonRond tmp; /* tous les boutons temporaires de parcours circulaire */
+
 		switch (etat) {
 		case NORMAL:
 			switch (e.getButton()) {
@@ -103,7 +105,7 @@ public class SuperController {
 				for (Direction dir : lesDir) {
 					Coord dest = new Coord(bouton.getCoordJ() + dir.getX(), bouton.getCoordI() + dir.getY());
 
-					BoutonRond tmp = plateau.getCase(dest).getBouton();
+					tmp = plateau.getCase(dest).getBouton();
 					if (tmp != null && !plateau.getCase(dest).getBord()) {
 						tmp.setCliquableGauche(true);
 						tmp.setVisible(true);
@@ -124,7 +126,7 @@ public class SuperController {
 				for (Direction dir : lesDir) {
 					Case caseDest = plateau.getCase(bouton.getCoordI() + dir.getY(), bouton.getCoordJ() + dir.getX());
 
-					BoutonRond tmp = caseDest.getBouton();
+					tmp = caseDest.getBouton();
 					if (tmp != null && !caseDest.getBord() && caseDest.estOccupee()
 							&& caseDest.getBoule().getCouleur() == plateau.getCase(b1).getBoule().getCouleur()) {
 						tmp.setCliquableDroit(true);
@@ -225,7 +227,6 @@ public class SuperController {
 				}
 
 				Case caseDest;
-				BoutonRond tmp;
 
 				/* affichage des boutons lateraux */
 				for (Direction dir : lesDir) {
@@ -264,12 +265,29 @@ public class SuperController {
 		case SELECTIONLATERAL2:
 			switch (e.getButton()) {
 			case CLICGAUCHE:
-				/* déplacer les 2 boules */
+				// for (Direction dir : lesDir) {
+				Case caseDest = plateau.getCase(bouton.getCoordI() + sensDeuxBoules.getY(), bouton.getCoordJ()
+						+ sensDeuxBoules.getX());
+
+				tmp = caseDest.getBouton();
+				if (tmp != null && !caseDest.getBord() && tmp.isMouseOver() && !caseDest.estOccupee()) {
+					System.out.println("je suis dans le if");
+					/* déplacer les 2 boules */
+
+					panneau.cacherBoutons();
+					panneau.visibiliteBoutonVide();
+					System.out.println("etat : NORMAL");
+					etat = Etat.NORMAL;
+
+					break;
+				}
+				// }
+
 				break;
 			case CLICDROIT:
 				Coord coordBoule3 = bouton.getCoord();
 				Case caseBoule3 = plateau.getCase(coordBoule3);
-				BoutonRond tmp = caseBoule3.getBouton();
+				tmp = caseBoule3.getBouton();
 
 				System.out.println("etat : SELECTIONLATERAL3");
 				etat = Etat.SELECTIONLATERAL3;
@@ -281,6 +299,7 @@ public class SuperController {
 		case SELECTIONLATERAL3:
 			switch (e.getButton()) {
 			case CLICGAUCHE:
+				etat = Etat.NORMAL;
 				break;
 			default:
 				break;
