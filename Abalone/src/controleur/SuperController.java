@@ -2,6 +2,7 @@ package controleur;
 
 import java.awt.event.MouseEvent;
 
+import modele.Boule;
 import modele.Case;
 import modele.Couleur;
 import modele.Direction;
@@ -12,11 +13,13 @@ import vue.BoutonRond;
 import vue.FenetreAbalone;
 import vue.PanneauJeu;
 import Utilitaire.Coord;
+import Utilitaire.CoordDouble;
 
 public class SuperController {
 
 	public static final int CLICGAUCHE = MouseEvent.BUTTON1;
 	public static final int CLICDROIT = MouseEvent.BUTTON3;
+	public static final int ips = 60;
 
 	private Coord b1;
 	private Coord b2;
@@ -312,7 +315,6 @@ public class SuperController {
 	}
 
 	private void deplacerLigneBoules(int nbBoules, Coord delta) {
-		Plateau plateau = modele.getPlateau();
 
 		System.out.println(nbBoules + " boule(s) a deplacer");
 		// la derniere boule est la premiere deplacee
@@ -321,7 +323,7 @@ public class SuperController {
 		while (nbBoules > 0) {
 			nbBoules--;
 			try {
-				plateau.deplacerBouleDirection(Direction.toDirection(delta), coordDepla);
+				deplacerBouleDirection(Direction.toDirection(delta), coordDepla);
 
 			} catch (DeplacementException e1) {
 				e1.printStackTrace();
@@ -351,7 +353,7 @@ public class SuperController {
 	}
 
 	public void sourisSortie(MouseEvent e) {
-		BoutonRond bouton = ((BoutonRond) e.getSource());
+		// BoutonRond bouton = ((BoutonRond) e.getSource());
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
 				BoutonRond bout = fenetre.getModele().getPlateau().getCase(i, j).getBouton();
@@ -365,5 +367,59 @@ public class SuperController {
 
 	public void setVue(FenetreAbalone fenetre) {
 		this.fenetre = fenetre;
+	}
+
+	public void deplacerBouleDirection(Direction dir, Coord coordCase) throws DeplacementException {
+		System.out.println("deplacement de (" + coordCase.getX() + ";" + coordCase.getY() + ") en direction ("
+				+ dir.getX() + ";" + dir.getY() + ")");
+
+		if (coordCase.getX() < 0 || coordCase.getX() >= Plateau.WIDTH || coordCase.getY() < 0
+				|| coordCase.getY() >= Plateau.HEIGHT) {
+			throw new DeplacementException("case debut invalide (<0 | >" + Plateau.HEIGHT + ")");
+		}
+
+		Case caseActuelle = modele.getPlateau().getCase(coordCase);
+		Coord coordCaseSuivante = modele.getPlateau().coordCaseSuivant(dir, coordCase);
+
+		if (!caseActuelle.estOccupee()) {
+			throw new DeplacementException("case debut non occupee");
+		}
+		if (modele.getPlateau().getCase(coordCaseSuivante).estOccupee()) {
+			throw new DeplacementException("case arrivee occcupee");
+		}
+
+		Boule bouleADeplacer = caseActuelle.getBoule();
+
+
+		int periode = 1000 / ips;
+
+		CoordDouble delta = new CoordDouble((double) (dir.getX()) / ips, (double) (dir.getY()) / ips);
+
+		for (int i = 0; i < ips; i++) {
+			bouleADeplacer.getCoord().setCoord(2.3, 2.3);
+
+			/*
+			 * bouleADeplacer.getCoord().setCoord(bouleADeplacer.getCoord().getY(
+			 * ) + delta.getY(), bouleADeplacer.getCoord().getX() +
+			 * delta.getX());
+			 */
+			System.out.println("delta : " + delta + bouleADeplacer.getCoord());
+
+			System.out.println("appel repaint");
+			fenetre.repaint();
+
+			try {
+				Thread.sleep(periode);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		bouleADeplacer.getCoord().setCoord(coordCaseSuivante.getY(), coordCaseSuivante.getX());
+		modele.getPlateau().getCase(coordCaseSuivante).setBoule(caseActuelle.getBoule());
+		caseActuelle.setBoule(null);
+
 	}
 }

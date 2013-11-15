@@ -33,6 +33,11 @@ public class Coord {
 		return new CoordDouble(this.getX(), this.getY());
 	}
 
+	public void setCoord(int i, int j) {
+		this.y = i;
+		this.x = j;
+	}
+
 	@Override
 	public String toString() {
 		return "Coord [x=" + x + ", y=" + y + "]";

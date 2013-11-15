@@ -89,7 +89,9 @@ public class PanneauJeu extends JPanel {
 	}
 
 	public void paintComponent(Graphics g) {
+
 		super.paintComponent(g);
+
 		// parcours du tableau
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
@@ -138,6 +140,5 @@ public class PanneauJeu extends JPanel {
 
 			}
 		}
-
 	}
 }
