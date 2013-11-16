@@ -19,7 +19,9 @@ public class SuperController {
 
 	public static final int CLICGAUCHE = MouseEvent.BUTTON1;
 	public static final int CLICDROIT = MouseEvent.BUTTON3;
-	public static final int ips = 60;
+	public static final int ips = 50;
+	public static final int temps = 200;
+	public static int nbBoulesDeplac = 0;
 
 	private Coord b1;
 	private Coord b2;
@@ -166,12 +168,12 @@ public class SuperController {
 							b1.getX() + nbCouleurActuelle * sensDeuxBoules.getX(), couleurArr);
 				}
 
-				int coeffDelta = nbCouleurActuelle + nbCouleurOpposee;
+				nbBoulesDeplac = nbCouleurActuelle + nbCouleurOpposee;
 				boolean deplacementPossible = true;
 
 				// verification de la case qui suit la derniere
-				Case caseFinale = plateau.getCase(b1.getY() + coeffDelta * sensDeuxBoules.getY(), b1.getX()
-						+ coeffDelta * sensDeuxBoules.getX());
+				Case caseFinale = plateau.getCase(b1.getY() + nbBoulesDeplac * sensDeuxBoules.getY(), b1.getX()
+						+ nbBoulesDeplac * sensDeuxBoules.getX());
 				if (caseFinale != null && caseFinale.estOccupee()) {
 					deplacementPossible = false;
 				}
@@ -182,7 +184,7 @@ public class SuperController {
 				// deplacement reel
 				if (nbCouleurActuelle <= Plateau.MAXDEPLACEMENT && nbCouleurOpposee < nbCouleurActuelle
 						&& deplacementPossible) {
-					deplacerLigneBoules(coeffDelta, sensDeuxBoules);
+					deplacerLigneBoules(nbBoulesDeplac, sensDeuxBoules);
 					verifierBoules();
 				}
 
@@ -316,6 +318,7 @@ public class SuperController {
 
 	private void deplacerLigneBoules(int nbBoules, Coord delta) {
 
+		nbBoulesDeplac = nbBoules;
 		System.out.println(nbBoules + " boule(s) a deplacer");
 		// la derniere boule est la premiere deplacee
 		Coord coordDepla = new Coord(b1.getX() + (nbBoules - 1) * delta.getX(), b1.getY() + (nbBoules - 1)
@@ -390,23 +393,19 @@ public class SuperController {
 
 		Boule bouleADeplacer = caseActuelle.getBoule();
 
-
-		int periode = 1000 / ips;
+		int periode = temps / nbBoulesDeplac / ips;
 
 		CoordDouble delta = new CoordDouble((double) (dir.getX()) / ips, (double) (dir.getY()) / ips);
 
 		for (int i = 0; i < ips; i++) {
-			bouleADeplacer.getCoord().setCoord(2.3, 2.3);
 
-			/*
-			 * bouleADeplacer.getCoord().setCoord(bouleADeplacer.getCoord().getY(
-			 * ) + delta.getY(), bouleADeplacer.getCoord().getX() +
-			 * delta.getX());
-			 */
-			System.out.println("delta : " + delta + bouleADeplacer.getCoord());
+			bouleADeplacer.getCoord().setCoord(bouleADeplacer.getCoord().getY() + delta.getY(),
+					bouleADeplacer.getCoord().getX() + delta.getX());
 
-			System.out.println("appel repaint");
 			fenetre.repaint();
+
+			fenetre.getPanneau().paintImmediately(0, 0, fenetre.getPanneau().getWidth(),
+					fenetre.getPanneau().getHeight());
 
 			try {
 				Thread.sleep(periode);

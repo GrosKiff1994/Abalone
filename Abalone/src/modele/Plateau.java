@@ -46,10 +46,6 @@ public class Plateau {
 			}
 		}
 
-		tab[5][5] = new Case();
-		Boule b = new Boule(Couleur.BLANC);
-		b.getCoord().setCoord(5.5, 5.5);
-		tab[5][5].setBoule(b);
 	}
 
 	public Case getCase(int i, int j) {
