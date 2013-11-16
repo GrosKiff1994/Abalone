@@ -93,6 +93,7 @@ public class SuperController {
 		Direction[] lesDir = Direction.values();
 
 		BoutonRond tmp; /* tous les boutons temporaires de parcours circulaire */
+		BoutonRond tmp2; /* pour gérer les boutons dans les directions opposées */
 
 		switch (etat) {
 		case NORMAL:
@@ -270,14 +271,20 @@ public class SuperController {
 		case SELECTIONLATERAL2:
 			switch (e.getButton()) {
 			case CLICGAUCHE:
-				// for (Direction dir : lesDir) {
+
 				Case caseDest = plateau.getCase(bouton.getCoordI() + sensDeuxBoules.getY(), bouton.getCoordJ()
 						+ sensDeuxBoules.getX());
-
 				tmp = caseDest.getBouton();
-				if (tmp != null && !caseDest.getBord() && tmp.isMouseOver() && !caseDest.estOccupee()) {
-					System.out.println("je suis dans le if");
-					/* déplacer les 2 boules */
+
+				Case caseDest2 = plateau.getCase(bouton.getCoordI() - sensDeuxBoules.getY(), bouton.getCoordJ()
+						- sensDeuxBoules.getX());
+				tmp2 = caseDest2.getBouton();
+
+				if ((tmp != null && !caseDest.getBord() && tmp.isMouseOver() && !caseDest.estOccupee())
+						|| (tmp2 != null && !caseDest2.getBord() && tmp2.isMouseOver() && !caseDest2.estOccupee() && tmp2
+								.isCliquableGauche())) {
+
+					/* TODO déplacer les 2 boules */
 
 					panneau.cacherBoutons();
 					panneau.visibiliteBoutonVide();
@@ -285,8 +292,8 @@ public class SuperController {
 					etat = Etat.NORMAL;
 
 					break;
+
 				}
-				// }
 
 				break;
 			case CLICDROIT:
