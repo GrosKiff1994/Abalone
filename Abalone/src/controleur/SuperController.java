@@ -261,6 +261,27 @@ public class SuperController {
 					}
 				}
 
+				for (int i = 0; i < Plateau.HEIGHT; i++) {
+					for (int j = 0; j < Plateau.WIDTH; j++) {
+						if (plateau.getCase(i, j).getBouton().isCliquableGauche()
+								&& plateau.getCase(i, j).getBouton().isVisible()) {
+							for (Direction dir : lesDir) {
+								if (plateau.getCase(i + dir.getY(), j + dir.getX()).getBouton().isVisible()
+										&& plateau.getCase(i + dir.getY(), j + dir.getX()).getBouton()
+												.isCliquableGauche()) {
+									plateau.getCase(i, j).getBouton().setCliquableGauche(true);
+									plateau.getCase(i, j).getBouton().setVisible(true);
+									break;
+								} else {
+									plateau.getCase(i, j).getBouton().setCliquableGauche(false);
+									plateau.getCase(i, j).getBouton().setVisible(false);
+
+								}
+							}
+						}
+					}
+				}
+
 				System.out.println("etat : SELECTIONLATERAL2");
 				etat = Etat.SELECTIONLATERAL2;
 
