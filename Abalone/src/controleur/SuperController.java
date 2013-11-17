@@ -19,9 +19,8 @@ public class SuperController {
 
 	public static final int CLICGAUCHE = MouseEvent.BUTTON1;
 	public static final int CLICDROIT = MouseEvent.BUTTON3;
-	public static final int ips = 50;
-	public static final int temps = 200;
-	public static int nbBoulesDeplac = 0;
+	public static final int ips = 35;
+	public static final int temps = 100;
 
 	private Coord b1;
 	private Coord b2;
@@ -148,6 +147,7 @@ public class SuperController {
 			}
 			break;
 		case SELECTIONLIGNE:
+			int nbBoulesDeplac;
 			switch (e.getButton()) {
 			case CLICGAUCHE:
 				Coord arrive = bouton.getCoord();
@@ -185,6 +185,7 @@ public class SuperController {
 				// deplacement reel
 				if (nbCouleurActuelle <= Plateau.MAXDEPLACEMENT && nbCouleurOpposee < nbCouleurActuelle
 						&& deplacementPossible) {
+					panneau.cacherBoutons();
 					deplacerLigneBoules(nbBoulesDeplac, sensDeuxBoules);
 					verifierBoules();
 				}
@@ -324,8 +325,8 @@ public class SuperController {
 	}
 
 	private void deplacerLigneBoules(int nbBoules, Coord delta) {
+		int periode = temps / nbBoules / ips;
 
-		nbBoulesDeplac = nbBoules;
 		System.out.println(nbBoules + " boule(s) a deplacer");
 		// la derniere boule est la premiere deplacee
 		Coord coordDepla = new Coord(b1.getX() + (nbBoules - 1) * delta.getX(), b1.getY() + (nbBoules - 1)
@@ -333,7 +334,7 @@ public class SuperController {
 		while (nbBoules > 0) {
 			nbBoules--;
 			try {
-				deplacerBouleDirection(Direction.toDirection(delta), coordDepla);
+				deplacerBouleDirection(Direction.toDirection(delta), coordDepla, periode);
 
 			} catch (DeplacementException e1) {
 				e1.printStackTrace();
@@ -379,7 +380,8 @@ public class SuperController {
 		this.fenetre = fenetre;
 	}
 
-	public void deplacerBouleDirection(Direction dir, Coord coordCase) throws DeplacementException {
+	public void deplacerBouleDirection(Direction dir, Coord coordCase, int tempsPeriode) throws DeplacementException {
+
 		System.out.println("deplacement de (" + coordCase.getX() + ";" + coordCase.getY() + ") en direction ("
 				+ dir.getX() + ";" + dir.getY() + ")");
 
@@ -400,12 +402,10 @@ public class SuperController {
 
 		Boule bouleADeplacer = caseActuelle.getBoule();
 
-		int periode = temps / nbBoulesDeplac / ips;
-
 		CoordDouble delta = new CoordDouble((double) (dir.getX()) / ips, (double) (dir.getY()) / ips);
 
 		for (int i = 0; i < ips; i++) {
-
+			long debut = System.currentTimeMillis();
 			bouleADeplacer.getCoord().setCoord(bouleADeplacer.getCoord().getY() + delta.getY(),
 					bouleADeplacer.getCoord().getX() + delta.getX());
 
@@ -415,9 +415,10 @@ public class SuperController {
 					fenetre.getPanneau().getHeight());
 
 			try {
-				Thread.sleep(periode);
+				long tpsRestant = tempsPeriode - (System.currentTimeMillis() - debut);
+				if (tpsRestant > 0)
+					Thread.sleep(tpsRestant);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 

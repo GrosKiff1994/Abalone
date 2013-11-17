@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
@@ -20,7 +21,8 @@ public class PanneauJeu extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int DIMBOULE = 60;
 
-	protected FenetreAbalone fenetre;
+	private FenetreAbalone fenetre;
+	private BufferedImage fond;
 
 	public void visibiliteBoutonVide() {
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
@@ -88,57 +90,63 @@ public class PanneauJeu extends JPanel {
 
 	}
 
-	public void paintComponent(Graphics g) {
-
-		super.paintComponent(g);
+	public void genererFond() {
+		fond = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		Graphics g = fond.getGraphics();
 
 		// parcours du tableau
 		for (int i = 0; i < Plateau.HEIGHT; i++) {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
 				Case caseCourante = fenetre.getModele().getPlateau().getCase(i, j);
 				// case existe ?
-				if (caseCourante != null) {
-					// case occupee ?
-					if (caseCourante.estOccupee()) {
-						CoordDouble coord = caseCourante.getBoule().getCoord();
-
-						g.setColor(Color.BLACK);
-						g.fillOval((int) (coord.getX() * DIMBOULE + coord.getY() * DIMBOULE / 2 - 2),
-								(int) (coord.getY() * (DIMBOULE - DIMBOULE / 8) - 2), DIMBOULE, DIMBOULE);
-
-						// selon la couleur
-						switch (caseCourante.getBoule().getCouleur()) {
-						case NOIR:
-							g.setColor(Color.DARK_GRAY);
-							break;
-						case BLANC:
-							g.setColor(Color.WHITE);
-							break;
-						default:
-						}
-						g.fillOval((int) (coord.getX() * DIMBOULE + coord.getY() * DIMBOULE / 2 - 4),
-								(int) (coord.getY() * (DIMBOULE - DIMBOULE / 8) - 4), DIMBOULE, DIMBOULE);
-					} else {
-						if (caseCourante.getBord()) {
-							// g.setColor(Color.GRAY);
-							// g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i
-							// * (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE,
-							// DIMBOULE);
-						} else {
-							g.setColor(Color.LIGHT_GRAY);
-							g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i * (DIMBOULE - DIMBOULE / 8) - 2,
-									DIMBOULE, DIMBOULE);
-						}
-
-					} // fin case occupee
-
-				} // fin case existe
-
-				/*
-				 * else { g.setColor(Color.DARK_GRAY); }
-				 */
+				if (caseCourante != null && !caseCourante.getBord()) {
+					g.setColor(Color.LIGHT_GRAY);
+					g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i * (DIMBOULE - DIMBOULE / 8) - 2, DIMBOULE,
+							DIMBOULE);
+				}
 
 			}
+
+		}
+	}
+
+	public void paintComponent(Graphics g) {
+
+		super.paintComponent(g);
+		g.drawImage(fond, 0, 0, null);
+
+		// parcours du tableau
+		for (int i = 0; i < Plateau.HEIGHT; i++) {
+			for (int j = 0; j < Plateau.WIDTH; j++) {
+				Case caseCourante = fenetre.getModele().getPlateau().getCase(i, j);
+				// case existe ?
+				if (caseCourante != null && caseCourante.estOccupee()) {
+					CoordDouble coord = caseCourante.getBoule().getCoord();
+
+					g.setColor(Color.BLACK);
+					g.fillOval((int) (coord.getX() * DIMBOULE + coord.getY() * DIMBOULE / 2 - 2), (int) (coord.getY()
+							* (DIMBOULE - DIMBOULE / 8) - 2), DIMBOULE, DIMBOULE);
+
+					// selon la couleur
+					switch (caseCourante.getBoule().getCouleur()) {
+					case NOIR:
+						g.setColor(Color.DARK_GRAY);
+						break;
+					case BLANC:
+						g.setColor(Color.WHITE);
+						break;
+					default:
+					}
+					g.fillOval((int) (coord.getX() * DIMBOULE + coord.getY() * DIMBOULE / 2 - 4), (int) (coord.getY()
+							* (DIMBOULE - DIMBOULE / 8) - 4), DIMBOULE, DIMBOULE);
+				}
+
+			} // fin case existe
+
+			/*
+			 * else { g.setColor(Color.DARK_GRAY); }
+			 */
+
 		}
 	}
 }
