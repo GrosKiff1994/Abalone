@@ -207,6 +207,7 @@ public class SuperController {
 					break;
 
 				Coord arrivee = new Coord(bouton.getCoordJ(), bouton.getCoordI());
+				b2 = bouton.getCoord();
 				sensDeuxBoules = new Coord(arrivee.getX() - b1.getX(), arrivee.getY() - b1.getY());
 
 				panneau.cacherBoutons();
@@ -307,6 +308,23 @@ public class SuperController {
 								.isCliquableGauche())) {
 
 					/* TODO déplacer les 2 boules */
+					Coord sensDeplac = new Coord(bouton.getCoord().getX() - b1.getX(), bouton.getCoord().getY()
+							- b1.getY());
+
+					int nbBoules = 2;
+					int periode = temps / nbBoules / ips;
+
+					if (!tmp.isCliquableGauche()) {
+						sensDeplac = new Coord(sensDeplac.getX() - sensDeuxBoules.getX(), sensDeplac.getY()
+								- sensDeuxBoules.getY());
+					}
+					try {
+						deplacerBouleDirection(Direction.toDirection(sensDeplac), b1, periode);
+						deplacerBouleDirection(Direction.toDirection(sensDeplac), b2, periode);
+					} catch (DeplacementException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
 					panneau.cacherBoutons();
 					panneau.visibiliteBoutonVide();
