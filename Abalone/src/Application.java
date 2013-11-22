@@ -16,7 +16,6 @@ public class Application {
 
 		fenetre.setController(controller);
 		controller.setVue(fenetre);
-		modele.setVue(fenetre);
 
 		Plateau plateauJeu = new Plateau();
 		plateauJeu.chargerTab(Carte.tabTest);

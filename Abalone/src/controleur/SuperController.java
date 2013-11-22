@@ -30,7 +30,7 @@ public class SuperController {
 	private Modele modele;
 	private Etat etat;
 
-	private Coord sensDeuxBoules;
+	// private Coord sensDeuxBoules;
 
 	public void setEtat(controleur.Etat etat) {
 		this.etat = etat;
@@ -99,11 +99,12 @@ public class SuperController {
 
 		Direction[] lesDir = Direction.values();
 
-		BoutonRond tmp; /* tous les boutons temporaires de parcours circulaire */
-		BoutonRond tmp2; /* pour gérer les boutons dans les directions opposées */
+		// BoutonRond tmp; /* tous les boutons temporaires de parcours
+		// circulaire */
 
 		switch (etat) {
 		case NORMAL:
+			BoutonRond tmp;
 			switch (e.getButton()) {
 			case CLICGAUCHE:
 				// coordonnees depart
@@ -158,8 +159,9 @@ public class SuperController {
 			int nbBoulesDeplac;
 			switch (e.getButton()) {
 			case CLICGAUCHE:
-				Coord arrive = bouton.getCoord();
-				sensDeuxBoules = new Coord(arrive.getX() - b1.getX(), arrive.getY() - b1.getY());
+				b2 = bouton.getCoord();
+				Coord sensDeuxBoules = new Coord(b2.getX() - b1.getX(), b2.getY() - b1.getY());
+
 				Direction dir = Direction.toDirection(sensDeuxBoules);
 
 				/* premiere ligne de boules */
@@ -216,7 +218,7 @@ public class SuperController {
 
 				b2 = bouton.getCoord();
 
-				sensDeuxBoules = new Coord(b2.getX() - b1.getX(), b2.getY() - b1.getY());
+				Coord sensDeuxBoules = new Coord(b2.getX() - b1.getX(), b2.getY() - b1.getY());
 
 				panneau.cacherBoutons();
 
@@ -271,18 +273,19 @@ public class SuperController {
 		case SELECTIONLATERAL2:
 			switch (e.getButton()) {
 			case CLICGAUCHE:
+				Coord sensDeuxBoules = new Coord(b2.getX() - b1.getX(), b2.getY() - b1.getY());
 
-				Case caseDest = plateau.getCase(bouton.getCoordI() + sensDeuxBoules.getY(), bouton.getCoordJ()
+				Case caseProlonge = plateau.getCase(bouton.getCoordI() + sensDeuxBoules.getY(), bouton.getCoordJ()
 						+ sensDeuxBoules.getX());
-				tmp = caseDest.getBouton();
 
-				Case caseDest2 = plateau.getCase(bouton.getCoordI() - sensDeuxBoules.getY(), bouton.getCoordJ()
+				Case caseInverse = plateau.getCase(bouton.getCoordI() - sensDeuxBoules.getY(), bouton.getCoordJ()
 						- sensDeuxBoules.getX());
-				tmp2 = caseDest2.getBouton();
 
-				if ((tmp != null && !caseDest.getBord() && tmp.isMouseOver() && !caseDest.estOccupee())
-						|| (tmp2 != null && !caseDest2.getBord() && tmp2.isMouseOver() && !caseDest2.estOccupee() && tmp2
-								.isCliquableGauche())) {
+				if ((caseProlonge.getBouton() != null && !caseProlonge.getBord()
+						&& caseProlonge.getBouton().isMouseOver() && !caseProlonge.estOccupee())
+						|| (caseInverse.getBouton() != null && !caseInverse.getBord()
+								&& caseInverse.getBouton().isMouseOver() && !caseInverse.estOccupee() && caseInverse
+								.getBouton().isCliquableGauche())) {
 
 					/* TODO déplacer les 2 boules */
 					Coord sensDeplac = new Coord(bouton.getCoord().getX() - b1.getX(), bouton.getCoord().getY()
@@ -291,7 +294,7 @@ public class SuperController {
 					int nbBoules = 2;
 					int periode = temps / nbBoules / ips;
 
-					if (!tmp.isCliquableGauche()) {
+					if (!caseProlonge.getBouton().isCliquableGauche()) {
 						sensDeplac = new Coord(sensDeplac.getX() - sensDeuxBoules.getX(), sensDeplac.getY()
 								- sensDeuxBoules.getY());
 					}
@@ -333,6 +336,9 @@ public class SuperController {
 				Case caseDepart = plateau.getCase(b1);
 				Case caseMilieu = plateau.getCase(b2);
 				Case caseArrivee = plateau.getCase(b3);
+
+				sensDeuxBoules = new Coord(b2.getX() - b1.getX(), b2.getY() - b1.getY());
+
 				Case caseDecalDepart = plateau.getCase(b1.getY() - sensDeuxBoules.getY(),
 						b1.getX() - sensDeuxBoules.getX());
 				Case caseDecalArrivee = plateau.getCase(b3.getY() + sensDeuxBoules.getY(),
@@ -476,6 +482,7 @@ public class SuperController {
 		BoutonRond bouton = ((BoutonRond) e.getSource());
 		bouton.setMouseOver(true);
 		if (etat == Etat.SELECTIONLATERAL2) {
+			Coord sensDeuxBoules = new Coord(b2.getX() - b1.getX(), b2.getY() - b1.getY());
 			Coord coordDepla = new Coord(bouton.getCoord().getX() + sensDeuxBoules.getX(), bouton.getCoord().getY()
 					+ sensDeuxBoules.getY());
 			if (!modele.getPlateau().getCase(coordDepla).getBouton().isVisible()) {

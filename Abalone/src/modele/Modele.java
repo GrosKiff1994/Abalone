@@ -1,6 +1,5 @@
 package modele;
 
-import vue.FenetreAbalone;
 
 public class Modele {
 	private Plateau plateau;
@@ -19,14 +18,11 @@ public class Modele {
 			if (j.getBoulesDuJoueurEjectees() >= 6) {
 				perdant = j;
 				System.out.println("Le joueur " + perdant + " a perdu !");
-
+				System.exit(0);
 			}
 		}
 
 		System.out.print(chaine);
-	}
-
-	public void setVue(FenetreAbalone fenetre) {
 	}
 
 	public Plateau getPlateau() {

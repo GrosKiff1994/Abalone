@@ -45,11 +45,11 @@ public class BoutonRond extends JButton {
 	}
 
 	public boolean isCliquableDroit() {
-		return cliquableDroit;
+		return cliquableDroit && isVisible();
 	}
 
 	public boolean isCliquableGauche() {
-		return cliquableGauche;
+		return cliquableGauche && isVisible();
 	}
 
 	public boolean isSelectionne() {
