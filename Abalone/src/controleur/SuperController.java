@@ -337,9 +337,60 @@ public class SuperController {
 
 				break;
 			case CLICDROIT:
+				if (bouton.isCliquableGauche())
+					break;
+
+				b3 = bouton.getCoord();
 				Coord coordBoule3 = bouton.getCoord();
 				Case caseBoule3 = plateau.getCase(coordBoule3);
 				tmp = caseBoule3.getBouton();
+
+				/* affichage des boutons lateraux */
+				for (Direction dir : lesDir) {
+
+					caseDest = plateau.getCase(caseBoule3.getBouton().getCoordI() + dir.getY(), caseBoule3.getBouton()
+							.getCoordJ() + dir.getX());
+
+					tmp = caseDest.getBouton();
+					if (tmp != null && !caseDest.getBord() && !caseDest.estOccupee()
+							&& !caseDest.getBouton().getCoord().equals(caseDecalArrivee.getBouton().getCoord())
+							&& !caseDest.getBouton().getCoord().equals(caseDecalDepart.getBouton().getCoord())) {
+						tmp.setCliquableGauche(true);
+						tmp.setVisible(true);
+					}
+
+					caseDest = plateau.getCase(caseBoule3.getBouton().getCoordI() + dir.getY(), caseBoule3.getBouton()
+							.getCoordJ() + dir.getX());
+
+					tmp = caseDest.getBouton();
+					if (tmp != null && !caseDest.getBord() && !caseDest.estOccupee()
+							&& !caseDest.getBouton().getCoord().equals(caseDecalArrivee.getBouton().getCoord())
+							&& !caseDest.getBouton().getCoord().equals(caseDecalDepart.getBouton().getCoord())) {
+						tmp.setCliquableGauche(true);
+						tmp.setVisible(true);
+					}
+				}
+
+				for (int i = 0; i < Plateau.HEIGHT; i++) {
+					for (int j = 0; j < Plateau.WIDTH; j++) {
+						if (plateau.getCase(i, j).getBouton().isCliquableGauche()
+								&& plateau.getCase(i, j).getBouton().isVisible()) {
+							for (Direction dir : lesDir) {
+								if (plateau.getCase(i + dir.getY(), j + dir.getX()).getBouton().isVisible()
+										&& plateau.getCase(i + dir.getY(), j + dir.getX()).getBouton()
+												.isCliquableGauche()) {
+									plateau.getCase(i, j).getBouton().setCliquableGauche(true);
+									plateau.getCase(i, j).getBouton().setVisible(true);
+									break;
+								} else {
+									plateau.getCase(i, j).getBouton().setCliquableGauche(false);
+									plateau.getCase(i, j).getBouton().setVisible(false);
+
+								}
+							}
+						}
+					}
+				}
 
 				System.out.println("etat : SELECTIONLATERAL3");
 				etat = Etat.SELECTIONLATERAL3;
