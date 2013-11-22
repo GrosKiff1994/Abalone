@@ -55,7 +55,7 @@ public class PanneauJeu extends JPanel {
 		}
 	}
 
-	public PanneauJeu(FenetreAbalone fenetre, final SuperController controller) {
+	public PanneauJeu(final FenetreAbalone fenetre, final SuperController controller) {
 		this.fenetre = fenetre;
 
 		class listenerAnnuler extends MouseAdapter {
@@ -65,6 +65,7 @@ public class PanneauJeu extends JPanel {
 				if (e.getButton() == MouseEvent.BUTTON3) {
 					cacherBoutons();
 					visibiliteBoutonVide();
+					fenetre.getController().viderB1B2B3();
 					controller.setEtat(Etat.NORMAL);
 					System.out.println("Etat : SELECTION");
 				}

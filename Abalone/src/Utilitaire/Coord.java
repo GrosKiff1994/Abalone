@@ -9,6 +9,11 @@ public class Coord {
 		this.y = y;
 	}
 
+	public Coord(Coord c) {
+		this.x = c.getX();
+		this.y = c.getY();
+	}
+
 	public int getX() {
 		return x;
 	}
@@ -41,6 +46,11 @@ public class Coord {
 	@Override
 	public String toString() {
 		return "Coord [x=" + x + ", y=" + y + "]";
+	}
+
+	public void setCoord(Coord c) {
+		this.x = c.getX();
+		this.y = c.getY();
 	}
 
 }

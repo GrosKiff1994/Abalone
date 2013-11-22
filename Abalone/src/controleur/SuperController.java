@@ -1,6 +1,7 @@
 package controleur;
 
 import java.awt.event.MouseEvent;
+import java.util.HashSet;
 
 import modele.Boule;
 import modele.Case;
@@ -28,6 +29,7 @@ public class SuperController {
 	private FenetreAbalone fenetre;
 	private Modele modele;
 	private Etat etat;
+
 	private Coord sensDeuxBoules;
 
 	public void setEtat(controleur.Etat etat) {
@@ -40,6 +42,12 @@ public class SuperController {
 
 	public SuperController(Modele modele) {
 		this.modele = modele;
+	}
+
+	public void viderB1B2B3() {
+		b1 = null;
+		b2 = null;
+		b3 = null;
 	}
 
 	public int compteCouleur(Direction delta, Coord depart, Couleur couleur) {
@@ -206,19 +214,29 @@ public class SuperController {
 				if (bouton.isSelectionne())
 					break;
 
-				Coord arrivee = new Coord(bouton.getCoordJ(), bouton.getCoordI());
 				b2 = bouton.getCoord();
-				sensDeuxBoules = new Coord(arrivee.getX() - b1.getX(), arrivee.getY() - b1.getY());
+
+				sensDeuxBoules = new Coord(b2.getX() - b1.getX(), b2.getY() - b1.getY());
 
 				panneau.cacherBoutons();
 
 				/* caseDecalDepart - caseDepart - caseArrivee - caseDecalArrivee */
-				Case caseDecalArrivee = plateau.getCase(arrivee.getY() + sensDeuxBoules.getY(), arrivee.getX()
-						+ sensDeuxBoules.getX());
+				Case caseDepart = plateau.getCase(b1);
+				Case caseArrivee = plateau.getCase(b2);
 				Case caseDecalDepart = plateau.getCase(b1.getY() - sensDeuxBoules.getY(),
 						b1.getX() - sensDeuxBoules.getX());
-				Case caseDepart = plateau.getCase(b1);
-				Case caseArrivee = plateau.getCase(arrivee);
+				Case caseDecalArrivee = plateau.getCase(b2.getY() + sensDeuxBoules.getY(),
+						b2.getX() + sensDeuxBoules.getX());
+
+				HashSet<Case> listeCases = new HashSet<Case>();
+				listeCases.add(caseDepart);
+				listeCases.add(caseArrivee);
+				listeCases.add(caseDecalDepart);
+				listeCases.add(caseDecalArrivee);
+
+				/* affichage des boutons lateraux */
+				cercleBoutonsLateraux(listeCases, caseDepart);
+				cercleBoutonsLateraux(listeCases, caseArrivee);
 
 				/* affichage des boutons decal */
 
@@ -226,62 +244,21 @@ public class SuperController {
 						&& caseDecalArrivee.getBoule().getCouleur() == caseArrivee.getBoule().getCouleur()) {
 					caseDecalArrivee.getBouton().setCliquableDroit(true);
 					caseDecalArrivee.getBouton().setVisible(true);
+				} else {
+					caseDecalArrivee.getBouton().setCliquableDroit(false);
+					caseDecalArrivee.getBouton().setVisible(false);
 				}
 
 				if (caseDecalDepart.estOccupee()
 						&& caseDecalDepart.getBoule().getCouleur() == caseDepart.getBoule().getCouleur()) {
 					caseDecalArrivee.getBouton().setCliquableDroit(true);
 					caseDecalDepart.getBouton().setVisible(true);
+				} else {
+					caseDecalArrivee.getBouton().setCliquableDroit(false);
+					caseDecalDepart.getBouton().setVisible(false);
 				}
 
-				Case caseDest;
-
-				/* affichage des boutons lateraux */
-				for (Direction dir : lesDir) {
-
-					caseDest = plateau.getCase(caseDepart.getBouton().getCoordI() + dir.getY(), caseDepart.getBouton()
-							.getCoordJ() + dir.getX());
-
-					tmp = caseDest.getBouton();
-					if (tmp != null && !caseDest.getBord() && !caseDest.estOccupee()
-							&& !caseDest.getBouton().getCoord().equals(caseDecalArrivee.getBouton().getCoord())
-							&& !caseDest.getBouton().getCoord().equals(caseDecalDepart.getBouton().getCoord())) {
-						tmp.setCliquableGauche(true);
-						tmp.setVisible(true);
-					}
-
-					caseDest = plateau.getCase(caseArrivee.getBouton().getCoordI() + dir.getY(), caseArrivee
-							.getBouton().getCoordJ() + dir.getX());
-
-					tmp = caseDest.getBouton();
-					if (tmp != null && !caseDest.getBord() && !caseDest.estOccupee()
-							&& !caseDest.getBouton().getCoord().equals(caseDecalArrivee.getBouton().getCoord())
-							&& !caseDest.getBouton().getCoord().equals(caseDecalDepart.getBouton().getCoord())) {
-						tmp.setCliquableGauche(true);
-						tmp.setVisible(true);
-					}
-				}
-
-				for (int i = 0; i < Plateau.HEIGHT; i++) {
-					for (int j = 0; j < Plateau.WIDTH; j++) {
-						if (plateau.getCase(i, j).getBouton().isCliquableGauche()
-								&& plateau.getCase(i, j).getBouton().isVisible()) {
-							for (Direction dir : lesDir) {
-								if (plateau.getCase(i + dir.getY(), j + dir.getX()).getBouton().isVisible()
-										&& plateau.getCase(i + dir.getY(), j + dir.getX()).getBouton()
-												.isCliquableGauche()) {
-									plateau.getCase(i, j).getBouton().setCliquableGauche(true);
-									plateau.getCase(i, j).getBouton().setVisible(true);
-									break;
-								} else {
-									plateau.getCase(i, j).getBouton().setCliquableGauche(false);
-									plateau.getCase(i, j).getBouton().setVisible(false);
-
-								}
-							}
-						}
-					}
-				}
+				eliminerForeverAlone();
 
 				System.out.println("etat : SELECTIONLATERAL2");
 				etat = Etat.SELECTIONLATERAL2;
@@ -326,8 +303,11 @@ public class SuperController {
 						e1.printStackTrace();
 					}
 
+					viderB1B2B3();
+
 					panneau.cacherBoutons();
 					panneau.visibiliteBoutonVide();
+
 					System.out.println("etat : NORMAL");
 					etat = Etat.NORMAL;
 
@@ -340,57 +320,45 @@ public class SuperController {
 				if (bouton.isCliquableGauche())
 					break;
 
+				panneau.cacherBoutons();
+
 				b3 = bouton.getCoord();
-				Coord coordBoule3 = bouton.getCoord();
-				Case caseBoule3 = plateau.getCase(coordBoule3);
-				tmp = caseBoule3.getBouton();
+
+				reordonne(b1, b2, b3);
+
+				/*
+				 * caseDecalDepart - caseDepart - caseMilieu - caseArrivee -
+				 * caseDecalArrivee
+				 */
+				Case caseDepart = plateau.getCase(b1);
+				Case caseMilieu = plateau.getCase(b2);
+				Case caseArrivee = plateau.getCase(b3);
+				Case caseDecalDepart = plateau.getCase(b1.getY() - sensDeuxBoules.getY(),
+						b1.getX() - sensDeuxBoules.getX());
+				Case caseDecalArrivee = plateau.getCase(b3.getY() + sensDeuxBoules.getY(),
+						b3.getX() + sensDeuxBoules.getX());
+
+				HashSet<Case> casesSpeciales = new HashSet<Case>();
+				casesSpeciales.add(caseDecalArrivee);
+				casesSpeciales.add(caseDecalDepart);
+				casesSpeciales.add(caseDepart);
+				casesSpeciales.add(caseArrivee);
+				casesSpeciales.add(caseMilieu);
 
 				/* affichage des boutons lateraux */
-				for (Direction dir : lesDir) {
+				cercleBoutonsLateraux(casesSpeciales, caseDepart);
+				cercleBoutonsLateraux(casesSpeciales, caseMilieu);
+				cercleBoutonsLateraux(casesSpeciales, caseArrivee);
 
-					caseDest = plateau.getCase(caseBoule3.getBouton().getCoordI() + dir.getY(), caseBoule3.getBouton()
-							.getCoordJ() + dir.getX());
+				eliminerForeverAlone();
 
-					tmp = caseDest.getBouton();
-					if (tmp != null && !caseDest.getBord() && !caseDest.estOccupee()
-							&& !caseDest.getBouton().getCoord().equals(caseDecalArrivee.getBouton().getCoord())
-							&& !caseDest.getBouton().getCoord().equals(caseDecalDepart.getBouton().getCoord())) {
-						tmp.setCliquableGauche(true);
-						tmp.setVisible(true);
-					}
+				caseDecalDepart.getBouton().setVisible(false);
+				caseDecalDepart.getBouton().setCliquableGauche(false);
+				caseDecalDepart.getBouton().setCliquableDroit(false);
 
-					caseDest = plateau.getCase(caseBoule3.getBouton().getCoordI() + dir.getY(), caseBoule3.getBouton()
-							.getCoordJ() + dir.getX());
-
-					tmp = caseDest.getBouton();
-					if (tmp != null && !caseDest.getBord() && !caseDest.estOccupee()
-							&& !caseDest.getBouton().getCoord().equals(caseDecalArrivee.getBouton().getCoord())
-							&& !caseDest.getBouton().getCoord().equals(caseDecalDepart.getBouton().getCoord())) {
-						tmp.setCliquableGauche(true);
-						tmp.setVisible(true);
-					}
-				}
-
-				for (int i = 0; i < Plateau.HEIGHT; i++) {
-					for (int j = 0; j < Plateau.WIDTH; j++) {
-						if (plateau.getCase(i, j).getBouton().isCliquableGauche()
-								&& plateau.getCase(i, j).getBouton().isVisible()) {
-							for (Direction dir : lesDir) {
-								if (plateau.getCase(i + dir.getY(), j + dir.getX()).getBouton().isVisible()
-										&& plateau.getCase(i + dir.getY(), j + dir.getX()).getBouton()
-												.isCliquableGauche()) {
-									plateau.getCase(i, j).getBouton().setCliquableGauche(true);
-									plateau.getCase(i, j).getBouton().setVisible(true);
-									break;
-								} else {
-									plateau.getCase(i, j).getBouton().setCliquableGauche(false);
-									plateau.getCase(i, j).getBouton().setVisible(false);
-
-								}
-							}
-						}
-					}
-				}
+				caseDecalArrivee.getBouton().setVisible(false);
+				caseDecalArrivee.getBouton().setCliquableGauche(false);
+				caseDecalArrivee.getBouton().setCliquableDroit(false);
 
 				System.out.println("etat : SELECTIONLATERAL3");
 				etat = Etat.SELECTIONLATERAL3;
@@ -403,6 +371,10 @@ public class SuperController {
 			switch (e.getButton()) {
 			case CLICGAUCHE:
 				etat = Etat.NORMAL;
+
+				/* blabla */
+				viderB1B2B3();
+
 				break;
 			default:
 				break;
@@ -411,6 +383,71 @@ public class SuperController {
 		default:
 			break;
 
+		}
+	}
+
+	/*
+	 * met les trois coordonnées telles que premier - second - troisième en
+	 * ligne
+	 */
+	private void reordonne(Coord p, Coord s, Coord t) {
+		if (t.getX() - s.getX() > 1 || t.getX() - s.getX() < -1 || t.getY() - s.getY() > 1 || t.getY() - s.getY() < -1) {
+			Coord pSave = new Coord(p);
+			Coord sSave = new Coord(s);
+			Coord tSave = new Coord(t);
+
+			p.setCoord(tSave);
+			s.setCoord(pSave);
+			t.setCoord(sSave);
+		}
+	}
+
+	private void cercleBoutonsLateraux(HashSet<Case> listeCases, Case centre) {
+		Plateau plateau = this.modele.getPlateau();
+		Direction[] lesDir = Direction.values();
+
+		for (Direction dir : lesDir) {
+
+			Case caseDest = plateau.getCase(centre.getBouton().getCoordI() + dir.getY(), centre.getBouton().getCoordJ()
+					+ dir.getX());
+
+			BoutonRond tmp = caseDest.getBouton();
+			if (tmp != null && !caseDest.getBord() && !caseDest.estOccupee()) {
+
+				for (Case caseTmp : listeCases) {
+					if (caseDest.getBouton().getCoord().equals(caseTmp.getBouton().getCoord()))
+						break;
+				}
+
+				tmp.setCliquableGauche(true);
+				tmp.setVisible(true);
+			}
+		}
+	}
+
+	private void eliminerForeverAlone() {
+		Plateau plateau = this.modele.getPlateau();
+		Direction[] lesDir = Direction.values();
+
+		// cache les boutons isolés
+		for (int i = 0; i < Plateau.HEIGHT; i++) {
+			for (int j = 0; j < Plateau.WIDTH; j++) {
+				if (plateau.getCase(i, j).getBouton().isCliquableGauche()
+						&& plateau.getCase(i, j).getBouton().isVisible()) {
+					for (Direction dir : lesDir) {
+						if (plateau.getCase(i + dir.getY(), j + dir.getX()).getBouton().isVisible()
+								&& plateau.getCase(i + dir.getY(), j + dir.getX()).getBouton().isCliquableGauche()) {
+							plateau.getCase(i, j).getBouton().setCliquableGauche(true);
+							plateau.getCase(i, j).getBouton().setVisible(true);
+							break;
+						} else {
+							plateau.getCase(i, j).getBouton().setCliquableGauche(false);
+							plateau.getCase(i, j).getBouton().setVisible(false);
+
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -447,8 +484,7 @@ public class SuperController {
 			}
 			modele.getPlateau().getCase(coordDepla).getBouton().setMouseOver(true);
 			fenetre.repaint();
-		}
-		if (etat == Etat.SELECTIONLATERAL3) {
+		} else if (etat == Etat.SELECTIONLATERAL3) {
 			// TODO On verra pus tard...
 		}
 	}
