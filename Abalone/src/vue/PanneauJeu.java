@@ -46,10 +46,7 @@ public class PanneauJeu extends JPanel {
 			for (int j = 0; j < Plateau.WIDTH; j++) {
 				BoutonRond bout = fenetre.getModele().getPlateau().getCase(i, j).getBouton();
 				if (bout != null) {
-					bout.setVisible(false);
-					bout.setCliquableDroit(false);
-					bout.setCliquableGauche(false);
-					bout.setSelectionne(false);
+					bout.reset();
 				}
 			}
 		}
@@ -67,7 +64,7 @@ public class PanneauJeu extends JPanel {
 					visibiliteBoutonVide();
 					fenetre.getController().viderB1B2B3();
 					controller.setEtat(Etat.NORMAL);
-					System.out.println("Etat : SELECTION");
+					System.out.println("Etat : NORMAL");
 				}
 			}
 

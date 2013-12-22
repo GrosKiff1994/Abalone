@@ -26,11 +26,24 @@ public class SuperController {
 	private Coord b1;
 	private Coord b2;
 	private Coord b3;
+
 	private FenetreAbalone fenetre;
 	private Modele modele;
 	private Etat etat;
 
 	// private Coord sensDeuxBoules;
+
+	public Coord getB1() {
+		return b1;
+	}
+
+	public Coord getB2() {
+		return b2;
+	}
+
+	public Coord getB3() {
+		return b3;
+	}
 
 	public void setEtat(controleur.Etat etat) {
 		this.etat = etat;
@@ -44,10 +57,18 @@ public class SuperController {
 		this.modele = modele;
 	}
 
+	public void afficherB1B2B3() {
+		System.out.println("b1 : " + b1);
+		System.out.println("b2 : " + b2);
+		System.out.println("b3 : " + b3);
+	}
+
 	public void viderB1B2B3() {
 		b1 = null;
 		b2 = null;
 		b3 = null;
+		System.out.println("dans viderB1B2B3");
+		afficherB1B2B3();
 	}
 
 	public int compteCouleur(Direction delta, Coord depart, Couleur couleur) {
@@ -128,13 +149,17 @@ public class SuperController {
 				break;
 			case CLICDROIT:
 				// coordonnees depart
+
 				b1 = bouton.getCoord();
+
+				System.out.println("dans 1er clic droit");
+				afficherB1B2B3();
+				System.out.println(bouton);
 
 				panneau.cacherBoutons();
 
 				BoutonRond boutonDep = plateau.getCase(b1).getBouton();
 				boutonDep.setVisible(true);
-				boutonDep.setSelectionne(true);
 
 				// afficher cercle voisins
 				for (Direction dir : lesDir) {
@@ -302,7 +327,6 @@ public class SuperController {
 						deplacerBouleDirection(Direction.toDirection(sensDeplac), b1, periode);
 						deplacerBouleDirection(Direction.toDirection(sensDeplac), b2, periode);
 					} catch (DeplacementException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 
@@ -328,6 +352,9 @@ public class SuperController {
 				b3 = bouton.getCoord();
 
 				reordonne(b1, b2, b3);
+				System.out.println("b1 : " + b1);
+				System.out.println("b2 : " + b2);
+				System.out.println("b3 : " + b3);
 
 				/*
 				 * caseDecalDepart - caseDepart - caseMilieu - caseArrivee -

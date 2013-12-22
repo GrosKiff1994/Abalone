@@ -38,7 +38,16 @@ public class BoutonRond extends JButton {
 	private boolean mouseOver;
 	private boolean cliquableDroit;
 	private boolean cliquableGauche;
-	private boolean selectionne;
+
+	// private boolean selectionne;
+
+	public void reset() {
+		this.mouseOver = false;
+		this.cliquableDroit = false;
+		this.cliquableGauche = false;
+		// this.selectionne = false;
+		this.setVisible(false);
+	}
 
 	public boolean isMouseOver() {
 		return mouseOver;
@@ -53,7 +62,8 @@ public class BoutonRond extends JButton {
 	}
 
 	public boolean isSelectionne() {
-		return selectionne;
+		return this.getCoord() == fenetre.getController().getB1() || this.getCoord() == fenetre.getController().getB2()
+				|| this.getCoord() == fenetre.getController().getB3();
 	}
 
 	public BoutonRond(int rayon, int i, int j, final FenetreAbalone fenetre) {
@@ -116,7 +126,7 @@ public class BoutonRond extends JButton {
 			couleurActuelle = couleurSelec;
 		} else if (mouseOver) {
 			couleurActuelle = couleurMouseOver;
-		} else if (selectionne) {
+		} else if (isSelectionne()) {
 			couleurActuelle = couleurSelec;
 		} else if (cliquableDroit) {
 			couleurActuelle = couleurLateralSelec;
@@ -165,15 +175,11 @@ public class BoutonRond extends JButton {
 		this.cliquableGauche = b;
 	}
 
-	public void setSelectionne(boolean b) {
-		this.selectionne = b;
-	}
-
 	@Override
 	public String toString() {
 		return "BoutonRond [coord=" + coord + ", couleurActuelle=" + couleurActuelle + ", mouseOver=" + mouseOver
 				+ ", cliquableDroit=" + cliquableDroit + ", cliquableGauche=" + cliquableGauche + ", selectionne="
-				+ selectionne + "]";
+				+ isSelectionne() + ", visible=" + this.isVisible() + "]";
 	}
 
 }
