@@ -45,7 +45,6 @@ public class BoutonRond extends JButton {
 		this.mouseOver = false;
 		this.cliquableDroit = false;
 		this.cliquableGauche = false;
-		// this.selectionne = false;
 		this.setVisible(false);
 	}
 
@@ -67,6 +66,10 @@ public class BoutonRond extends JButton {
 	}
 
 	public BoutonRond(int rayon, int i, int j, final FenetreAbalone fenetre) {
+		this.cliquableDroit = false;
+		this.cliquableGauche = false;
+		this.setVisible(false);
+		this.mouseOver = false;
 		this.fenetre = fenetre;
 
 		coord = new Coord(j, i);
@@ -134,8 +137,6 @@ public class BoutonRond extends JButton {
 			couleurActuelle = couleurLigne;
 		} else if (cliquableGauche) {
 			couleurActuelle = couleurLateralDeplac;
-		} else if (isVisible() && fenetre.getController().getEtat() != Etat.NORMAL) {
-			couleurActuelle = couleurLigne;
 		} else {
 			couleurActuelle = couleurTransparent;
 		}
@@ -167,19 +168,47 @@ public class BoutonRond extends JButton {
 		this.mouseOver = b;
 	}
 
-	public void setCliquableDroit(boolean b) {
-		this.cliquableDroit = b;
+	public void mettreCliquableDroit() {
+		this.cliquableDroit = true;
+		this.setVisible(true);
 	}
 
-	public void setCliquableGauche(boolean b) {
-		this.cliquableGauche = b;
+	public void mettreCliquableGauche() {
+		this.cliquableGauche = true;
+		this.setVisible(true);
 	}
 
 	@Override
 	public String toString() {
 		return "BoutonRond [coord=" + coord + ", couleurActuelle=" + couleurActuelle + ", mouseOver=" + mouseOver
-				+ ", cliquableDroit=" + cliquableDroit + ", cliquableGauche=" + cliquableGauche + ", selectionne="
-				+ isSelectionne() + ", visible=" + this.isVisible() + "]";
+				+ ", cliquableDroit=" + cliquableDroit + ", cliquableGauche=" + cliquableGauche
+				+ ", isCliquableDroit()=" + isCliquableDroit() + ", isCliquableGauche()=" + isCliquableGauche()
+				+ ", isSelectionne()=" + isSelectionne() + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((coord == null) ? 0 : coord.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BoutonRond other = (BoutonRond) obj;
+		if (coord == null) {
+			if (other.coord != null)
+				return false;
+		} else if (!coord.equals(other.coord))
+			return false;
+		return true;
 	}
 
 }

@@ -53,4 +53,12 @@ public class Coord {
 		this.y = c.getY();
 	}
 
+	public static Coord difference(Coord p, Coord s) {
+		return new Coord(p.getX() - s.getX(), p.getY() - s.getY());
+	}
+
+	public static Coord somme(Coord p, Coord s) {
+		return new Coord(p.getX() + s.getX(), p.getY() + s.getY());
+	}
+
 }

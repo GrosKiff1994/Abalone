@@ -42,4 +42,17 @@ public class CoordDouble {
 	public String toString() {
 		return "CoordDouble [x=" + x + ", y=" + y + "]";
 	}
+
+	public void setCoord(CoordDouble c) {
+		this.x = c.getX();
+		this.y = c.getY();
+	}
+
+	public static CoordDouble difference(CoordDouble p, CoordDouble s) {
+		return new CoordDouble(p.getX() - s.getX(), p.getY() - s.getY());
+	}
+
+	public static CoordDouble somme(CoordDouble p, CoordDouble s) {
+		return new CoordDouble(p.getX() + s.getX(), p.getY() + s.getY());
+	}
 }

@@ -31,11 +31,7 @@ public class PanneauJeu extends JPanel {
 				if (bout != null) {
 					if (fenetre.getModele().getPlateau().getCase(i, j).estOccupee()) {
 						bout.setVisible(true);
-					} else {
-						bout.setVisible(false);
 					}
-					bout.setCliquableDroit(false);
-					bout.setCliquableGauche(false);
 				}
 			}
 		}

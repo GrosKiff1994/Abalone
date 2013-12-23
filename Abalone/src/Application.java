@@ -21,6 +21,8 @@ public class Application {
 		plateauJeu.chargerTab(Carte.tabTest);
 		modele.setPlateau(plateauJeu);
 		fenetre.creerPanneau();
+		controller.viderB1B2B3();
+		fenetre.getPanneau().cacherBoutons();
 		fenetre.getPanneau().visibiliteBoutonVide();
 		controller.setEtat(controleur.Etat.NORMAL);
 
