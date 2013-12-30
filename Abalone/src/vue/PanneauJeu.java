@@ -55,7 +55,7 @@ public class PanneauJeu extends JPanel {
 
 			@Override
 			public void mouseReleased(java.awt.event.MouseEvent e) {
-				if (e.getButton() == MouseEvent.BUTTON3) {
+				if (e.getButton() == MouseEvent.BUTTON3 || e.getButton() == MouseEvent.BUTTON1) {
 					cacherBoutons();
 					visibiliteBoutonVide();
 					fenetre.getController().viderB1B2B3();
