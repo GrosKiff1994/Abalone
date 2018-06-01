@@ -2,17 +2,19 @@ package vue;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-import modele.Case;
-import modele.Plateau;
 import Utilitaire.CoordDouble;
 import controleur.Etat;
 import controleur.SuperController;
+import modele.Case;
+import modele.Plateau;
 
 public class PanneauJeu extends JPanel {
 	/**
@@ -105,6 +107,9 @@ public class PanneauJeu extends JPanel {
 	}
 
 	public void paintComponent(Graphics g) {
+
+		Graphics2D graphics2D = (Graphics2D)g;
+		graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		super.paintComponent(g);
 		g.drawImage(fond, 0, 0, null);

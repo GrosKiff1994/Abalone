@@ -32,6 +32,5 @@ public class Application {
 
 		modele.getTabJoueurs()[0] = new Joueur("joueurNOIR", Couleur.NOIR);
 		modele.getTabJoueurs()[1] = new Joueur("joueurBLANC", Couleur.BLANC);
-
 	}
 }
