@@ -59,7 +59,7 @@ public class GameController {
     int nbCoul = 0;
     Coord parcours = new Coord(jDep, iDep);
     Board board = game.board;
-    while (board.getSpace(parcours) != null && board.getSpace(parcours).ball.isPresent()
+    while (board.getSpace(parcours) != null && board.getSpace(parcours).hasBall()
         && board.getSpace(parcours).ball.map(b->b.color == couleur).orElse(false)) {
       nbCoul++;
       parcours.x = parcours.x + delta.vector.x;

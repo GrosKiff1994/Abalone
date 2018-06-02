@@ -82,7 +82,7 @@ public class Board {
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
         if (grid[i][j] != null) {
-          if (grid[i][j].ball.isPresent()) {
+          if (grid[i][j].hasBall()) {
             Ball ball = grid[i][j].ball.get();
             switch (ball.color) {
               case BLACK:
