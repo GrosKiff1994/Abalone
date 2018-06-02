@@ -358,7 +358,7 @@ public class GameController {
       }
     }
 
-    setState(State.THIRD_SELECTED_FOR_LATERAL);
+    setState(State.FIRST_SELECTED_FOR_LATERAL);
   }
 
   private void handleLeftClickInNormalState(BoutonRond bouton, PanneauJeu panneau, Board plateau, Direction[] lesDir) {
