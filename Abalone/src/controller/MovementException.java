@@ -1,6 +1,6 @@
 package controller;
 
-public class MovementException extends Exception {
+public class MovementException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
