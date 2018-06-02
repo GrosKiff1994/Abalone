@@ -2,9 +2,9 @@ package controleur;
 
 public class DeplacementException extends Exception {
 
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	public DeplacementException(String mess) {
-		super(mess);
-	}
+  public DeplacementException(String mess) {
+    super(mess);
+  }
 }
