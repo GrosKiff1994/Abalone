@@ -11,7 +11,6 @@ public class Board {
   private static final char EMPTY = 'v';
   private static final int DEFAULT_HEIGHT = 11;
   private static final int DEFAULT_WIDTH = 11;
-  public static final int MAX_DEPLACEMENTS = 3;
 
   public int width;
   public int height;

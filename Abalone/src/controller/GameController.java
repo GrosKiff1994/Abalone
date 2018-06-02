@@ -20,7 +20,7 @@ public class GameController {
 
   public static final int CLICGAUCHE = MouseEvent.BUTTON1;
   public static final int CLICDROIT = MouseEvent.BUTTON3;
-  public static final int MAXDEPLACEMENT = 3;
+  public static final int MAX_DEPLACEMENTS = 3;
   public static final int ips = 35;
   public static final int temps = 100;
 
@@ -123,268 +123,261 @@ public class GameController {
       case NORMAL:
         BoutonRond tmp;
         switch (e.getButton()) {
-          case CLICGAUCHE:
-            // coordonnees depart
-            b1 = bouton.getCoord();
-            setState(State.FIRST_SELECTED_FOR_LINE);
-            System.out.println("etat : DEPLACEMENTLIGNE");
-
-            // cacher
-            panneau.hideButtons();
-
-            // afficher cercle voisins
-            for (Direction dir : lesDir) {
-              Coord dest =
-                  new Coord(bouton.getCoordJ() + dir.vector.x, bouton.getCoordI() + dir.vector.y);
-
-              tmp = plateau.getSpace(dest).bouton;
-              if (tmp != null && !plateau.getSpace(dest).isBorder) {
-                tmp.mettreCliquableGauche();
-              }
-            }
-            break;
-          case CLICDROIT:
-            // coordonnees depart
-
-            b1 = bouton.getCoord();
-
-            System.out.println("dans 1er clic droit");
-            afficherB1B2B3();
-            System.out.println(bouton);
-
-            panneau.hideButtons();
-
-            BoutonRond boutonDep = plateau.getSpace(b1).bouton;
-            boutonDep.setVisible(true);
-
-            // afficher cercle voisins
-            for (Direction dir : lesDir) {
-              Space spaceDest = plateau.getSpace(bouton.getCoordI() + dir.vector.y,
-                  bouton.getCoordJ() + dir.vector.x);
-
-              tmp = spaceDest.bouton;
-              if (tmp != null && !spaceDest.isBorder && spaceDest.estOccupee()
-                  && spaceDest.ball.color == plateau.getSpace(b1).ball.color) {
-                tmp.mettreCliquableDroit();
-              }
-            }
-
-            setState(State.THIRD_SELECTED_FOR_LATERAL);
-            System.out.println("etat : SELECTIONLATERAL");
-            break;
-          default:
-            break;
+          case CLICGAUCHE: handleLeftClickInNormalState(bouton, panneau, plateau, lesDir); break;
+          case CLICDROIT: handleRightClickInNormalState(bouton, panneau, plateau, lesDir); break;
+          default: break;
         }
         break;
       case FIRST_SELECTED_FOR_LINE:
-        int nbBoulesDeplac;
         switch (e.getButton()) {
-          case CLICGAUCHE:
-            b2 = bouton.getCoord();
-            Vector sensDeuxBoules = new Vector(b1, b2);
-            Direction dir = Direction.toDirection(sensDeuxBoules);
-
-            /* premiere ligne de boules */
-            Color couleurDepart = plateau.getSpace(b1).ball.color;
-            int nbCouleurActuelle = this.compteCouleur(dir, b1, couleurDepart);
-            int nbCouleurOpposee = 0;
-
-            Space caseDeFinCouleurActuelle =
-                plateau.getSpace(b1.y + nbCouleurActuelle * sensDeuxBoules.y,
-                    b1.x + nbCouleurActuelle * sensDeuxBoules.x);
-
-            /* seconde ligne de boules */
-            if (caseDeFinCouleurActuelle.estOccupee()) {
-              Color couleurArr = caseDeFinCouleurActuelle.ball.color;
-              nbCouleurOpposee = compteCouleur(dir, b1.y + nbCouleurActuelle * sensDeuxBoules.y,
-                  b1.x + nbCouleurActuelle * sensDeuxBoules.x, couleurArr);
-            }
-
-            nbBoulesDeplac = nbCouleurActuelle + nbCouleurOpposee;
-            boolean deplacementPossible = true;
-
-            // verification de la case qui suit la derniere
-            Space caseFinale = plateau.getSpace(b1.y + nbBoulesDeplac * sensDeuxBoules.y,
-                b1.x + nbBoulesDeplac * sensDeuxBoules.x);
-            if (caseFinale != null && caseFinale.estOccupee()) {
-              deplacementPossible = false;
-            }
-
-            System.out.println("nbCouleurAcuelle = " + nbCouleurActuelle + ", nbCouleurOpposee = "
-                + nbCouleurOpposee);
-
-            // deplacement reel
-            if (nbCouleurActuelle <= Board.MAX_DEPLACEMENTS && nbCouleurOpposee < nbCouleurActuelle
-                && deplacementPossible) {
-              panneau.hideButtons();
-              this.deplacerLigneBoules(nbBoulesDeplac, sensDeuxBoules);
-              verifierBoules();
-            }
-
-            /* nettoyage et reaffichage */
-            cleanBalls();
-            panneau.hideButtons();
-            panneau.updateClickables();
-
-            System.out.println("etat : NORMAL");
-            setState(State.NORMAL);
-            break;
-          default:
-            break;
+          case CLICGAUCHE: handleLeftClickInFirstSelectedForLineState(bouton, panneau, plateau); break;
+          default: break;
         }
         break;
       case FIRST_SELECTED_FOR_LATERAL:
         switch (e.getButton()) {
-          case CLICDROIT:
-            if (bouton.isSelectionne())
-              break;
-
-            b2 = bouton.getCoord();
-
-            Vector sensDeuxBoules = new Vector(b1, b2);
-
-            panneau.hideButtons();
-
-            Space caseDepart = plateau.getSpace(b1);
-            Space caseArrivee = plateau.getSpace(b2);
-            Space caseDecalDepart = plateau.getSpace(b1.add(sensDeuxBoules.getOpposite()));
-            Space caseDecalArrivee = plateau.getSpace(b2.add(sensDeuxBoules));
-
-            HashSet<Space> listeCases = new HashSet<Space>();
-            listeCases.add(caseDepart);
-            listeCases.add(caseArrivee);
-            listeCases.add(caseDecalDepart);
-            listeCases.add(caseDecalArrivee);
-
-            /* affichage des boutons lateraux */
-            cercleBoutonsLateraux(listeCases, caseDepart);
-            cercleBoutonsLateraux(listeCases, caseArrivee);
-
-            /* affichage des boutons decal */
-
-            if (caseDecalArrivee.estOccupee()
-                && caseDecalArrivee.ball.color == caseArrivee.ball.color) {
-              caseDecalArrivee.bouton.mettreCliquableDroit();
-            } else {
-              caseDecalArrivee.bouton.reset();
-            }
-
-            if (caseDecalDepart.estOccupee()
-                && caseDecalDepart.ball.color == caseDepart.ball.color) {
-              caseDecalDepart.bouton.mettreCliquableDroit();
-            } else {
-              caseDecalDepart.bouton.reset();
-            }
-
-            eliminerForeverAlone();
-
-            System.out.println("etat : SELECTIONLATERAL2");
-            setState(State.SECOND_SELECTED_FOR_LATERAL);
-
-            break;
-          default:
-            break;
+          case CLICDROIT: handleRightClickInFirstSelectedForLateralState(bouton, panneau, plateau); break;
+          default: break;
         }
         break;
       case SECOND_SELECTED_FOR_LATERAL:
         switch (e.getButton()) {
-          case CLICGAUCHE:
-            Vector sensDeuxBoules = new Vector(b1, b2);
-
-            Space caseProlonge = plateau.getSpace(bouton.coord.add(sensDeuxBoules));
-            Space caseInverse = plateau.getSpace(bouton.coord.add(sensDeuxBoules.getOpposite()));
-
-            if ((caseProlonge.bouton != null && !caseProlonge.isBorder
-                && caseProlonge.bouton.isMouseOver() && !caseProlonge.estOccupee())
-                || (caseInverse.bouton != null && !caseInverse.isBorder
-                    && caseInverse.bouton.isMouseOver() && !caseInverse.estOccupee()
-                    && caseInverse.bouton.isCliquableGauche())) {
-
-              Vector sensDeplac = new Vector(b1, bouton.coord);
-              int nbBoules = 2;
-              int periode = temps / nbBoules / ips;
-
-              if (!caseProlonge.bouton.isCliquableGauche()) {
-                sensDeplac = sensDeplac.add(sensDeuxBoules.getOpposite());
-              }
-              panneau.hideButtons();
-              try {
-                deplacerBouleDirection(Direction.toDirection(sensDeplac), b1, periode);
-                deplacerBouleDirection(Direction.toDirection(sensDeplac), b2, periode);
-              } catch (MovementException e1) {
-                e1.printStackTrace();
-              }
-
-              cleanBalls();
-              panneau.hideButtons();
-              panneau.updateClickables();
-
-              System.out.println("etat : NORMAL");
-              setState(State.NORMAL);
-
-              break;
-
-            }
-
-            break;
-          case CLICDROIT:
-            if (bouton.isSelectionne())
-              break;
-
-            b3 = bouton.coord;
-
-            reordonne(b1, b2, b3);
-            afficherB1B2B3();
-
-            Space caseB1 = plateau.getSpace(b1);
-            Space caseB2 = plateau.getSpace(b2);
-            Space caseB3 = plateau.getSpace(b3);
-
-            sensDeuxBoules = new Vector(b1, b2);
-
-            Space caseDecalDepart = plateau.getSpace(b1.add(sensDeuxBoules.getOpposite()));
-            Space caseDecalArrivee = plateau.getSpace(b3.add(sensDeuxBoules));
-
-            HashSet<Space> casesSpeciales = new HashSet<>();
-            casesSpeciales.add(caseDecalDepart);
-            casesSpeciales.add(caseDecalArrivee);
-            casesSpeciales.add(caseB1);
-            casesSpeciales.add(caseB3);
-            casesSpeciales.add(caseB2);
-
-            /* affichage des boutons lateraux */
-            cercleBoutonsLateraux(casesSpeciales, caseB1);
-            cercleBoutonsLateraux(casesSpeciales, caseB2);
-            cercleBoutonsLateraux(casesSpeciales, caseB3);
-
-            caseDecalDepart.bouton.reset();
-            caseDecalArrivee.bouton.reset();
-
-            eliminerForeverAlone();
-
-            System.out.println("etat : SELECTIONLATERAL3");
-            setState(State.THIRD_SELECTED_FOR_LATERAL);
-            break;
-          default:
-            break;
+          case CLICGAUCHE: handleLeftClickInsecondSelectedForLateralState(bouton, panneau, plateau); break;
+          case CLICDROIT: handleRightClickInSecondSelectedForLateralState(bouton, plateau); break;
+          default: break;
         }
         break;
       case THIRD_SELECTED_FOR_LATERAL:
         switch (e.getButton()) {
-          case CLICGAUCHE:
-            setState(State.NORMAL);
-
-            /* blabla */
-            cleanBalls();
-
-            break;
-          default:
-            break;
+          case CLICGAUCHE: handleLeftClickInThirdSelectedfForLateralState(); break;
+          default: break;
         }
         break;
       default:
         break;
 
+    }
+  }
+
+  private void handleLeftClickInThirdSelectedfForLateralState() {
+    cleanBalls();
+    setState(State.NORMAL);
+  }
+
+  private void handleRightClickInSecondSelectedForLateralState(BoutonRond bouton, Board plateau) {
+    if (bouton.isSelectionne())
+      return;
+
+    b3 = bouton.coord;
+
+    reordonne(b1, b2, b3);
+    afficherB1B2B3();
+
+    Space caseB1 = plateau.getSpace(b1);
+    Space caseB2 = plateau.getSpace(b2);
+    Space caseB3 = plateau.getSpace(b3);
+
+    Vector sensDeuxBoules = new Vector(b1, b2);
+
+    Space caseDecalDepart = plateau.getSpace(b1.add(sensDeuxBoules.getOpposite()));
+    Space caseDecalArrivee = plateau.getSpace(b3.add(sensDeuxBoules));
+
+    HashSet<Space> casesSpeciales = new HashSet<>();
+    casesSpeciales.add(caseDecalDepart);
+    casesSpeciales.add(caseDecalArrivee);
+    casesSpeciales.add(caseB1);
+    casesSpeciales.add(caseB3);
+    casesSpeciales.add(caseB2);
+
+    /* affichage des boutons lateraux */
+    cercleBoutonsLateraux(casesSpeciales, caseB1);
+    cercleBoutonsLateraux(casesSpeciales, caseB2);
+    cercleBoutonsLateraux(casesSpeciales, caseB3);
+
+    caseDecalDepart.bouton.reset();
+    caseDecalArrivee.bouton.reset();
+
+    eliminerForeverAlone();
+
+    setState(State.THIRD_SELECTED_FOR_LATERAL);
+  }
+
+  private void handleLeftClickInsecondSelectedForLateralState(BoutonRond bouton, PanneauJeu panneau, Board plateau) {
+    Vector sensDeuxBoules = new Vector(b1, b2);
+
+    Space caseProlonge = plateau.getSpace(bouton.coord.add(sensDeuxBoules));
+    Space caseInverse = plateau.getSpace(bouton.coord.add(sensDeuxBoules.getOpposite()));
+
+    if ((caseProlonge.bouton != null && !caseProlonge.isBorder
+        && caseProlonge.bouton.isMouseOver() && !caseProlonge.estOccupee())
+        || (caseInverse.bouton != null && !caseInverse.isBorder
+            && caseInverse.bouton.isMouseOver() && !caseInverse.estOccupee()
+            && caseInverse.bouton.isCliquableGauche())) {
+
+      Vector sensDeplac = new Vector(b1, bouton.coord);
+      int nbBoules = 2;
+      int periode = temps / nbBoules / ips;
+
+      if (!caseProlonge.bouton.isCliquableGauche()) {
+        sensDeplac = sensDeplac.add(sensDeuxBoules.getOpposite());
+      }
+      panneau.hideButtons();
+      try {
+        deplacerBouleDirection(Direction.toDirection(sensDeplac), b1, periode);
+        deplacerBouleDirection(Direction.toDirection(sensDeplac), b2, periode);
+      } catch (MovementException e1) {
+        e1.printStackTrace();
+      }
+
+      cleanBalls();
+      panneau.hideButtons();
+      panneau.updateClickables();
+
+      setState(State.NORMAL);
+    }
+  }
+
+  private void handleRightClickInFirstSelectedForLateralState(BoutonRond bouton, PanneauJeu panneau, Board plateau) {
+    if (bouton.isSelectionne())
+      return;
+
+    b2 = bouton.getCoord();
+
+    Vector sensDeuxBoules = new Vector(b1, b2);
+
+    panneau.hideButtons();
+
+    Space caseDepart = plateau.getSpace(b1);
+    Space caseArrivee = plateau.getSpace(b2);
+    Space caseDecalDepart = plateau.getSpace(b1.add(sensDeuxBoules.getOpposite()));
+    Space caseDecalArrivee = plateau.getSpace(b2.add(sensDeuxBoules));
+
+    HashSet<Space> listeCases = new HashSet<>();
+    listeCases.add(caseDepart);
+    listeCases.add(caseArrivee);
+    listeCases.add(caseDecalDepart);
+    listeCases.add(caseDecalArrivee);
+
+    /* affichage des boutons lateraux */
+    cercleBoutonsLateraux(listeCases, caseDepart);
+    cercleBoutonsLateraux(listeCases, caseArrivee);
+
+    /* affichage des boutons decal */
+
+    if (caseDecalArrivee.estOccupee()
+        && caseDecalArrivee.ball.color == caseArrivee.ball.color) {
+      caseDecalArrivee.bouton.mettreCliquableDroit();
+    } else {
+      caseDecalArrivee.bouton.reset();
+    }
+
+    if (caseDecalDepart.estOccupee()
+        && caseDecalDepart.ball.color == caseDepart.ball.color) {
+      caseDecalDepart.bouton.mettreCliquableDroit();
+    } else {
+      caseDecalDepart.bouton.reset();
+    }
+
+    eliminerForeverAlone();
+
+    setState(State.SECOND_SELECTED_FOR_LATERAL);
+  }
+
+  private void handleLeftClickInFirstSelectedForLineState(BoutonRond bouton, PanneauJeu panneau, Board plateau) {
+    b2 = bouton.getCoord();
+    Vector sensDeuxBoules = new Vector(b1, b2);
+    Direction dir = Direction.toDirection(sensDeuxBoules);
+
+    /* premiere ligne de boules */
+    Color couleurDepart = plateau.getSpace(b1).ball.color;
+    int nbCouleurActuelle = this.compteCouleur(dir, b1, couleurDepart);
+    int nbCouleurOpposee = 0;
+
+    Space caseDeFinCouleurActuelle =
+        plateau.getSpace(b1.y + nbCouleurActuelle * sensDeuxBoules.y,
+            b1.x + nbCouleurActuelle * sensDeuxBoules.x);
+
+    /* seconde ligne de boules */
+    if (caseDeFinCouleurActuelle.estOccupee()) {
+      Color couleurArr = caseDeFinCouleurActuelle.ball.color;
+      nbCouleurOpposee = compteCouleur(dir, b1.y + nbCouleurActuelle * sensDeuxBoules.y,
+          b1.x + nbCouleurActuelle * sensDeuxBoules.x, couleurArr);
+    }
+    int nbBoulesDeplac = nbCouleurActuelle + nbCouleurOpposee;
+    boolean deplacementPossible = true;
+
+    // verification de la case qui suit la derniere
+    Space caseFinale = plateau.getSpace(b1.y + nbBoulesDeplac * sensDeuxBoules.y,
+        b1.x + nbBoulesDeplac * sensDeuxBoules.x);
+    if (caseFinale != null && caseFinale.estOccupee()) {
+      deplacementPossible = false;
+    }
+
+    System.out.println("nbCouleurAcuelle = " + nbCouleurActuelle + ", nbCouleurOpposee = "
+        + nbCouleurOpposee);
+
+    // deplacement reel
+    if (nbCouleurActuelle <= MAX_DEPLACEMENTS && nbCouleurOpposee < nbCouleurActuelle
+        && deplacementPossible) {
+      panneau.hideButtons();
+      this.deplacerLigneBoules(nbBoulesDeplac, sensDeuxBoules);
+      verifierBoules();
+    }
+
+    /* nettoyage et reaffichage */
+    cleanBalls();
+    panneau.hideButtons();
+    panneau.updateClickables();
+
+    setState(State.NORMAL);
+  }
+
+  private void handleRightClickInNormalState(BoutonRond bouton, PanneauJeu panneau, Board plateau, Direction[] lesDir) {
+    BoutonRond tmp;// coordonnees depart
+
+    b1 = bouton.getCoord();
+
+    System.out.println("dans 1er clic droit");
+    afficherB1B2B3();
+    System.out.println(bouton);
+
+    panneau.hideButtons();
+
+    BoutonRond boutonDep = plateau.getSpace(b1).bouton;
+    boutonDep.setVisible(true);
+
+    // afficher cercle voisins
+    for (Direction dir : lesDir) {
+      Space spaceDest = plateau.getSpace(bouton.getCoordI() + dir.vector.y,
+          bouton.getCoordJ() + dir.vector.x);
+
+      tmp = spaceDest.bouton;
+      if (tmp != null && !spaceDest.isBorder && spaceDest.estOccupee()
+          && spaceDest.ball.color == plateau.getSpace(b1).ball.color) {
+        tmp.mettreCliquableDroit();
+      }
+    }
+
+    setState(State.THIRD_SELECTED_FOR_LATERAL);
+  }
+
+  private void handleLeftClickInNormalState(BoutonRond bouton, PanneauJeu panneau, Board plateau, Direction[] lesDir) {
+    BoutonRond tmp;// coordonnees depart
+    b1 = bouton.getCoord();
+    setState(State.FIRST_SELECTED_FOR_LINE);
+
+    // cacher
+    panneau.hideButtons();
+
+    // afficher cercle voisins
+    for (Direction dir : lesDir) {
+      Coord dest =
+          new Coord(bouton.getCoordJ() + dir.vector.x, bouton.getCoordI() + dir.vector.y);
+
+      tmp = plateau.getSpace(dest).bouton;
+      if (tmp != null && !plateau.getSpace(dest).isBorder) {
+        tmp.mettreCliquableGauche();
+      }
     }
   }
 
