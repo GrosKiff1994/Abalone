@@ -80,7 +80,7 @@ public class Board {
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
         if (grid[i][j] != null) {
-          if (grid[i][j].estOccupee()) {
+          if (grid[i][j].hasBall()) {
             switch (grid[i][j].ball.color) {
               case BLACK:
                 res += "N";
@@ -101,4 +101,5 @@ public class Board {
     }
     return res;
   }
+
 }

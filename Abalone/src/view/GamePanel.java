@@ -18,16 +18,16 @@ public class GamePanel extends JPanel {
   private static final long serialVersionUID = 1L;
   public static final int DIMBOULE = 60;
 
-  private Window fenetre;
-  private BufferedImage fond;
+  private Window window;
+  private BufferedImage background;
   private GameController controller;
 
   public void updateClickables() {
-    for (int i = 0; i < controller.modele.board.height; i++) {
-      for (int j = 0; j < controller.modele.board.width; j++) {
-        RoundButton bout = controller.modele.board.getSpace(i, j).bouton;
+    for (int i = 0; i < controller.game.board.height; i++) {
+      for (int j = 0; j < controller.game.board.width; j++) {
+        RoundButton bout = controller.game.board.getSpace(i, j).button;
         if (bout != null) {
-          if (controller.modele.board.getSpace(i, j).estOccupee()) {
+          if (controller.game.board.getSpace(i, j).hasBall()) {
             bout.setVisible(true);
           }
         }
@@ -36,18 +36,18 @@ public class GamePanel extends JPanel {
   }
 
   public void hideButtons() {
-    for (int i = 0; i < controller.modele.board.height; i++) {
-      for (int j = 0; j < controller.modele.board.width; j++) {
-        RoundButton bout = fenetre.getModele().board.getSpace(i, j).bouton;
-        if (bout != null) {
-          bout.reset();
+    for (int i = 0; i < controller.game.board.height; i++) {
+      for (int j = 0; j < controller.game.board.width; j++) {
+        RoundButton button = window.game.board.getSpace(i, j).button;
+        if (button != null) {
+          button.reset();
         }
       }
     }
   }
 
   public GamePanel(final Window fenetre, final GameController controller) {
-    this.fenetre = fenetre;
+    this.window = fenetre;
     this.controller = controller;
 
     class listenerAnnuler extends MouseAdapter {
@@ -57,8 +57,8 @@ public class GamePanel extends JPanel {
         if (e.getButton() == MouseEvent.BUTTON3 || e.getButton() == MouseEvent.BUTTON1) {
           hideButtons();
           updateClickables();
-          fenetre.getController().cleanBalls();
-          controller.setState(State.NORMAL);
+          fenetre.controller.cleanBalls();
+          controller.state = State.NORMAL;
           System.out.println("Etat : NORMAL");
         }
       }
@@ -69,13 +69,13 @@ public class GamePanel extends JPanel {
 
     this.setLayout(null);
 
-    for (int i = 0; i < controller.modele.board.height; i++) {
-      for (int j = 0; j < controller.modele.board.width; j++) {
-        Space caseCourante = fenetre.getModele().board.getSpace(i, j);
+    for (int i = 0; i < controller.game.board.height; i++) {
+      for (int j = 0; j < controller.game.board.width; j++) {
+        Space caseCourante = fenetre.game.board.getSpace(i, j);
         if (caseCourante != null) {
           RoundButton tmpBouton = new RoundButton(DIMBOULE, i, j, fenetre);
           this.add(tmpBouton);
-          fenetre.getModele().board.getSpace(i, j).bouton = tmpBouton;
+          fenetre.game.board.getSpace(i, j).button = tmpBouton;
         }
 
       }
@@ -84,13 +84,13 @@ public class GamePanel extends JPanel {
   }
 
   public void drawBackground() {
-    fond = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
-    Graphics g = fond.getGraphics();
+    background = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
+    Graphics g = background.getGraphics();
 
     // parcours du tableau
-    for (int i = 0; i < controller.modele.board.height; i++) {
-      for (int j = 0; j < controller.modele.board.width; j++) {
-        Space caseCourante = fenetre.getModele().board.getSpace(i, j);
+    for (int i = 0; i < controller.game.board.height; i++) {
+      for (int j = 0; j < controller.game.board.width; j++) {
+        Space caseCourante = window.game.board.getSpace(i, j);
         // case existe ?
         if (caseCourante != null && !caseCourante.isBorder) {
           g.setColor(Color.LIGHT_GRAY);
@@ -109,19 +109,19 @@ public class GamePanel extends JPanel {
     graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
     super.paintComponent(g);
-    g.drawImage(fond, 0, 0, null);
+    g.drawImage(background, 0, 0, null);
 
     // parcours du tableau
-    for (int i = 0; i < controller.modele.board.height; i++) {
-      for (int j = 0; j < controller.modele.board.width; j++) {
-        Space caseCourante = fenetre.getModele().board.getSpace(i, j);
+    for (int i = 0; i < controller.game.board.height; i++) {
+      for (int j = 0; j < controller.game.board.width; j++) {
+        Space caseCourante = window.game.board.getSpace(i, j);
         // case existe ?
-        if (caseCourante != null && caseCourante.estOccupee()) {
+        if (caseCourante != null && caseCourante.hasBall()) {
           CoordDouble coord = caseCourante.ball.coord;
 
           g.setColor(Color.BLACK);
-          g.fillOval((int) (coord.getX() * DIMBOULE + coord.getY() * DIMBOULE / 2 - 2),
-              (int) (coord.getY() * (DIMBOULE - DIMBOULE / 8) - 2), DIMBOULE, DIMBOULE);
+          g.fillOval((int) (coord.x * DIMBOULE + coord.y * DIMBOULE / 2 - 2),
+              (int) (coord.y * (DIMBOULE - DIMBOULE / 8) - 2), DIMBOULE, DIMBOULE);
 
           // selon la couleur
           switch (caseCourante.ball.color) {
@@ -133,8 +133,8 @@ public class GamePanel extends JPanel {
               break;
             default:
           }
-          g.fillOval((int) (coord.getX() * DIMBOULE + coord.getY() * DIMBOULE / 2 - 4),
-              (int) (coord.getY() * (DIMBOULE - DIMBOULE / 8) - 4), DIMBOULE, DIMBOULE);
+          g.fillOval((int) (coord.x * DIMBOULE + coord.y * DIMBOULE / 2 - 4),
+              (int) (coord.y * (DIMBOULE - DIMBOULE / 8) - 4), DIMBOULE, DIMBOULE);
         }
 
       } // fin case existe

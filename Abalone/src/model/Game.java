@@ -10,16 +10,16 @@ public class Game {
   public Player looser;
 
   public void checkVictory() {
-    String chaine = "";
+    String print = "";
     for (Player player : players) {
-      chaine += player.name + " : " + player.lostBalls + " boule(s) ejectee(s); \n";
+      print += player.name + " : " + player.lostBalls + " boule(s) ejectee(s); \n";
       if (player.lostBalls >= 6) {
         looser = player;
         System.out.println("Le joueur " + looser + " a perdu !");
         System.exit(0);
       }
     }
-    System.out.print(chaine);
+    System.out.print(print);
   }
 
 }

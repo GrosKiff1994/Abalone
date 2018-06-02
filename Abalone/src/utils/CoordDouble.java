@@ -1,7 +1,9 @@
 package utils;
 
 public class CoordDouble {
-  private double x, y;
+
+  public double x;
+  public double y;
 
   public CoordDouble(double x, double y) {
     super();
@@ -9,28 +11,12 @@ public class CoordDouble {
     this.y = y;
   }
 
-  public double getX() {
-    return x;
-  }
-
-  public void setX(double x) {
-    this.x = x;
-  }
-
-  public double getY() {
-    return y;
-  }
-
-  public void setY(double y) {
-    this.y = y;
-  }
-
   public boolean equals(Object o) {
-    return (this.x == ((CoordDouble) o).getX() && this.y == ((CoordDouble) o).getY());
+    return (this.x == ((CoordDouble) o).x && this.y == ((CoordDouble) o).y);
   }
 
   public Coord castCoord() {
-    return new Coord((int) this.getX(), (int) this.getY());
+    return new Coord((int) this.x, (int) this.y);
   }
 
   public void setCoord(double i, double j) {
@@ -44,15 +30,16 @@ public class CoordDouble {
   }
 
   public void setCoord(CoordDouble c) {
-    this.x = c.getX();
-    this.y = c.getY();
+    this.x = c.x;
+    this.y = c.y;
   }
 
   public static CoordDouble difference(CoordDouble p, CoordDouble s) {
-    return new CoordDouble(p.getX() - s.getX(), p.getY() - s.getY());
+    return new CoordDouble(p.x - s.x, p.y - s.y);
   }
 
   public static CoordDouble somme(CoordDouble p, CoordDouble s) {
-    return new CoordDouble(p.getX() + s.getX(), p.getY() + s.getY());
+    return new CoordDouble(p.x + s.x, p.y + s.y);
   }
+
 }

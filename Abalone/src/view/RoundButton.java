@@ -15,6 +15,7 @@ import utils.Coord;
 public class RoundButton extends JButton {
 
   private static final long serialVersionUID = 1L;
+
   public Coord coord;
 
   boolean varDist;
@@ -27,49 +28,45 @@ public class RoundButton extends JButton {
   public static final Color couleurSelec = new Color(75, 181, 193, 200);
   public static final Color couleurBords = new Color(0, 0, 0);
 
-  private Color couleurActuelle;
-  private Window fenetre;
+  public Color currentColor;
+  public Window window;
 
   private Shape shape;
 
   /* flags du bouton */
-  private boolean mouseOver;
-  private boolean cliquableDroit;
-  private boolean cliquableGauche;
+  public boolean isMouseOver;
+  private boolean isRightClickable;
+  private boolean isLeftClickable;
 
   // private boolean selectionne;
 
   public void reset() {
-    this.mouseOver = false;
-    this.cliquableDroit = false;
-    this.cliquableGauche = false;
+    this.isMouseOver = false;
+    this.isRightClickable = false;
+    this.isLeftClickable = false;
     this.setVisible(false);
   }
 
-  public boolean isMouseOver() {
-    return mouseOver;
+  public boolean isRightClickable() {
+    return isRightClickable && isVisible();
   }
 
-  public boolean isCliquableDroit() {
-    return cliquableDroit && isVisible();
-  }
-
-  public boolean isCliquableGauche() {
-    return cliquableGauche && isVisible();
+  public boolean isLeftClickable() {
+    return isLeftClickable && isVisible();
   }
 
   public boolean isSelectionne() {
-    return fenetre.getController().getB1().map(c -> c == this.getCoord()).orElse(false)
-        || fenetre.getController().getB2().map(c -> c == this.getCoord()).orElse(false)
-        || fenetre.getController().getB3().map(c -> c == this.getCoord()).orElse(false);
+    return window.controller.maybeB1.map(c -> c == this.getCoord()).orElse(false)
+        || window.controller.maybeB2.map(c -> c == this.getCoord()).orElse(false)
+        || window.controller.maybeB3.map(c -> c == this.getCoord()).orElse(false);
   }
 
   public RoundButton(int rayon, int i, int j, final Window fenetre) {
-    this.cliquableDroit = false;
-    this.cliquableGauche = false;
+    this.isRightClickable = false;
+    this.isLeftClickable = false;
     this.setVisible(false);
-    this.mouseOver = false;
-    this.fenetre = fenetre;
+    this.isMouseOver = false;
+    this.window = fenetre;
 
     coord = new Coord(j, i);
     int x = j * GamePanel.DIMBOULE + i * GamePanel.DIMBOULE / 2 - 4;
@@ -83,7 +80,7 @@ public class RoundButton extends JButton {
 
       @Override
       public void mouseReleased(java.awt.event.MouseEvent e) {
-        fenetre.getController().sourisRelachee(e);
+        fenetre.controller.sourisRelachee(e);
       }
     }
 
@@ -91,12 +88,12 @@ public class RoundButton extends JButton {
 
       @Override
       public void mouseEntered(java.awt.event.MouseEvent e) {
-        fenetre.getController().sourisEntree(e);
+        fenetre.controller.sourisEntree(e);
       }
 
       @Override
       public void mouseExited(MouseEvent e) {
-        fenetre.getController().sourisSortie(e);
+        fenetre.controller.sourisSortie(e);
       }
     }
 
@@ -114,11 +111,11 @@ public class RoundButton extends JButton {
   }
 
   public Color getCouleurActuelle() {
-    return couleurActuelle;
+    return currentColor;
   }
 
   public void setCouleurActuelle(Color couleurActuelle) {
-    this.couleurActuelle = couleurActuelle;
+    this.currentColor = couleurActuelle;
   }
 
   protected void paintComponent(Graphics g) {
@@ -127,23 +124,22 @@ public class RoundButton extends JButton {
     graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
     if (getModel().isArmed()) {
-      couleurActuelle = couleurSelec;
-    } else if (mouseOver) {
-      couleurActuelle = couleurMouseOver;
+      currentColor = couleurSelec;
+    } else if (isMouseOver) {
+      currentColor = couleurMouseOver;
     } else if (isSelectionne()) {
-      couleurActuelle = couleurSelec;
-    } else if (cliquableDroit) {
-      couleurActuelle = couleurLateralSelec;
-    } else if (cliquableGauche
-        && fenetre.getController().getEtat() == State.FIRST_SELECTED_FOR_LINE) {
-      couleurActuelle = couleurLigne;
-    } else if (cliquableGauche) {
-      couleurActuelle = couleurLateralDeplac;
+      currentColor = couleurSelec;
+    } else if (isRightClickable) {
+      currentColor = couleurLateralSelec;
+    } else if (isLeftClickable && window.controller.state == State.FIRST_SELECTED_FOR_LINE) {
+      currentColor = couleurLigne;
+    } else if (isLeftClickable) {
+      currentColor = couleurLateralDeplac;
     } else {
-      couleurActuelle = couleurTransparent;
+      currentColor = couleurTransparent;
     }
 
-    g.setColor(couleurActuelle);
+    g.setColor(currentColor);
     g.fillOval(0, 0, getSize().width, getSize().height);
 
   }
@@ -167,25 +163,25 @@ public class RoundButton extends JButton {
   }
 
   public void setMouseOver(boolean b) {
-    this.mouseOver = b;
+    this.isMouseOver = b;
   }
 
   public void mettreCliquableDroit() {
-    this.cliquableDroit = true;
+    this.isRightClickable = true;
     this.setVisible(true);
   }
 
   public void mettreCliquableGauche() {
-    this.cliquableGauche = true;
+    this.isLeftClickable = true;
     this.setVisible(true);
   }
 
   @Override
   public String toString() {
-    return "BoutonRond [coord=" + coord + ", couleurActuelle=" + couleurActuelle + ", mouseOver="
-        + mouseOver + ", cliquableDroit=" + cliquableDroit + ", cliquableGauche=" + cliquableGauche
-        + ", isCliquableDroit()=" + isCliquableDroit() + ", isCliquableGauche()="
-        + isCliquableGauche() + ", isSelectionne()=" + isSelectionne() + "]";
+    return "BoutonRond [coord=" + coord + ", couleurActuelle=" + currentColor + ", mouseOver="
+        + isMouseOver + ", cliquableDroit=" + isRightClickable + ", cliquableGauche="
+        + isLeftClickable + ", isCliquableDroit()=" + isRightClickable() + ", isCliquableGauche()="
+        + isLeftClickable() + ", isSelectionne()=" + isSelectionne() + "]";
   }
 
   @Override

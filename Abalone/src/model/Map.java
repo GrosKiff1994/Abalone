@@ -1,6 +1,9 @@
 package model;
 
 public class Map {
+
+  private Map() {}
+
   public static final char tabVide[][] =
       new char[][] {{'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
           {'x', 'x', 'x', 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'x'},
@@ -78,4 +81,5 @@ public class Map {
           {'x', 'n', 'n', 'n', 'b', 'b', 'b', 'x', 'x', 'x', 'x'},
           {'x', 'n', 'n', 'v', 'b', 'b', 'x', 'x', 'x', 'x', 'x'},
           {'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'}};
+
 }
