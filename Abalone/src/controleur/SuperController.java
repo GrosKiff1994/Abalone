@@ -506,7 +506,20 @@ public class SuperController {
   public void sourisSortie(MouseEvent e) {
     BoutonRond bouton = ((BoutonRond) e.getSource());
     bouton.setMouseOver(false);
-    fenetre.repaint();
+    if (etat == Etat.SELECTIONLATERAL2) {
+      Coord sensDeuxBoules = Coord.difference(b2, b1);
+
+      Coord coordDepla = Coord.somme(bouton.getCoord(), sensDeuxBoules);
+      if (!modele.getPlateau().getCase(coordDepla).getBouton().isVisible()) {
+        coordDepla = Coord.difference(bouton.getCoord(), sensDeuxBoules);
+      }
+
+      modele.getPlateau().getCase(coordDepla).getBouton().setMouseOver(false);
+
+      fenetre.repaint();
+    } else if (etat == Etat.SELECTIONLATERAL3) {
+      // TODO On verra pus tard...
+    }
   }
 
   public void setVue(FenetreAbalone fenetre) {
