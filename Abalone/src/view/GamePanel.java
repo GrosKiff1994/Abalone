@@ -13,6 +13,9 @@ import controller.State;
 import model.Space;
 import utils.CoordDouble;
 
+import static model.Color.BLACK;
+import static model.Color.WHITE;
+
 public class GamePanel extends JPanel {
 
   private static final long serialVersionUID = 1L;
@@ -116,25 +119,27 @@ public class GamePanel extends JPanel {
       for (int j = 0; j < controller.game.board.width; j++) {
         Space caseCourante = window.game.board.getSpace(i, j);
         // case existe ?
-        if (caseCourante != null && caseCourante.hasBall()) {
-          CoordDouble coord = caseCourante.ball.coord;
+        if (caseCourante != null) {
+          caseCourante.ball.ifPresent(ball -> {
+            CoordDouble coord = ball.coord;
 
           g.setColor(Color.BLACK);
           g.fillOval((int) (coord.x * DIMBOULE + coord.y * DIMBOULE / 2 - 2),
               (int) (coord.y * (DIMBOULE - DIMBOULE / 8) - 2), DIMBOULE, DIMBOULE);
 
-          // selon la couleur
-          switch (caseCourante.ball.color) {
-            case BLACK:
-              g.setColor(Color.DARK_GRAY);
-              break;
-            case WHITE:
-              g.setColor(Color.WHITE);
-              break;
-            default:
-          }
-          g.fillOval((int) (coord.x * DIMBOULE + coord.y * DIMBOULE / 2 - 4),
-              (int) (coord.y * (DIMBOULE - DIMBOULE / 8) - 4), DIMBOULE, DIMBOULE);
+            // selon la couleur
+            switch (ball.color) {
+              case BLACK:
+                g.setColor(Color.DARK_GRAY);
+                break;
+              case WHITE:
+                g.setColor(Color.WHITE);
+                break;
+              default:
+            }
+            g.fillOval((int) (coord.x * DIMBOULE + coord.y * DIMBOULE / 2 - 4),
+                    (int) (coord.y * (DIMBOULE - DIMBOULE / 8) - 4), DIMBOULE, DIMBOULE);
+          });
         }
 
       } // fin case existe

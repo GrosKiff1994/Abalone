@@ -2,6 +2,9 @@ package model;
 
 import utils.Vector;
 
+import java.util.Optional;
+import java.util.logging.Logger;
+
 public enum Direction {
 
   DIR_HD(new Vector(1, -1)), DIR_D(new Vector(1, 0)), DIR_BD(new Vector(0, 1)), DIR_BG(
@@ -13,20 +16,14 @@ public enum Direction {
     this.vector = offset;
   }
 
-  public static Direction toDirection(Vector delta) {
-    if (delta.x < -1 || delta.x > 1 || delta.y < -1 || delta.y > 1) {
-      try {
-        throw new DirectionException("Direction invalide : " + delta);
-      } catch (DirectionException e) {
-        e.printStackTrace();
-      }
-    }
+  public static Optional<Direction> toDirection(Vector delta) {
     for (Direction dir : values()) {
       if (dir.vector.equals(delta)) {
-        return dir;
+        return Optional.of(dir);
       }
     }
-    return null;
+    // It can be impossible to map a vector to a direction
+    System.err.println("Invalid direction : " + delta);
+    return Optional.empty();
   }
-
 }
