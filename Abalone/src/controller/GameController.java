@@ -4,9 +4,6 @@ import java.awt.event.MouseEvent;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
-import com.sun.istack.internal.NotNull;
-import jdk.nashorn.internal.runtime.options.Option;
 import model.Ball;
 import model.Board;
 import model.Color;
@@ -17,8 +14,8 @@ import model.Space;
 import utils.Coord;
 import utils.CoordDouble;
 import utils.Vector;
-import view.RoundButton;
 import view.GamePanel;
+import view.RoundButton;
 import view.Window;
 
 public class GameController {
@@ -40,7 +37,9 @@ public class GameController {
 
   // private Coord sensDeuxBoules;
 
-  public Optional<Coord> getB1() { return maybeB1; }
+  public Optional<Coord> getB1() {
+    return maybeB1;
+  }
 
   public Optional<Coord> getB2() {
     return maybeB2;
@@ -64,7 +63,7 @@ public class GameController {
   }
 
   public void afficherB1B2B3() {
-    System.out.println("b1 : " + maybeB1 +  " b2 : " + maybeB2 + " b3 : " + maybeB3);
+    System.out.println("b1 : " + maybeB1 + " b2 : " + maybeB2 + " b3 : " + maybeB3);
   }
 
   public void cleanBalls() {
@@ -82,9 +81,9 @@ public class GameController {
   public int compteCouleur(Direction delta, int iDep, int jDep, Color couleur) {
     int nbCoul = 0;
     Coord parcours = new Coord(jDep, iDep);
-    Board plateau = modele.getPlateau();
-    while (plateau.getSpace(parcours) != null && plateau.getSpace(parcours).estOccupee()
-        && plateau.getSpace(parcours).ball.color == couleur) {
+    Board board = modele.board;
+    while (board.getSpace(parcours) != null && board.getSpace(parcours).estOccupee()
+        && board.getSpace(parcours).ball.color == couleur) {
       nbCoul++;
       parcours.x = parcours.x + delta.vector.x;
       parcours.y = parcours.y + delta.vector.y;
@@ -93,18 +92,18 @@ public class GameController {
   }
 
   public void verifierBoules() {
-    Board board = modele.getPlateau();
+    Board board = modele.board;
     // verification boule hors jeu
     for (int i = 0; i < board.height; i++) {
       for (int j = 0; j < board.width; j++) {
         if (board.getSpace(i, j).isBorder && board.getSpace(i, j).estOccupee()) {
-          for (Player joueur : modele.players) {
-            if (board.getSpace(i, j).ball.color == joueur.color) {
-              joueur.setBoulesDuJoueurEjectees(joueur.getBoulesDuJoueurEjectees() + 1);
+          for (Player player : modele.players) {
+            if (board.getSpace(i, j).ball.color == player.color) {
+              player.lostBalls += 1;
             }
           }
           board.getSpace(i, j).ball = null;
-          modele.verifierVictoire();
+          modele.checkVictory();
         }
       }
     }
@@ -112,11 +111,11 @@ public class GameController {
 
   public void sourisRelachee(MouseEvent e) {
 
-    RoundButton bouton = ((RoundButton) e.getSource());
-    GamePanel panneau = fenetre.getPanel();
-    Board plateau = modele.getPlateau();
+    RoundButton button = ((RoundButton) e.getSource());
+    GamePanel panel = fenetre.getPanel();
+    Board board = modele.board;
 
-    System.out.println("clic : ligne " + bouton.getCoordI() + ", colonne " + bouton.getCoordJ());
+    System.out.println("clic : ligne " + button.getCoordI() + ", colonne " + button.getCoordJ());
 
     Direction[] lesDir = Direction.values();
 
@@ -127,34 +126,53 @@ public class GameController {
       case NORMAL:
         RoundButton tmp;
         switch (e.getButton()) {
-          case CLICGAUCHE: handleLeftClickInNormalState(bouton, panneau, plateau, lesDir); break;
-          case CLICDROIT: handleRightClickInNormalState(bouton, panneau, plateau, lesDir); break;
-          default: break;
+          case CLICGAUCHE:
+            handleLeftClickInNormalState(button, panel, board, lesDir);
+            break;
+          case CLICDROIT:
+            handleRightClickInNormalState(button, panel, board, lesDir);
+            break;
+          default:
+            break;
         }
         break;
       case FIRST_SELECTED_FOR_LINE:
         switch (e.getButton()) {
-          case CLICGAUCHE: handleLeftClickInFirstSelectedForLineState(bouton, panneau, plateau); break;
-          default: break;
+          case CLICGAUCHE:
+            handleLeftClickInFirstSelectedForLineState(button, panel, board);
+            break;
+          default:
+            break;
         }
         break;
       case FIRST_SELECTED_FOR_LATERAL:
         switch (e.getButton()) {
-          case CLICDROIT: handleRightClickInFirstSelectedForLateralState(bouton, panneau, plateau); break;
-          default: break;
+          case CLICDROIT:
+            handleRightClickInFirstSelectedForLateralState(button, panel, board);
+            break;
+          default:
+            break;
         }
         break;
       case SECOND_SELECTED_FOR_LATERAL:
         switch (e.getButton()) {
-          case CLICGAUCHE: handleLeftClickInsecondSelectedForLateralState(bouton, panneau, plateau); break;
-          case CLICDROIT: handleRightClickInSecondSelectedForLateralState(bouton, plateau); break;
-          default: break;
+          case CLICGAUCHE:
+            handleLeftClickInsecondSelectedForLateralState(button, panel, board);
+            break;
+          case CLICDROIT:
+            handleRightClickInSecondSelectedForLateralState(button, board);
+            break;
+          default:
+            break;
         }
         break;
       case THIRD_SELECTED_FOR_LATERAL:
         switch (e.getButton()) {
-          case CLICGAUCHE: handleLeftClickInThirdSelectedfForLateralState(); break;
-          default: break;
+          case CLICGAUCHE:
+            handleLeftClickInThirdSelectedfForLateralState();
+            break;
+          default:
+            break;
         }
         break;
       default:
@@ -210,7 +228,8 @@ public class GameController {
     setState(State.THIRD_SELECTED_FOR_LATERAL);
   }
 
-  private void handleLeftClickInsecondSelectedForLateralState(RoundButton bouton, GamePanel panneau, Board plateau) {
+  private void handleLeftClickInsecondSelectedForLateralState(RoundButton bouton, GamePanel panneau,
+      Board plateau) {
     Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
     Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
     Vector sensDeuxBoules = new Vector(b1, b2);
@@ -218,11 +237,10 @@ public class GameController {
     Space caseProlonge = plateau.getSpace(bouton.coord.add(sensDeuxBoules));
     Space caseInverse = plateau.getSpace(bouton.coord.add(sensDeuxBoules.getOpposite()));
 
-    if ((caseProlonge.bouton != null && !caseProlonge.isBorder
-        && caseProlonge.bouton.isMouseOver() && !caseProlonge.estOccupee())
-        || (caseInverse.bouton != null && !caseInverse.isBorder
-            && caseInverse.bouton.isMouseOver() && !caseInverse.estOccupee()
-            && caseInverse.bouton.isCliquableGauche())) {
+    if ((caseProlonge.bouton != null && !caseProlonge.isBorder && caseProlonge.bouton.isMouseOver()
+        && !caseProlonge.estOccupee())
+        || (caseInverse.bouton != null && !caseInverse.isBorder && caseInverse.bouton.isMouseOver()
+            && !caseInverse.estOccupee() && caseInverse.bouton.isCliquableGauche())) {
 
       Vector sensDeplac = new Vector(b1, bouton.coord);
       int nbBoules = 2;
@@ -247,7 +265,8 @@ public class GameController {
     }
   }
 
-  private void handleRightClickInFirstSelectedForLateralState(RoundButton bouton, GamePanel panneau, Board plateau) {
+  private void handleRightClickInFirstSelectedForLateralState(RoundButton bouton, GamePanel panneau,
+      Board plateau) {
     if (bouton.isSelectionne())
       return;
 
@@ -276,15 +295,13 @@ public class GameController {
 
     /* affichage des boutons decal */
 
-    if (caseDecalArrivee.estOccupee()
-        && caseDecalArrivee.ball.color == caseArrivee.ball.color) {
+    if (caseDecalArrivee.estOccupee() && caseDecalArrivee.ball.color == caseArrivee.ball.color) {
       caseDecalArrivee.bouton.mettreCliquableDroit();
     } else {
       caseDecalArrivee.bouton.reset();
     }
 
-    if (caseDecalDepart.estOccupee()
-        && caseDecalDepart.ball.color == caseDepart.ball.color) {
+    if (caseDecalDepart.estOccupee() && caseDecalDepart.ball.color == caseDepart.ball.color) {
       caseDecalDepart.bouton.mettreCliquableDroit();
     } else {
       caseDecalDepart.bouton.reset();
@@ -295,7 +312,8 @@ public class GameController {
     setState(State.SECOND_SELECTED_FOR_LATERAL);
   }
 
-  private void handleLeftClickInFirstSelectedForLineState(RoundButton bouton, GamePanel panneau, Board plateau) {
+  private void handleLeftClickInFirstSelectedForLineState(RoundButton bouton, GamePanel panneau,
+      Board plateau) {
     maybeB2 = Optional.of(bouton.getCoord());
 
     Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
@@ -308,9 +326,8 @@ public class GameController {
     int nbCouleurActuelle = this.compteCouleur(dir, b1, couleurDepart);
     int nbCouleurOpposee = 0;
 
-    Space caseDeFinCouleurActuelle =
-        plateau.getSpace(b1.y + nbCouleurActuelle * sensDeuxBoules.y,
-            b1.x + nbCouleurActuelle * sensDeuxBoules.x);
+    Space caseDeFinCouleurActuelle = plateau.getSpace(b1.y + nbCouleurActuelle * sensDeuxBoules.y,
+        b1.x + nbCouleurActuelle * sensDeuxBoules.x);
 
     /* seconde ligne de boules */
     if (caseDeFinCouleurActuelle.estOccupee()) {
@@ -328,8 +345,8 @@ public class GameController {
       deplacementPossible = false;
     }
 
-    System.out.println("nbCouleurAcuelle = " + nbCouleurActuelle + ", nbCouleurOpposee = "
-        + nbCouleurOpposee);
+    System.out.println(
+        "nbCouleurAcuelle = " + nbCouleurActuelle + ", nbCouleurOpposee = " + nbCouleurOpposee);
 
     // deplacement reel
     if (nbCouleurActuelle <= MAX_DEPLACEMENTS && nbCouleurOpposee < nbCouleurActuelle
@@ -347,7 +364,8 @@ public class GameController {
     setState(State.NORMAL);
   }
 
-  private void handleRightClickInNormalState(RoundButton bouton, GamePanel panneau, Board plateau, Direction[] lesDir) {
+  private void handleRightClickInNormalState(RoundButton bouton, GamePanel panneau, Board plateau,
+      Direction[] lesDir) {
     RoundButton tmp;// coordonnees depart
 
     maybeB1 = Optional.of(bouton.getCoord());
@@ -364,8 +382,8 @@ public class GameController {
 
     // afficher cercle voisins
     for (Direction dir : lesDir) {
-      Space spaceDest = plateau.getSpace(bouton.getCoordI() + dir.vector.y,
-          bouton.getCoordJ() + dir.vector.x);
+      Space spaceDest =
+          plateau.getSpace(bouton.getCoordI() + dir.vector.y, bouton.getCoordJ() + dir.vector.x);
 
       tmp = spaceDest.bouton;
       if (tmp != null && !spaceDest.isBorder && spaceDest.estOccupee()
@@ -377,7 +395,8 @@ public class GameController {
     setState(State.FIRST_SELECTED_FOR_LATERAL);
   }
 
-  private void handleLeftClickInNormalState(RoundButton bouton, GamePanel panneau, Board plateau, Direction[] lesDir) {
+  private void handleLeftClickInNormalState(RoundButton bouton, GamePanel panneau, Board plateau,
+      Direction[] lesDir) {
     RoundButton tmp;// coordonnees depart
     maybeB1 = Optional.of(bouton.getCoord());
     setState(State.FIRST_SELECTED_FOR_LINE);
@@ -387,8 +406,7 @@ public class GameController {
 
     // afficher cercle voisins
     for (Direction dir : lesDir) {
-      Coord dest =
-          new Coord(bouton.getCoordJ() + dir.vector.x, bouton.getCoordI() + dir.vector.y);
+      Coord dest = new Coord(bouton.getCoordJ() + dir.vector.x, bouton.getCoordI() + dir.vector.y);
 
       tmp = plateau.getSpace(dest).bouton;
       if (tmp != null && !plateau.getSpace(dest).isBorder) {
@@ -412,10 +430,10 @@ public class GameController {
 
   // Met en cliquable gauche les boutons qui ne sont pas dans listeCases et qui entourent centre
   private void cercleBoutonsLateraux(HashSet<Space> blackList, Space centre) {
-    Board plateau = this.modele.getPlateau();
+    Board board = this.modele.board;
     Direction[] lesDir = Direction.values();
     for (Direction dir : lesDir) {
-      Space caseDest = plateau.getSpace(centre.bouton.getCoordI() + dir.vector.y,
+      Space caseDest = board.getSpace(centre.bouton.getCoordI() + dir.vector.y,
           centre.bouton.getCoordJ() + dir.vector.x);
       RoundButton tmp = caseDest.bouton;
       if (tmp != null && !caseDest.isBorder && !caseDest.estOccupee()) {
@@ -429,12 +447,12 @@ public class GameController {
   }
 
   private void eliminerForeverAlone() {
-    Board plateau = this.modele.getPlateau();
+    Board plateau = this.modele.board;
     Direction[] lesDir = Direction.values();
 
     // cache les boutons isolés
-    for (int i = 0; i < this.modele.getPlateau().height; i++) {
-      for (int j = 0; j < this.modele.getPlateau().width; j++) {
+    for (int i = 0; i < this.modele.board.height; i++) {
+      for (int j = 0; j < this.modele.board.width; j++) {
         if (plateau.getSpace(i, j).bouton.isCliquableGauche()) {
           boolean aVoisin = false;
           for (Direction dir : lesDir) {
@@ -482,10 +500,10 @@ public class GameController {
 
       Vector sensDeuxBoules = new Vector(b1, b2);
       Coord coordDepla = bouton.coord.add(sensDeuxBoules);
-      if (!modele.getPlateau().getSpace(coordDepla).bouton.isVisible()) {
+      if (!modele.board.getSpace(coordDepla).bouton.isVisible()) {
         coordDepla = bouton.coord.add(sensDeuxBoules.getOpposite());
       }
-      modele.getPlateau().getSpace(coordDepla).bouton.setMouseOver(true);
+      modele.board.getSpace(coordDepla).bouton.setMouseOver(true);
       fenetre.repaint();
     } else if (etat == State.THIRD_SELECTED_FOR_LATERAL) {
       // TODO On verra pus tard...
@@ -501,10 +519,10 @@ public class GameController {
 
       Vector sensDeuxBoules = new Vector(b1, b2);
       Coord coordDepla = bouton.coord.add(sensDeuxBoules);
-      if (!modele.getPlateau().getSpace(coordDepla).bouton.isVisible()) {
+      if (!modele.board.getSpace(coordDepla).bouton.isVisible()) {
         coordDepla = bouton.coord.add(sensDeuxBoules.getOpposite());
       }
-      modele.getPlateau().getSpace(coordDepla).bouton.setMouseOver(false);
+      modele.board.getSpace(coordDepla).bouton.setMouseOver(false);
       fenetre.repaint();
     } else if (etat == State.THIRD_SELECTED_FOR_LATERAL) {
       // TODO On verra pus tard...
@@ -521,18 +539,18 @@ public class GameController {
     System.out.println("deplacement de (" + coordCase.x + ";" + coordCase.y + ") en direction ("
         + dir.vector.x + ";" + dir.vector.y + ")");
 
-    if (coordCase.x < 0 || coordCase.x >= modele.getPlateau().width || coordCase.y < 0
-        || coordCase.y >= modele.getPlateau().height) {
-      throw new MovementException("case debut invalide (<0 | >" + modele.getPlateau().height + ")");
+    if (coordCase.x < 0 || coordCase.x >= modele.board.width || coordCase.y < 0
+        || coordCase.y >= modele.board.height) {
+      throw new MovementException("case debut invalide (<0 | >" + modele.board.height + ")");
     }
 
-    Space caseActuelle = modele.getPlateau().getSpace(coordCase);
-    Coord coordCaseSuivante = modele.getPlateau().getNeighbor(coordCase, dir);
+    Space caseActuelle = modele.board.getSpace(coordCase);
+    Coord coordCaseSuivante = modele.board.getNeighbor(coordCase, dir);
 
     if (!caseActuelle.estOccupee()) {
       throw new MovementException("case debut non occupee");
     }
-    if (modele.getPlateau().getSpace(coordCaseSuivante).estOccupee()) {
+    if (modele.board.getSpace(coordCaseSuivante).estOccupee()) {
       throw new MovementException("case arrivee occcupee");
     }
 
@@ -561,7 +579,7 @@ public class GameController {
     }
 
     bouleADeplacer.coord.setCoord(coordCaseSuivante.y, coordCaseSuivante.x);
-    modele.getPlateau().getSpace(coordCaseSuivante).ball = caseActuelle.ball;
+    modele.board.getSpace(coordCaseSuivante).ball = caseActuelle.ball;
     caseActuelle.ball = null;
 
   }

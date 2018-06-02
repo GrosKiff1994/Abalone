@@ -54,7 +54,6 @@ public class Board {
         }
       }
     }
-
   }
 
   public Space getSpace(int i, int j) {

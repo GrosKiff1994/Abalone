@@ -19,7 +19,7 @@ public class Application {
 
     Board board = new Board();
     board.load(Map.tabTest);
-    game.setBoard(board);
+    game.board = board;
     window.createPanel();
     gameController.cleanBalls(); // TODO: clean
     window.getPanel().hideButtons();

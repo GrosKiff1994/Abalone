@@ -23,11 +23,11 @@ public class GamePanel extends JPanel {
   private GameController controller;
 
   public void updateClickables() {
-    for (int i = 0; i < controller.modele.getPlateau().height; i++) {
-      for (int j = 0; j < controller.modele.getPlateau().width; j++) {
-        RoundButton bout = controller.modele.getPlateau().getSpace(i, j).bouton;
+    for (int i = 0; i < controller.modele.board.height; i++) {
+      for (int j = 0; j < controller.modele.board.width; j++) {
+        RoundButton bout = controller.modele.board.getSpace(i, j).bouton;
         if (bout != null) {
-          if (controller.modele.getPlateau().getSpace(i, j).estOccupee()) {
+          if (controller.modele.board.getSpace(i, j).estOccupee()) {
             bout.setVisible(true);
           }
         }
@@ -36,9 +36,9 @@ public class GamePanel extends JPanel {
   }
 
   public void hideButtons() {
-    for (int i = 0; i < controller.modele.getPlateau().height; i++) {
-      for (int j = 0; j < controller.modele.getPlateau().width; j++) {
-        RoundButton bout = fenetre.getModele().getPlateau().getSpace(i, j).bouton;
+    for (int i = 0; i < controller.modele.board.height; i++) {
+      for (int j = 0; j < controller.modele.board.width; j++) {
+        RoundButton bout = fenetre.getModele().board.getSpace(i, j).bouton;
         if (bout != null) {
           bout.reset();
         }
@@ -69,13 +69,13 @@ public class GamePanel extends JPanel {
 
     this.setLayout(null);
 
-    for (int i = 0; i < controller.modele.getPlateau().height; i++) {
-      for (int j = 0; j < controller.modele.getPlateau().width; j++) {
-        Space caseCourante = fenetre.getModele().getPlateau().getSpace(i, j);
+    for (int i = 0; i < controller.modele.board.height; i++) {
+      for (int j = 0; j < controller.modele.board.width; j++) {
+        Space caseCourante = fenetre.getModele().board.getSpace(i, j);
         if (caseCourante != null) {
           RoundButton tmpBouton = new RoundButton(DIMBOULE, i, j, fenetre);
           this.add(tmpBouton);
-          fenetre.getModele().getPlateau().getSpace(i, j).bouton = tmpBouton;
+          fenetre.getModele().board.getSpace(i, j).bouton = tmpBouton;
         }
 
       }
@@ -88,9 +88,9 @@ public class GamePanel extends JPanel {
     Graphics g = fond.getGraphics();
 
     // parcours du tableau
-    for (int i = 0; i < controller.modele.getPlateau().height; i++) {
-      for (int j = 0; j < controller.modele.getPlateau().width; j++) {
-        Space caseCourante = fenetre.getModele().getPlateau().getSpace(i, j);
+    for (int i = 0; i < controller.modele.board.height; i++) {
+      for (int j = 0; j < controller.modele.board.width; j++) {
+        Space caseCourante = fenetre.getModele().board.getSpace(i, j);
         // case existe ?
         if (caseCourante != null && !caseCourante.isBorder) {
           g.setColor(Color.LIGHT_GRAY);
@@ -112,9 +112,9 @@ public class GamePanel extends JPanel {
     g.drawImage(fond, 0, 0, null);
 
     // parcours du tableau
-    for (int i = 0; i < controller.modele.getPlateau().height; i++) {
-      for (int j = 0; j < controller.modele.getPlateau().width; j++) {
-        Space caseCourante = fenetre.getModele().getPlateau().getSpace(i, j);
+    for (int i = 0; i < controller.modele.board.height; i++) {
+      for (int j = 0; j < controller.modele.board.width; j++) {
+        Space caseCourante = fenetre.getModele().board.getSpace(i, j);
         // case existe ?
         if (caseCourante != null && caseCourante.estOccupee()) {
           CoordDouble coord = caseCourante.ball.coord;
