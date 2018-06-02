@@ -2,19 +2,19 @@ package controller;
 
 import java.awt.event.MouseEvent;
 import java.util.HashSet;
-import modele.Ball;
-import modele.Board;
-import modele.Color;
-import modele.Direction;
-import modele.Game;
-import modele.Player;
-import modele.Space;
-import utilitaire.Coord;
-import utilitaire.CoordDouble;
-import utilitaire.Vector;
-import vue.BoutonRond;
-import vue.PanneauJeu;
-import vue.Window;
+import model.Ball;
+import model.Board;
+import model.Color;
+import model.Direction;
+import model.Game;
+import model.Player;
+import model.Space;
+import utils.Coord;
+import utils.CoordDouble;
+import utils.Vector;
+import view.BoutonRond;
+import view.PanneauJeu;
+import view.Window;
 
 public class GameController {
 
@@ -47,6 +47,7 @@ public class GameController {
   }
 
   public void setState(controller.State etat) {
+    System.out.println("Transition from state " + this.etat + " to " + etat);
     this.etat = etat;
   }
 
@@ -59,9 +60,7 @@ public class GameController {
   }
 
   public void afficherB1B2B3() {
-    System.out.println("b1 : " + b1);
-    System.out.println("b2 : " + b2);
-    System.out.println("b3 : " + b3);
+    System.out.println("b1 : " + b1 +  " b2 : " + b2 + " b3 : " + b3);
   }
 
   public void cleanBalls() {
@@ -127,7 +126,7 @@ public class GameController {
           case CLICGAUCHE:
             // coordonnees depart
             b1 = bouton.getCoord();
-            etat = State.FIRST_SELECTED_FOR_LINE;
+            setState(State.FIRST_SELECTED_FOR_LINE);
             System.out.println("etat : DEPLACEMENTLIGNE");
 
             // cacher
@@ -170,7 +169,7 @@ public class GameController {
               }
             }
 
-            etat = State.THIRD_SELECTED_FOR_LATERAL;
+            setState(State.THIRD_SELECTED_FOR_LATERAL);
             System.out.println("etat : SELECTIONLATERAL");
             break;
           default:
@@ -228,7 +227,7 @@ public class GameController {
             panneau.updateClickables();
 
             System.out.println("etat : NORMAL");
-            etat = State.NORMAL;
+            setState(State.NORMAL);
             break;
           default:
             break;
@@ -280,7 +279,7 @@ public class GameController {
             eliminerForeverAlone();
 
             System.out.println("etat : SELECTIONLATERAL2");
-            etat = State.SECOND_SELECTED_FOR_LATERAL;
+            setState(State.SECOND_SELECTED_FOR_LATERAL);
 
             break;
           default:
@@ -321,7 +320,7 @@ public class GameController {
               panneau.updateClickables();
 
               System.out.println("etat : NORMAL");
-              etat = State.NORMAL;
+              setState(State.NORMAL);
 
               break;
 
@@ -364,7 +363,7 @@ public class GameController {
             eliminerForeverAlone();
 
             System.out.println("etat : SELECTIONLATERAL3");
-            etat = State.THIRD_SELECTED_FOR_LATERAL;
+            setState(State.THIRD_SELECTED_FOR_LATERAL);
             break;
           default:
             break;
@@ -373,7 +372,7 @@ public class GameController {
       case THIRD_SELECTED_FOR_LATERAL:
         switch (e.getButton()) {
           case CLICGAUCHE:
-            etat = State.NORMAL;
+            setState(State.NORMAL);
 
             /* blabla */
             cleanBalls();

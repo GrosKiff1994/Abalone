@@ -1,4 +1,4 @@
-package utilitaire;
+package utils;
 
 public class CoordDouble {
   private double x, y;

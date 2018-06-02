@@ -1,4 +1,4 @@
-package modele;
+package model;
 
 @SuppressWarnings("serial")
 public class DirectionException extends Exception {

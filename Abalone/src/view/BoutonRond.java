@@ -1,4 +1,4 @@
-package vue;
+package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import javax.swing.JButton;
 import controller.State;
-import utilitaire.Coord;
+import utils.Coord;
 
 public class BoutonRond extends JButton {
 

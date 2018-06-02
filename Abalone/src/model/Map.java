@@ -1,4 +1,4 @@
-package modele;
+package model;
 
 public class Map {
   public static final char tabVide[][] =

@@ -1,10 +1,10 @@
 import controller.GameController;
-import modele.Board;
-import modele.Color;
-import modele.Game;
-import modele.Map;
-import modele.Player;
-import vue.Window;
+import model.Board;
+import model.Color;
+import model.Game;
+import model.Map;
+import model.Player;
+import view.Window;
 
 public class Application {
 

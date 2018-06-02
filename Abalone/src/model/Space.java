@@ -1,6 +1,6 @@
-package modele;
+package model;
 
-import vue.BoutonRond;
+import view.BoutonRond;
 
 public class Space {
 

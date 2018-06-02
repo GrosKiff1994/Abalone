@@ -1,18 +1,22 @@
-package utilitaire;
+package utils;
 
-public class Coord {
+public class Vector {
+
   public int x;
   public int y;
 
-  public Coord(int x, int y) {
-    super();
+  public Vector(Coord from, Coord to) {
+    this(to.x - from.x, to.y - from.y);
+  }
+
+  public Vector(int x, int y) {
     this.x = x;
     this.y = y;
   }
 
-  public Coord(Coord c) {
-    this.x = c.x;
-    this.y = c.y;
+  public Vector(Vector vector) {
+    this.x = vector.x;
+    this.y = vector.y;
   }
 
   @Override
@@ -32,7 +36,7 @@ public class Coord {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    Coord other = (Coord) obj;
+    Vector other = (Vector) obj;
     if (x != other.x)
       return false;
     if (y != other.y)
@@ -40,18 +44,17 @@ public class Coord {
     return true;
   }
 
-  @Override
-  public String toString() {
-    return "Coord [x=" + x + ", y=" + y + "]";
+  public void setVector(Vector vector) {
+    this.x = vector.x;
+    this.y = vector.y;
   }
 
-  public void setCoord(Coord coord) {
-    this.x = coord.x;
-    this.y = coord.y;
+  public Vector getOpposite() {
+    return new Vector(-x, -y);
   }
 
-  public Coord add(Vector v) {
-    return new Coord(x + v.x, y + v.y);
+  public Vector add(Vector v) {
+    return new Vector(x + v.x, y + v.y);
   }
 
 }

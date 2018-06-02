@@ -1,4 +1,4 @@
-package vue;
+package view;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -10,8 +10,8 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import controller.GameController;
 import controller.State;
-import modele.Space;
-import utilitaire.CoordDouble;
+import model.Space;
+import utils.CoordDouble;
 
 public class PanneauJeu extends JPanel {
 

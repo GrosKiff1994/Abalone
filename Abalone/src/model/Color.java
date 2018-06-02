@@ -1,4 +1,4 @@
-package modele;
+package model;
 
 public enum Color {
   WHITE("Couleur blanche"), BLACK("Couleur noire");

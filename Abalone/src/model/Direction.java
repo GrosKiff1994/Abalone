@@ -1,6 +1,6 @@
-package modele;
+package model;
 
-import utilitaire.Vector;
+import utils.Vector;
 
 public enum Direction {
 

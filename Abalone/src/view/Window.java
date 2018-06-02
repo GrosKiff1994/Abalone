@@ -1,8 +1,8 @@
-package vue;
+package view;
 
 import javax.swing.JFrame;
 import controller.GameController;
-import modele.Game;
+import model.Game;
 
 public class Window extends JFrame {
   /**

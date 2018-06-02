@@ -1,7 +1,7 @@
-package modele;
+package model;
 
 import java.util.NoSuchElementException;
-import utilitaire.Coord;
+import utils.Coord;
 
 public class Board {
 
