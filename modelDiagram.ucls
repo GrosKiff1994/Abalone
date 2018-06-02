@@ -118,8 +118,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="14" language="java" name="Utilitaire.Coord" project="Abalone" 
-    file="/Abalone/Abalone/src/Utilitaire/Coord.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="14" language="java" name="utilitaire.Coord" project="Abalone" 
+    file="/Abalone/Abalone/src/utilitaire/Coord.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="333" width="182" x="583" y="1017"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -127,8 +127,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="15" language="java" name="Utilitaire.CoordDouble" project="Abalone" 
-    file="/Abalone/Abalone/src/Utilitaire/CoordDouble.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="15" language="java" name="utilitaire.CoordDouble" project="Abalone" 
+    file="/Abalone/Abalone/src/utilitaire/CoordDouble.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="315" width="276" x="1138" y="1017"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      

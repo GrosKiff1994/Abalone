@@ -1,7 +1,7 @@
 package modele;
 
-import Utilitaire.Coord;
 import controleur.DeplacementException;
+import utilitaire.Coord;
 
 public class Plateau {
 

@@ -2,8 +2,6 @@ package controleur;
 
 import java.awt.event.MouseEvent;
 import java.util.HashSet;
-import Utilitaire.Coord;
-import Utilitaire.CoordDouble;
 import modele.Boule;
 import modele.Case;
 import modele.Couleur;
@@ -11,6 +9,8 @@ import modele.Direction;
 import modele.Joueur;
 import modele.Modele;
 import modele.Plateau;
+import utilitaire.Coord;
+import utilitaire.CoordDouble;
 import vue.BoutonRond;
 import vue.FenetreAbalone;
 import vue.PanneauJeu;

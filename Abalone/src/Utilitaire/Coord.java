@@ -1,4 +1,4 @@
-package Utilitaire;
+package utilitaire;
 
 public class Coord {
   private int x, y;

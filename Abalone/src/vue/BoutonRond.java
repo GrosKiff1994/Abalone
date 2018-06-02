@@ -9,8 +9,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import javax.swing.JButton;
-import Utilitaire.Coord;
 import controleur.Etat;
+import utilitaire.Coord;
 
 public class BoutonRond extends JButton {
   /**

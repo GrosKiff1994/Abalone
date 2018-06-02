@@ -1,6 +1,6 @@
 package modele;
 
-import Utilitaire.Coord;
+import utilitaire.Coord;
 
 public enum Direction {
   dirHD(new Coord(1, -1)), dirD(new Coord(1, 0)), dirBD(new Coord(0, 1)), dirBG(

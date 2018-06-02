@@ -1,6 +1,6 @@
 package modele;
 
-import Utilitaire.CoordDouble;
+import utilitaire.CoordDouble;
 
 public class Boule {
 

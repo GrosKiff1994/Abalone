@@ -8,11 +8,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
-import Utilitaire.CoordDouble;
 import controleur.Etat;
 import controleur.SuperController;
 import modele.Case;
 import modele.Plateau;
+import utilitaire.CoordDouble;
 
 public class PanneauJeu extends JPanel {
   /**
