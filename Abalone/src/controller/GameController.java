@@ -2,6 +2,11 @@ package controller;
 
 import java.awt.event.MouseEvent;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
+import com.sun.istack.internal.NotNull;
+import jdk.nashorn.internal.runtime.options.Option;
 import model.Ball;
 import model.Board;
 import model.Color;
@@ -24,9 +29,10 @@ public class GameController {
   public static final int ips = 35;
   public static final int temps = 100;
 
-  private Coord b1;
-  private Coord b2;
-  private Coord b3;
+
+  private Optional<Coord> maybeB1 = Optional.empty();
+  private Optional<Coord> maybeB2 = Optional.empty();
+  private Optional<Coord> maybeB3 = Optional.empty();
 
   private Window fenetre;
   public Game modele;
@@ -34,16 +40,14 @@ public class GameController {
 
   // private Coord sensDeuxBoules;
 
-  public Coord getB1() {
-    return b1;
+  public Optional<Coord> getB1() { return maybeB1; }
+
+  public Optional<Coord> getB2() {
+    return maybeB2;
   }
 
-  public Coord getB2() {
-    return b2;
-  }
-
-  public Coord getB3() {
-    return b3;
+  public Optional<Coord> getB3() {
+    return maybeB3;
   }
 
   public void setState(controller.State etat) {
@@ -60,13 +64,13 @@ public class GameController {
   }
 
   public void afficherB1B2B3() {
-    System.out.println("b1 : " + b1 +  " b2 : " + b2 + " b3 : " + b3);
+    System.out.println("b1 : " + maybeB1 +  " b2 : " + maybeB2 + " b3 : " + maybeB3);
   }
 
   public void cleanBalls() {
-    b1 = null;
-    b2 = null;
-    b3 = null;
+    maybeB1 = Optional.empty();
+    maybeB2 = Optional.empty();
+    maybeB3 = Optional.empty();
     System.out.println("dans viderB1B2B3");
     afficherB1B2B3();
   }
@@ -168,7 +172,11 @@ public class GameController {
     if (bouton.isSelectionne())
       return;
 
-    b3 = bouton.coord;
+    maybeB3 = Optional.of(bouton.coord);
+
+    Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
+    Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
+    Coord b3 = maybeB3.orElseThrow(() -> new NoSuchElementException("B3 was not set!"));
 
     reordonne(b1, b2, b3);
     afficherB1B2B3();
@@ -203,6 +211,8 @@ public class GameController {
   }
 
   private void handleLeftClickInsecondSelectedForLateralState(RoundButton bouton, GamePanel panneau, Board plateau) {
+    Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
+    Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
     Vector sensDeuxBoules = new Vector(b1, b2);
 
     Space caseProlonge = plateau.getSpace(bouton.coord.add(sensDeuxBoules));
@@ -241,7 +251,9 @@ public class GameController {
     if (bouton.isSelectionne())
       return;
 
-    b2 = bouton.getCoord();
+    maybeB2 = Optional.of(bouton.getCoord());
+    Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
+    Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
 
     Vector sensDeuxBoules = new Vector(b1, b2);
 
@@ -284,7 +296,10 @@ public class GameController {
   }
 
   private void handleLeftClickInFirstSelectedForLineState(RoundButton bouton, GamePanel panneau, Board plateau) {
-    b2 = bouton.getCoord();
+    maybeB2 = Optional.of(bouton.getCoord());
+
+    Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
+    Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
     Vector sensDeuxBoules = new Vector(b1, b2);
     Direction dir = Direction.toDirection(sensDeuxBoules);
 
@@ -335,7 +350,8 @@ public class GameController {
   private void handleRightClickInNormalState(RoundButton bouton, GamePanel panneau, Board plateau, Direction[] lesDir) {
     RoundButton tmp;// coordonnees depart
 
-    b1 = bouton.getCoord();
+    maybeB1 = Optional.of(bouton.getCoord());
+    Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
 
     System.out.println("dans 1er clic droit");
     afficherB1B2B3();
@@ -363,7 +379,7 @@ public class GameController {
 
   private void handleLeftClickInNormalState(RoundButton bouton, GamePanel panneau, Board plateau, Direction[] lesDir) {
     RoundButton tmp;// coordonnees depart
-    b1 = bouton.getCoord();
+    maybeB1 = Optional.of(bouton.getCoord());
     setState(State.FIRST_SELECTED_FOR_LINE);
 
     // cacher
@@ -438,6 +454,8 @@ public class GameController {
   private void deplacerLigneBoules(int nbBoules, Vector delta) {
     int periode = temps / nbBoules / ips;
 
+    Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
+
     System.out.println(nbBoules + " boule(s) a deplacer");
     // la derniere boule est la premiere deplacee
     Coord coordDepla = new Coord(b1.x + (nbBoules - 1) * delta.x, b1.y + (nbBoules - 1) * delta.y);
@@ -459,6 +477,9 @@ public class GameController {
     RoundButton bouton = ((RoundButton) e.getSource());
     bouton.setMouseOver(true);
     if (etat == State.SECOND_SELECTED_FOR_LATERAL) {
+      Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
+      Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
+
       Vector sensDeuxBoules = new Vector(b1, b2);
       Coord coordDepla = bouton.coord.add(sensDeuxBoules);
       if (!modele.getPlateau().getSpace(coordDepla).bouton.isVisible()) {
@@ -475,6 +496,9 @@ public class GameController {
     RoundButton bouton = ((RoundButton) e.getSource());
     bouton.setMouseOver(false);
     if (etat == State.SECOND_SELECTED_FOR_LATERAL) {
+      Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
+      Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
+
       Vector sensDeuxBoules = new Vector(b1, b2);
       Coord coordDepla = bouton.coord.add(sensDeuxBoules);
       if (!modele.getPlateau().getSpace(coordDepla).bouton.isVisible()) {
