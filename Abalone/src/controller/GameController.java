@@ -18,7 +18,6 @@ import utils.Vector;
 import view.GamePanel;
 import view.RoundButton;
 import view.Window;
-
 public class GameController {
 
   public static final int CLICGAUCHE = MouseEvent.BUTTON1;
@@ -27,9 +26,9 @@ public class GameController {
   public static final int ips = 35;
   public static final int temps = 100;
 
-  public Optional<Coord> maybeB1 = Optional.empty();
-  public Optional<Coord> maybeB2 = Optional.empty();
-  public Optional<Coord> maybeB3 = Optional.empty();
+  public Coord b1 = null;
+  public Coord b2 = null;
+  public Coord b3 = null;
 
   public Window window;
   public Game game;
@@ -40,13 +39,13 @@ public class GameController {
   }
 
   public void afficherB1B2B3() {
-    System.out.println("b1 : " + maybeB1 + " b2 : " + maybeB2 + " b3 : " + maybeB3);
+    System.out.println("b1 : " + b1 + " b2 : " + b2 + " b3 : " + b3);
   }
 
   public void cleanBalls() {
-    maybeB1 = Optional.empty();
-    maybeB2 = Optional.empty();
-    maybeB3 = Optional.empty();
+    b1 = null;
+    b2 = null;
+    b3 = null;
     System.out.println("dans viderB1B2B3");
     afficherB1B2B3();
   }
@@ -60,7 +59,7 @@ public class GameController {
     Coord parcours = new Coord(jDep, iDep);
     Board board = game.board;
     while (board.getSpace(parcours) != null && board.getSpace(parcours).hasBall()
-        && board.getSpace(parcours).ball.map(b->b.color == couleur).orElse(false)) {
+        && board.getSpace(parcours).ball.color == couleur) {
       nbCoul++;
       parcours.x = parcours.x + delta.vector.x;
       parcours.y = parcours.y + delta.vector.y;
@@ -75,11 +74,11 @@ public class GameController {
       for (int j = 0; j < board.width; j++) {
         if (board.getSpace(i, j).isBorder && board.getSpace(i, j).hasBall()) {
           for (Player player : game.players) {
-            if (board.getSpace(i, j).ball.map(b -> b.color == player.color).orElse(false)) {
+            if (board.getSpace(i, j).ball.color == player.color) {
               player.lostBalls += 1;
             }
           }
-          board.getSpace(i, j).ball = Optional.empty();
+          board.getSpace(i, j).ball = null;
           game.checkVictory();
         }
       }
@@ -167,11 +166,7 @@ public class GameController {
     if (bouton.isSelectionne())
       return;
 
-    maybeB3 = Optional.of(bouton.coord);
-
-    Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
-    Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
-    Coord b3 = maybeB3.orElseThrow(() -> new NoSuchElementException("B3 was not set!"));
+    b3 = bouton.coord;
 
     reordonne(b1, b2, b3);
     afficherB1B2B3();
@@ -207,8 +202,6 @@ public class GameController {
 
   private void handleLeftClickInsecondSelectedForLateralState(RoundButton bouton, GamePanel panneau,
       Board board) {
-    Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
-    Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
     Vector sensDeuxBoules = new Vector(b1, b2);
 
     Space caseProlonge = board.getSpace(bouton.coord.add(sensDeuxBoules));
@@ -248,10 +241,7 @@ public class GameController {
     if (bouton.isSelectionne())
       return;
 
-    maybeB2 = Optional.of(bouton.getCoord());
-    Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
-    Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
-
+    b2 = bouton.getCoord();
     Vector sensDeuxBoules = new Vector(b1, b2);
 
     panneau.hideButtons();
@@ -274,14 +264,14 @@ public class GameController {
     /* affichage des boutons decal */
 
     if (caseDecalArrivee.hasBall()
-        && caseDecalArrivee.ball.map(b -> b.color).equals(caseArrivee.ball.map(b  -> b.color))) {
+        && caseDecalArrivee.ball.color == caseArrivee.ball.color) {
       caseDecalArrivee.button.mettreCliquableDroit();
     } else {
       caseDecalArrivee.button.reset();
     }
 
     if (caseDecalDepart.hasBall()
-        && caseDecalDepart.ball.map(b -> b.color).equals(caseDepart.ball.map(b  -> b.color))) {
+        && caseDecalDepart.ball.color == caseDepart.ball.color) {
       caseDecalDepart.button.mettreCliquableDroit();
     } else {
       caseDecalDepart.button.reset();
@@ -294,17 +284,15 @@ public class GameController {
 
   private void handleLeftClickInFirstSelectedForLineState(RoundButton bouton, GamePanel panneau,
       Board board) {
-    maybeB2 = Optional.of(bouton.getCoord());
+    b2 = bouton.getCoord();
 
-    Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
-    Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
     Vector sensDeuxBoules = new Vector(b1, b2);
 
     Optional<Direction> maybeDir = Direction.toDirection(sensDeuxBoules);
     Direction dir = maybeDir.orElseThrow(()-> new NoSuchElementException("No direction found!"));
 
     /* premiere ligne de boules */
-    Color couleurDepart = board.getSpace(b1).ball.orElseThrow(()-> new NoSuchElementException("B1 had no ball set!")).color;
+    Color couleurDepart = board.getSpace(b1).ball.color;
     int nbCouleurActuelle = this.compteCouleur(dir, b1, couleurDepart);
 
     Space caseDeFinCouleurActuelle = board.getSpace(b1.y + nbCouleurActuelle * sensDeuxBoules.y,
@@ -312,12 +300,12 @@ public class GameController {
 
     /* seconde ligne de boules */
 
-    int nbCouleurOpposee = caseDeFinCouleurActuelle.ball.map(ball ->
+    int nbCouleurOpposee = caseDeFinCouleurActuelle.ball != null ?
             compteCouleur(dir,
-                    b1.y + nbCouleurActuelle * sensDeuxBoules.y,
-                    b1.x + nbCouleurActuelle * sensDeuxBoules.x,
-                    ball.color)
-    ).orElse(0);
+              b1.y + nbCouleurActuelle * sensDeuxBoules.y,
+              b1.x + nbCouleurActuelle * sensDeuxBoules.x,
+              caseDeFinCouleurActuelle.ball.color
+            ) : 0;
     int nbBoulesDeplac = nbCouleurActuelle + nbCouleurOpposee;
     boolean deplacementPossible = true;
 
@@ -351,8 +339,7 @@ public class GameController {
       Direction[] lesDir) {
     RoundButton tmp;// coordonnees depart
 
-    maybeB1 = Optional.of(bouton.getCoord());
-    Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
+    b1 = bouton.getCoord();
 
     System.out.println("dans 1er clic droit");
     afficherB1B2B3();
@@ -369,7 +356,7 @@ public class GameController {
           board.getSpace(bouton.getCoordI() + dir.vector.y, bouton.getCoordJ() + dir.vector.x);
 
       tmp = spaceDest.button;
-      if(tmp != null && !spaceDest.isBorder && spaceDest.ball.map(b -> b.color).equals(board.getSpace(b1).ball.map(b -> b.color))) {
+      if(tmp != null && !spaceDest.isBorder && spaceDest.ball != null && spaceDest.ball.color == board.getSpace(b1).ball.color) {
         tmp.mettreCliquableDroit();
       }
     }
@@ -380,7 +367,7 @@ public class GameController {
   private void handleLeftClickInNormalState(RoundButton bouton, GamePanel panneau, Board board,
       Direction[] lesDir) {
     RoundButton tmp;// coordonnees depart
-    maybeB1 = Optional.of(bouton.getCoord());
+    b1 = bouton.getCoord();
     this.state = State.FIRST_SELECTED_FOR_LINE;
 
     // cacher
@@ -454,8 +441,6 @@ public class GameController {
   private void deplacerLigneBoules(int nbBoules, Vector delta) {
     int periode = temps / nbBoules / ips;
 
-    Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
-
     System.out.println(nbBoules + " boule(s) a deplacer");
     // la derniere boule est la premiere deplacee
     Coord coordDepla = new Coord(b1.x + (nbBoules - 1) * delta.x, b1.y + (nbBoules - 1) * delta.y);
@@ -477,9 +462,6 @@ public class GameController {
     RoundButton bouton = ((RoundButton) e.getSource());
     bouton.setMouseOver(true);
     if (state == State.SECOND_SELECTED_FOR_LATERAL) {
-      Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
-      Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
-
       Vector sensDeuxBoules = new Vector(b1, b2);
       Coord coordDepla = bouton.coord.add(sensDeuxBoules);
       if (!game.board.getSpace(coordDepla).button.isVisible()) {
@@ -496,9 +478,6 @@ public class GameController {
     RoundButton bouton = ((RoundButton) e.getSource());
     bouton.setMouseOver(false);
     if (state == State.SECOND_SELECTED_FOR_LATERAL) {
-      Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
-      Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
-
       Vector sensDeuxBoules = new Vector(b1, b2);
       Coord coordDepla = bouton.coord.add(sensDeuxBoules);
       if (!game.board.getSpace(coordDepla).button.isVisible()) {
@@ -533,7 +512,7 @@ public class GameController {
       throw new MovementException("case arrivee occcupee");
     }
 
-    Ball bouleADeplacer = caseActuelle.ball.orElseThrow(()-> new MovementException("case debut non occupee"));
+    Ball bouleADeplacer = caseActuelle.ball;
 
     CoordDouble delta =
         new CoordDouble((double) (dir.vector.x) / ips, (double) (dir.vector.y) / ips);
@@ -558,7 +537,7 @@ public class GameController {
 
     bouleADeplacer.coord.setCoord(coordCaseSuivante.y, coordCaseSuivante.x);
     game.board.getSpace(coordCaseSuivante).ball = caseActuelle.ball;
-    caseActuelle.ball = Optional.empty();
+    caseActuelle.ball = null;
 
   }
 }

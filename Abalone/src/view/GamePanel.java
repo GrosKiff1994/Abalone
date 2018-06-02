@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import controller.GameController;
 import controller.State;
+import model.Ball;
 import model.Space;
 import utils.CoordDouble;
 
@@ -119,8 +120,8 @@ public class GamePanel extends JPanel {
       for (int j = 0; j < controller.game.board.width; j++) {
         Space caseCourante = window.game.board.getSpace(i, j);
         // case existe ?
-        if (caseCourante != null) {
-          caseCourante.ball.ifPresent(ball -> {
+        if (caseCourante != null && caseCourante.hasBall()) {
+          Ball ball = caseCourante.ball;
             CoordDouble coord = ball.coord;
 
           g.setColor(Color.BLACK);
@@ -139,7 +140,7 @@ public class GamePanel extends JPanel {
             }
             g.fillOval((int) (coord.x * DIMBOULE + coord.y * DIMBOULE / 2 - 4),
                     (int) (coord.y * (DIMBOULE - DIMBOULE / 8) - 4), DIMBOULE, DIMBOULE);
-          });
+          }
         }
 
       } // fin case existe
@@ -150,4 +151,3 @@ public class GamePanel extends JPanel {
 
     }
   }
-}

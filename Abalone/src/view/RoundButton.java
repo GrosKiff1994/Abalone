@@ -56,9 +56,9 @@ public class RoundButton extends JButton {
   }
 
   public boolean isSelectionne() {
-    return window.controller.maybeB1.map(c -> c == this.getCoord()).orElse(false)
-        || window.controller.maybeB2.map(c -> c == this.getCoord()).orElse(false)
-        || window.controller.maybeB3.map(c -> c == this.getCoord()).orElse(false);
+    return window.controller.b1 == this.getCoord()
+        || window.controller.b2 == this.getCoord()
+        || window.controller.b3 == this.getCoord();
   }
 
   public RoundButton(int rayon, int i, int j, final Window fenetre) {
