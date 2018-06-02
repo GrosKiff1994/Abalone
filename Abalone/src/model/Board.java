@@ -1,8 +1,8 @@
 package model;
 
 import java.util.NoSuchElementException;
-
 import utils.Coord;
+import utils.CoordDouble;
 
 public class Board {
 
@@ -31,22 +31,17 @@ public class Board {
   private void load(char[][] map) {
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
-        Marble marble;
         switch (map[i][j]) {
           case EMPTY:
             grid[i][j] = new Space();
             break;
           case WHITE:
             grid[i][j] = new Space();
-            marble = new Marble(Color.WHITE);
-            grid[i][j].marble = marble;
-            marble.coord.setCoord((double) i, (double) j);
+            grid[i][j].marble = new Marble(new CoordDouble(j, i), Color.WHITE);
             break;
           case BLACK:
             grid[i][j] = new Space();
-            marble = new Marble(Color.BLACK);
-            grid[i][j].marble = marble;
-            marble.coord.setCoord((double) i, (double) j);
+            grid[i][j].marble = new Marble(new CoordDouble(j, i), Color.BLACK);
             break;
           case BORDER:
             grid[i][j] = new Space();

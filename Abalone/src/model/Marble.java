@@ -7,9 +7,9 @@ public class Marble {
   public Color color;
   public CoordDouble coord;
 
-  public Marble(Color color) {
+  public Marble(CoordDouble coordDouble, Color color) {
     this.color = color;
-    this.coord = new CoordDouble(0, 0);
+    this.coord = coordDouble;
   }
 
 }

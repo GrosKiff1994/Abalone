@@ -1,8 +1,7 @@
 package model;
 
-import utils.Vector;
-
 import java.util.Optional;
+import utils.Vector;
 
 public enum Direction {
 
@@ -25,4 +24,5 @@ public enum Direction {
     System.err.println("Invalid direction : " + delta);
     return Optional.empty();
   }
+
 }
