@@ -11,28 +11,25 @@ public class Application {
 
   public static void main(String[] args) {
 
-    Game game = new Game();
+    Board board = new Board(Map.tabTest);
+    Game game = new Game(board);
     GameController controller = new GameController(game);
     Window window = new Window(game);
 
-    controller.setWindow(window);
-    window.controller = controller;
+    game.players.add(new Player("BLACK", Color.BLACK));
+    game.players.add(new Player("WHITE", Color.WHITE));
 
-    Board board = new Board();
-    board.load(Map.tabTest);
-    game.board = board;
-    window.createPanel();
+    controller.window = window;
+    controller.state = State.NORMAL;
     controller.cleanBalls(); // TODO: clean
+
+    window.controller = controller;
+    window.createPanel();
     window.panel.hideButtons();
     window.panel.updateClickables();
-    controller.state = State.NORMAL;
-
     window.setTitle("Abalone");
     window.setVisible(true);
     window.panel.drawBackground();
-
-    game.players.add(new Player("BLACK", Color.BLACK));
-    game.players.add(new Player("WHITE", Color.WHITE));
 
   }
 

@@ -16,17 +16,18 @@ public class Board {
   public int height;
   private Space grid[][];
 
-  public Board(int height, int width) {
+  public Board(int height, int width, char[][] map) {
     this.width = width;
     this.height = height;
     this.grid = new Space[this.height][this.width];
+    this.load(map);
   }
 
-  public Board() {
-    this(DEFAULT_HEIGHT, DEFAULT_WIDTH);
+  public Board(char[][] map) {
+    this(DEFAULT_HEIGHT, DEFAULT_WIDTH, map);
   }
 
-  public void load(char[][] map) {
+  private void load(char[][] map) {
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
         Ball ball;

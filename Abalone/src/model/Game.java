@@ -9,6 +9,10 @@ public class Game {
   public List<Player> players = new ArrayList<>();
   public Player looser;
 
+  public Game(Board board) {
+    this.board = board;
+  }
+
   public void checkVictory() {
     String print = "";
     for (Player player : players) {
