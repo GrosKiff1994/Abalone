@@ -4,7 +4,7 @@ import view.RoundButton;
 
 public class Space {
 
-  public Ball ball = null;
+  public Marble marble = null;
   public boolean isBorder;
   public RoundButton button;
 
@@ -12,8 +12,8 @@ public class Space {
     isBorder = false;
   }
 
-  public boolean hasBall() {
-    return this.ball != null;
+  public boolean hasMarble() {
+    return this.marble != null;
   }
 
 }

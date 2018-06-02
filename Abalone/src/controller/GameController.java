@@ -4,12 +4,11 @@ import java.awt.event.MouseEvent;
 import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
-import model.Ball;
 import model.Board;
 import model.Color;
 import model.Direction;
 import model.Game;
+import model.Marble;
 import model.Player;
 import model.Space;
 import utils.Coord;
@@ -18,6 +17,7 @@ import utils.Vector;
 import view.GamePanel;
 import view.RoundButton;
 import view.Window;
+
 public class GameController {
 
   public static final int CLICGAUCHE = MouseEvent.BUTTON1;
@@ -42,7 +42,7 @@ public class GameController {
     System.out.println("b1 : " + b1 + " b2 : " + b2 + " b3 : " + b3);
   }
 
-  public void cleanBalls() {
+  public void cleanMarbles() {
     b1 = null;
     b2 = null;
     b3 = null;
@@ -58,8 +58,8 @@ public class GameController {
     int nbCoul = 0;
     Coord parcours = new Coord(jDep, iDep);
     Board board = game.board;
-    while (board.getSpace(parcours) != null && board.getSpace(parcours).hasBall()
-        && board.getSpace(parcours).ball.color == couleur) {
+    while (board.getSpace(parcours) != null && board.getSpace(parcours).hasMarble()
+        && board.getSpace(parcours).marble.color == couleur) {
       nbCoul++;
       parcours.x = parcours.x + delta.vector.x;
       parcours.y = parcours.y + delta.vector.y;
@@ -72,13 +72,13 @@ public class GameController {
     // verification boule hors jeu
     for (int i = 0; i < board.height; i++) {
       for (int j = 0; j < board.width; j++) {
-        if (board.getSpace(i, j).isBorder && board.getSpace(i, j).hasBall()) {
+        if (board.getSpace(i, j).isBorder && board.getSpace(i, j).hasMarble()) {
           for (Player player : game.players) {
-            if (board.getSpace(i, j).ball.color == player.color) {
-              player.lostBalls += 1;
+            if (board.getSpace(i, j).marble.color == player.color) {
+              player.lostMarbles += 1;
             }
           }
-          board.getSpace(i, j).ball = null;
+          board.getSpace(i, j).marble = null;
           game.checkVictory();
         }
       }
@@ -100,7 +100,6 @@ public class GameController {
 
     switch (state) {
       case NORMAL:
-        RoundButton tmp;
         switch (e.getButton()) {
           case CLICGAUCHE:
             handleLeftClickInNormalState(button, panel, board, lesDir);
@@ -158,7 +157,7 @@ public class GameController {
   }
 
   private void handleLeftClickInThirdSelectedfForLateralState() {
-    cleanBalls();
+    this.cleanMarbles();
     this.state = State.NORMAL;
   }
 
@@ -207,11 +206,10 @@ public class GameController {
     Space caseProlonge = board.getSpace(bouton.coord.add(sensDeuxBoules));
     Space caseInverse = board.getSpace(bouton.coord.add(sensDeuxBoules.getOpposite()));
 
-    if ((caseProlonge.button != null && !caseProlonge.isBorder
-        && caseProlonge.button.isMouseOver && !caseProlonge.hasBall())
-        || (caseInverse.button != null && !caseInverse.isBorder
-            && caseInverse.button.isMouseOver && !caseInverse.hasBall()
-            && caseInverse.button.isLeftClickable())) {
+    if ((caseProlonge.button != null && !caseProlonge.isBorder && caseProlonge.button.isMouseOver
+        && !caseProlonge.hasMarble())
+        || (caseInverse.button != null && !caseInverse.isBorder && caseInverse.button.isMouseOver
+            && !caseInverse.hasMarble() && caseInverse.button.isLeftClickable())) {
 
       Vector sensDeplac = new Vector(b1, bouton.coord);
       int nbBoules = 2;
@@ -223,12 +221,12 @@ public class GameController {
       panneau.hideButtons();
 
       Optional<Direction> maybeDir = Direction.toDirection(sensDeplac);
-      Direction dir = maybeDir.orElseThrow(()-> new NoSuchElementException("No direction found!"));
+      Direction dir = maybeDir.orElseThrow(() -> new NoSuchElementException("No direction found!"));
 
       deplacerBouleDirection(dir, b1, periode);
       deplacerBouleDirection(dir, b2, periode);
 
-      cleanBalls();
+      this.cleanMarbles();
       panneau.hideButtons();
       panneau.updateClickables();
 
@@ -263,15 +261,13 @@ public class GameController {
 
     /* affichage des boutons decal */
 
-    if (caseDecalArrivee.hasBall()
-        && caseDecalArrivee.ball.color == caseArrivee.ball.color) {
+    if (caseDecalArrivee.hasMarble() && caseDecalArrivee.marble.color == caseArrivee.marble.color) {
       caseDecalArrivee.button.mettreCliquableDroit();
     } else {
       caseDecalArrivee.button.reset();
     }
 
-    if (caseDecalDepart.hasBall()
-        && caseDecalDepart.ball.color == caseDepart.ball.color) {
+    if (caseDecalDepart.hasMarble() && caseDecalDepart.marble.color == caseDepart.marble.color) {
       caseDecalDepart.button.mettreCliquableDroit();
     } else {
       caseDecalDepart.button.reset();
@@ -289,10 +285,10 @@ public class GameController {
     Vector sensDeuxBoules = new Vector(b1, b2);
 
     Optional<Direction> maybeDir = Direction.toDirection(sensDeuxBoules);
-    Direction dir = maybeDir.orElseThrow(()-> new NoSuchElementException("No direction found!"));
+    Direction dir = maybeDir.orElseThrow(() -> new NoSuchElementException("No direction found!"));
 
     /* premiere ligne de boules */
-    Color couleurDepart = board.getSpace(b1).ball.color;
+    Color couleurDepart = board.getSpace(b1).marble.color;
     int nbCouleurActuelle = this.compteCouleur(dir, b1, couleurDepart);
 
     Space caseDeFinCouleurActuelle = board.getSpace(b1.y + nbCouleurActuelle * sensDeuxBoules.y,
@@ -300,19 +296,18 @@ public class GameController {
 
     /* seconde ligne de boules */
 
-    int nbCouleurOpposee = caseDeFinCouleurActuelle.ball != null ?
-            compteCouleur(dir,
-              b1.y + nbCouleurActuelle * sensDeuxBoules.y,
-              b1.x + nbCouleurActuelle * sensDeuxBoules.x,
-              caseDeFinCouleurActuelle.ball.color
-            ) : 0;
+    int nbCouleurOpposee =
+        caseDeFinCouleurActuelle.marble != null
+            ? compteCouleur(dir, b1.y + nbCouleurActuelle * sensDeuxBoules.y,
+                b1.x + nbCouleurActuelle * sensDeuxBoules.x, caseDeFinCouleurActuelle.marble.color)
+            : 0;
     int nbBoulesDeplac = nbCouleurActuelle + nbCouleurOpposee;
     boolean deplacementPossible = true;
 
     // verification de la case qui suit la derniere
     Space caseFinale = board.getSpace(b1.y + nbBoulesDeplac * sensDeuxBoules.y,
         b1.x + nbBoulesDeplac * sensDeuxBoules.x);
-    if (caseFinale != null && caseFinale.hasBall()) {
+    if (caseFinale != null && caseFinale.hasMarble()) {
       deplacementPossible = false;
     }
 
@@ -328,7 +323,7 @@ public class GameController {
     }
 
     /* nettoyage et reaffichage */
-    cleanBalls();
+    this.cleanMarbles();
     panneau.hideButtons();
     panneau.updateClickables();
 
@@ -356,7 +351,8 @@ public class GameController {
           board.getSpace(bouton.getCoordI() + dir.vector.y, bouton.getCoordJ() + dir.vector.x);
 
       tmp = spaceDest.button;
-      if(tmp != null && !spaceDest.isBorder && spaceDest.ball != null && spaceDest.ball.color == board.getSpace(b1).ball.color) {
+      if (tmp != null && !spaceDest.isBorder && spaceDest.marble != null
+          && spaceDest.marble.color == board.getSpace(b1).marble.color) {
         tmp.mettreCliquableDroit();
       }
     }
@@ -405,7 +401,7 @@ public class GameController {
       Space caseDest = board.getSpace(centre.button.getCoordI() + dir.vector.y,
           centre.button.getCoordJ() + dir.vector.x);
       RoundButton tmp = caseDest.button;
-      if (tmp != null && !caseDest.isBorder && !caseDest.hasBall()) {
+      if (tmp != null && !caseDest.isBorder && !caseDest.hasMarble()) {
         for (Space caseTmp : blackList) {
           if (caseDest.button.equals(caseTmp.button))
             break;
@@ -449,7 +445,7 @@ public class GameController {
 
 
       Optional<Direction> maybeDir = Direction.toDirection(delta);
-      Direction dir = maybeDir.orElseThrow(()-> new NoSuchElementException("No direction found!"));
+      Direction dir = maybeDir.orElseThrow(() -> new NoSuchElementException("No direction found!"));
 
       deplacerBouleDirection(dir, coordDepla, periode);
 
@@ -508,11 +504,11 @@ public class GameController {
     Space caseActuelle = game.board.getSpace(coordCase);
     Coord coordCaseSuivante = game.board.getNeighbor(coordCase, dir);
 
-    if (game.board.getSpace(coordCaseSuivante).hasBall()) {
+    if (game.board.getSpace(coordCaseSuivante).hasMarble()) {
       throw new MovementException("case arrivee occcupee");
     }
 
-    Ball bouleADeplacer = caseActuelle.ball;
+    Marble bouleADeplacer = caseActuelle.marble;
 
     CoordDouble delta =
         new CoordDouble((double) (dir.vector.x) / ips, (double) (dir.vector.y) / ips);
@@ -536,8 +532,8 @@ public class GameController {
     }
 
     bouleADeplacer.coord.setCoord(coordCaseSuivante.y, coordCaseSuivante.x);
-    game.board.getSpace(coordCaseSuivante).ball = caseActuelle.ball;
-    caseActuelle.ball = null;
+    game.board.getSpace(coordCaseSuivante).marble = caseActuelle.marble;
+    caseActuelle.marble = null;
 
   }
 }

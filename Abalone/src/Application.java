@@ -21,7 +21,7 @@ public class Application {
 
     controller.window = window;
     controller.state = State.NORMAL;
-    controller.cleanBalls(); // TODO: clean
+    controller.cleanMarbles(); // TODO: clean
 
     window.controller = controller;
     window.createPanel();

@@ -16,8 +16,8 @@ public class Game {
   public void checkVictory() {
     String print = "";
     for (Player player : players) {
-      print += player.name + " : " + player.lostBalls + " boule(s) ejectee(s); \n";
-      if (player.lostBalls >= 6) {
+      print += player.name + " : " + player.lostMarbles + " boule(s) ejectee(s); \n";
+      if (player.lostMarbles >= 6) {
         looser = player;
         System.out.println("Le joueur " + looser + " a perdu !");
         System.exit(0);

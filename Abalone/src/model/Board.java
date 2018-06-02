@@ -31,22 +31,22 @@ public class Board {
   private void load(char[][] map) {
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
-        Ball ball;
+        Marble marble;
         switch (map[i][j]) {
           case EMPTY:
             grid[i][j] = new Space();
             break;
           case WHITE:
             grid[i][j] = new Space();
-            ball = new Ball(Color.WHITE);
-            grid[i][j].ball = ball;
-            ball.coord.setCoord((double) i, (double) j);
+            marble = new Marble(Color.WHITE);
+            grid[i][j].marble = marble;
+            marble.coord.setCoord((double) i, (double) j);
             break;
           case BLACK:
             grid[i][j] = new Space();
-            ball = new Ball(Color.BLACK);
-            grid[i][j].ball = ball;
-            ball.coord.setCoord((double) i, (double) j);
+            marble = new Marble(Color.BLACK);
+            grid[i][j].marble = marble;
+            marble.coord.setCoord((double) i, (double) j);
             break;
           case BORDER:
             grid[i][j] = new Space();
@@ -82,8 +82,8 @@ public class Board {
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
         if (grid[i][j] != null) {
-          if (grid[i][j].hasBall()) {
-            switch (grid[i][j].ball.color) {
+          if (grid[i][j].hasMarble()) {
+            switch (grid[i][j].marble.color) {
               case BLACK:
                 res += "N";
                 break;

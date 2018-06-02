@@ -10,12 +10,9 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 import controller.GameController;
 import controller.State;
-import model.Ball;
+import model.Marble;
 import model.Space;
 import utils.CoordDouble;
-
-import static model.Color.BLACK;
-import static model.Color.WHITE;
 
 public class GamePanel extends JPanel {
 
@@ -31,7 +28,7 @@ public class GamePanel extends JPanel {
       for (int j = 0; j < controller.game.board.width; j++) {
         RoundButton bout = controller.game.board.getSpace(i, j).button;
         if (bout != null) {
-          if (controller.game.board.getSpace(i, j).hasBall()) {
+          if (controller.game.board.getSpace(i, j).hasMarble()) {
             bout.setVisible(true);
           }
         }
@@ -61,7 +58,7 @@ public class GamePanel extends JPanel {
         if (e.getButton() == MouseEvent.BUTTON3 || e.getButton() == MouseEvent.BUTTON1) {
           hideButtons();
           updateClickables();
-          fenetre.controller.cleanBalls();
+          fenetre.controller.cleanMarbles();
           controller.state = State.NORMAL;
           System.out.println("Etat : NORMAL");
         }
@@ -120,34 +117,31 @@ public class GamePanel extends JPanel {
       for (int j = 0; j < controller.game.board.width; j++) {
         Space caseCourante = window.game.board.getSpace(i, j);
         // case existe ?
-        if (caseCourante != null && caseCourante.hasBall()) {
-          Ball ball = caseCourante.ball;
-            CoordDouble coord = ball.coord;
+        if (caseCourante != null && caseCourante.hasMarble()) {
+          Marble marble = caseCourante.marble;
+          CoordDouble coord = marble.coord;
 
           g.setColor(Color.BLACK);
           g.fillOval((int) (coord.x * DIMBOULE + coord.y * DIMBOULE / 2 - 2),
               (int) (coord.y * (DIMBOULE - DIMBOULE / 8) - 2), DIMBOULE, DIMBOULE);
 
-            // selon la couleur
-            switch (ball.color) {
-              case BLACK:
-                g.setColor(Color.DARK_GRAY);
-                break;
-              case WHITE:
-                g.setColor(Color.WHITE);
-                break;
-              default:
-            }
-            g.fillOval((int) (coord.x * DIMBOULE + coord.y * DIMBOULE / 2 - 4),
-                    (int) (coord.y * (DIMBOULE - DIMBOULE / 8) - 4), DIMBOULE, DIMBOULE);
+          // selon la couleur
+          switch (marble.color) {
+            case BLACK:
+              g.setColor(Color.DARK_GRAY);
+              break;
+            case WHITE:
+              g.setColor(Color.WHITE);
+              break;
+            default:
           }
+          g.fillOval((int) (coord.x * DIMBOULE + coord.y * DIMBOULE / 2 - 4),
+              (int) (coord.y * (DIMBOULE - DIMBOULE / 8) - 4), DIMBOULE, DIMBOULE);
         }
-
-      } // fin case existe
-
-      /*
-       * else { g.setColor(Color.DARK_GRAY); }
-       */
+      }
 
     }
+
   }
+
+}
