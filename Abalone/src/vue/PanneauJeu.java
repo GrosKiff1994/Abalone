@@ -8,28 +8,26 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
-import controleur.Etat;
-import controleur.SuperController;
-import modele.Case;
-import modele.Plateau;
+import controller.GameController;
+import controller.State;
+import modele.Space;
 import utilitaire.CoordDouble;
 
 public class PanneauJeu extends JPanel {
-  /**
-   * 
-   */
+
   private static final long serialVersionUID = 1L;
   public static final int DIMBOULE = 60;
 
-  private FenetreAbalone fenetre;
+  private Window fenetre;
   private BufferedImage fond;
+  private GameController controller;
 
-  public void visibiliteBoutonVide() {
-    for (int i = 0; i < Plateau.HEIGHT; i++) {
-      for (int j = 0; j < Plateau.WIDTH; j++) {
-        BoutonRond bout = fenetre.getModele().getPlateau().getCase(i, j).getBouton();
+  public void updateClickables() {
+    for (int i = 0; i < controller.modele.getPlateau().height; i++) {
+      for (int j = 0; j < controller.modele.getPlateau().width; j++) {
+        BoutonRond bout = controller.modele.getPlateau().getSpace(i, j).bouton;
         if (bout != null) {
-          if (fenetre.getModele().getPlateau().getCase(i, j).estOccupee()) {
+          if (controller.modele.getPlateau().getSpace(i, j).estOccupee()) {
             bout.setVisible(true);
           }
         }
@@ -37,10 +35,10 @@ public class PanneauJeu extends JPanel {
     }
   }
 
-  public void cacherBoutons() {
-    for (int i = 0; i < Plateau.HEIGHT; i++) {
-      for (int j = 0; j < Plateau.WIDTH; j++) {
-        BoutonRond bout = fenetre.getModele().getPlateau().getCase(i, j).getBouton();
+  public void hideButtons() {
+    for (int i = 0; i < controller.modele.getPlateau().height; i++) {
+      for (int j = 0; j < controller.modele.getPlateau().width; j++) {
+        BoutonRond bout = fenetre.getModele().getPlateau().getSpace(i, j).bouton;
         if (bout != null) {
           bout.reset();
         }
@@ -48,18 +46,19 @@ public class PanneauJeu extends JPanel {
     }
   }
 
-  public PanneauJeu(final FenetreAbalone fenetre, final SuperController controller) {
+  public PanneauJeu(final Window fenetre, final GameController controller) {
     this.fenetre = fenetre;
+    this.controller = controller;
 
     class listenerAnnuler extends MouseAdapter {
 
       @Override
       public void mouseReleased(java.awt.event.MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON3 || e.getButton() == MouseEvent.BUTTON1) {
-          cacherBoutons();
-          visibiliteBoutonVide();
-          fenetre.getController().viderB1B2B3();
-          controller.setEtat(Etat.NORMAL);
+          hideButtons();
+          updateClickables();
+          fenetre.getController().cleanBalls();
+          controller.setState(State.NORMAL);
           System.out.println("Etat : NORMAL");
         }
       }
@@ -70,13 +69,13 @@ public class PanneauJeu extends JPanel {
 
     this.setLayout(null);
 
-    for (int i = 0; i < Plateau.HEIGHT; i++) {
-      for (int j = 0; j < Plateau.WIDTH; j++) {
-        Case caseCourante = fenetre.getModele().getPlateau().getCase(i, j);
+    for (int i = 0; i < controller.modele.getPlateau().height; i++) {
+      for (int j = 0; j < controller.modele.getPlateau().width; j++) {
+        Space caseCourante = fenetre.getModele().getPlateau().getSpace(i, j);
         if (caseCourante != null) {
           BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j, fenetre);
           this.add(tmpBouton);
-          fenetre.getModele().getPlateau().getCase(i, j).setBouton(tmpBouton);
+          fenetre.getModele().getPlateau().getSpace(i, j).bouton = tmpBouton;
         }
 
       }
@@ -84,16 +83,16 @@ public class PanneauJeu extends JPanel {
 
   }
 
-  public void genererFond() {
+  public void drawBackground() {
     fond = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
     Graphics g = fond.getGraphics();
 
     // parcours du tableau
-    for (int i = 0; i < Plateau.HEIGHT; i++) {
-      for (int j = 0; j < Plateau.WIDTH; j++) {
-        Case caseCourante = fenetre.getModele().getPlateau().getCase(i, j);
+    for (int i = 0; i < controller.modele.getPlateau().height; i++) {
+      for (int j = 0; j < controller.modele.getPlateau().width; j++) {
+        Space caseCourante = fenetre.getModele().getPlateau().getSpace(i, j);
         // case existe ?
-        if (caseCourante != null && !caseCourante.getBord()) {
+        if (caseCourante != null && !caseCourante.isBorder) {
           g.setColor(Color.LIGHT_GRAY);
           g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i * (DIMBOULE - DIMBOULE / 8) - 2,
               DIMBOULE, DIMBOULE);
@@ -113,23 +112,23 @@ public class PanneauJeu extends JPanel {
     g.drawImage(fond, 0, 0, null);
 
     // parcours du tableau
-    for (int i = 0; i < Plateau.HEIGHT; i++) {
-      for (int j = 0; j < Plateau.WIDTH; j++) {
-        Case caseCourante = fenetre.getModele().getPlateau().getCase(i, j);
+    for (int i = 0; i < controller.modele.getPlateau().height; i++) {
+      for (int j = 0; j < controller.modele.getPlateau().width; j++) {
+        Space caseCourante = fenetre.getModele().getPlateau().getSpace(i, j);
         // case existe ?
         if (caseCourante != null && caseCourante.estOccupee()) {
-          CoordDouble coord = caseCourante.getBoule().getCoord();
+          CoordDouble coord = caseCourante.ball.coord;
 
           g.setColor(Color.BLACK);
           g.fillOval((int) (coord.getX() * DIMBOULE + coord.getY() * DIMBOULE / 2 - 2),
               (int) (coord.getY() * (DIMBOULE - DIMBOULE / 8) - 2), DIMBOULE, DIMBOULE);
 
           // selon la couleur
-          switch (caseCourante.getBoule().getCouleur()) {
-            case NOIR:
+          switch (caseCourante.ball.color) {
+            case BLACK:
               g.setColor(Color.DARK_GRAY);
               break;
-            case BLANC:
+            case WHITE:
               g.setColor(Color.WHITE);
               break;
             default:

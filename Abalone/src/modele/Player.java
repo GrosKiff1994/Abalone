@@ -1,12 +1,12 @@
 package modele;
 
-public class Joueur {
+public class Player {
 
   private String nom;
-  private Couleur couleur;
+  public Color color;
   private int boulesDuJoueurEjectees;
 
-  public Joueur(String nom, Couleur couleur) {
+  public Player(String nom, Color couleur) {
     this.nom = nom;
     this.setCouleur(couleur);
     boulesDuJoueurEjectees = 0;
@@ -28,12 +28,8 @@ public class Joueur {
     this.boulesDuJoueurEjectees = boulesDuJoueurEjectees;
   }
 
-  public Couleur getCouleur() {
-    return couleur;
-  }
-
-  public void setCouleur(Couleur couleur) {
-    this.couleur = couleur;
+  public void setCouleur(Color couleur) {
+    this.color = couleur;
   }
 
   public String toString() {

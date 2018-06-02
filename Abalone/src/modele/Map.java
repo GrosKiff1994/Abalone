@@ -1,6 +1,6 @@
 package modele;
 
-public class Carte {
+public class Map {
   public static final char tabVide[][] =
       new char[][] {{'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x', 'x'},
           {'x', 'x', 'x', 'x', 'x', 'v', 'v', 'v', 'v', 'v', 'x'},

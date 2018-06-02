@@ -1,31 +1,20 @@
 package modele;
 
-import utilitaire.Coord;
+import utilitaire.Vector;
 
 public enum Direction {
-  dirHD(new Coord(1, -1)), dirD(new Coord(1, 0)), dirBD(new Coord(0, 1)), dirBG(
-      new Coord(-1, 1)), dirG(new Coord(-1, 0)), dirHG(new Coord(0, -1));
 
-  private Coord dir;
+  DIR_HD(new Vector(1, -1)), DIR_D(new Vector(1, 0)), DIR_BD(new Vector(0, 1)), DIR_BG(
+      new Vector(-1, 1)), DIR_G(new Vector(-1, 0)), DIR_HG(new Vector(0, -1));
 
-  Direction(Coord offset) {
-    this.dir = offset;
+  public Vector vector;
+
+  Direction(Vector offset) {
+    this.vector = offset;
   }
 
-  public int getX() {
-    return dir.getX();
-  }
-
-  public int getY() {
-    return dir.getY();
-  }
-
-  public Object getCoord() {
-    return dir;
-  }
-
-  public static Direction toDirection(Coord delta) {
-    if (delta.getX() < -1 || delta.getX() > 1 || delta.getY() < -1 || delta.getY() > 1) {
+  public static Direction toDirection(Vector delta) {
+    if (delta.x < -1 || delta.x > 1 || delta.y < -1 || delta.y > 1) {
       try {
         throw new DirectionException("Direction invalide : " + delta);
       } catch (DirectionException e) {
@@ -33,10 +22,11 @@ public enum Direction {
       }
     }
     for (Direction dir : values()) {
-      if (dir.getCoord().equals(delta)) {
+      if (dir.vector.equals(delta)) {
         return dir;
       }
     }
     return null;
   }
+
 }

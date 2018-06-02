@@ -1,19 +1,19 @@
 package vue;
 
 import javax.swing.JFrame;
-import modele.Modele;
-import controleur.SuperController;
+import controller.GameController;
+import modele.Game;
 
-public class FenetreAbalone extends JFrame {
+public class Window extends JFrame {
   /**
    * 
    */
   private static final long serialVersionUID = 1L;
   private PanneauJeu panelPrincipal;
-  private Modele modele;
-  private SuperController controller;
+  private Game modele;
+  private GameController controller;
 
-  public FenetreAbalone(Modele modele) {
+  public Window(Game modele) {
     this.modele = modele;
     setSize((int) (PanneauJeu.DIMBOULE * 16.15),
         (int) (11 * (PanneauJeu.DIMBOULE - PanneauJeu.DIMBOULE / 16)));
@@ -23,24 +23,24 @@ public class FenetreAbalone extends JFrame {
     setLocationRelativeTo(null);
   }
 
-  public PanneauJeu getPanneau() {
+  public PanneauJeu getPanel() {
     return this.panelPrincipal;
   }
 
-  public void creerPanneau() {
+  public void createPanel() {
     panelPrincipal = new PanneauJeu(this, controller);
     setContentPane(panelPrincipal);
   }
 
-  public void setController(SuperController controller) {
+  public void setController(GameController controller) {
     this.controller = controller;
   }
 
-  public SuperController getController() {
+  public GameController getController() {
     return this.controller;
   }
 
-  public Modele getModele() {
+  public Game getModele() {
     return modele;
   }
 }

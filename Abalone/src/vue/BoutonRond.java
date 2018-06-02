@@ -9,15 +9,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import javax.swing.JButton;
-import controleur.Etat;
+import controller.State;
 import utilitaire.Coord;
 
 public class BoutonRond extends JButton {
-  /**
-   * 
-   */
+
   private static final long serialVersionUID = 1L;
-  private Coord coord;
+  public Coord coord;
 
   boolean varDist;
 
@@ -30,9 +28,9 @@ public class BoutonRond extends JButton {
   public static final Color couleurBords = new Color(0, 0, 0);
 
   private Color couleurActuelle;
-  private FenetreAbalone fenetre;
+  private Window fenetre;
 
-  Shape shape;
+  private Shape shape;
 
   /* flags du bouton */
   private boolean mouseOver;
@@ -66,7 +64,7 @@ public class BoutonRond extends JButton {
         || this.getCoord() == fenetre.getController().getB3();
   }
 
-  public BoutonRond(int rayon, int i, int j, final FenetreAbalone fenetre) {
+  public BoutonRond(int rayon, int i, int j, final Window fenetre) {
     this.cliquableDroit = false;
     this.cliquableGauche = false;
     this.setVisible(false);
@@ -108,11 +106,11 @@ public class BoutonRond extends JButton {
   }
 
   public int getCoordI() {
-    return coord.getY();
+    return coord.y;
   }
 
   public int getCoordJ() {
-    return coord.getX();
+    return coord.x;
   }
 
   public Color getCouleurActuelle() {
@@ -136,7 +134,8 @@ public class BoutonRond extends JButton {
       couleurActuelle = couleurSelec;
     } else if (cliquableDroit) {
       couleurActuelle = couleurLateralSelec;
-    } else if (cliquableGauche && fenetre.getController().getEtat() == Etat.SELECTIONLIGNE) {
+    } else if (cliquableGauche
+        && fenetre.getController().getEtat() == State.FIRST_SELECTED_FOR_LINE) {
       couleurActuelle = couleurLigne;
     } else if (cliquableGauche) {
       couleurActuelle = couleurLateralDeplac;

@@ -1,36 +1,37 @@
-import controleur.SuperController;
-import modele.Carte;
-import modele.Couleur;
-import modele.Joueur;
-import modele.Modele;
-import modele.Plateau;
-import vue.FenetreAbalone;
+import controller.GameController;
+import modele.Board;
+import modele.Color;
+import modele.Game;
+import modele.Map;
+import modele.Player;
+import vue.Window;
 
 public class Application {
 
   public static void main(String[] args) {
 
-    Modele modele = new Modele();
-    SuperController controller = new SuperController(modele);
-    FenetreAbalone fenetre = new FenetreAbalone(modele);
+    Game game = new Game();
+    GameController gameController = new GameController(game);
+    Window window = new Window(game);
 
-    fenetre.setController(controller);
-    controller.setVue(fenetre);
+    window.setController(gameController);
+    gameController.setWindow(window);
 
-    Plateau plateauJeu = new Plateau();
-    plateauJeu.chargerTab(Carte.tabTest);
-    modele.setPlateau(plateauJeu);
-    fenetre.creerPanneau();
-    controller.viderB1B2B3();
-    fenetre.getPanneau().cacherBoutons();
-    fenetre.getPanneau().visibiliteBoutonVide();
-    controller.setEtat(controleur.Etat.NORMAL);
+    Board board = new Board();
+    board.load(Map.tabTest);
+    game.setBoard(board);
+    window.createPanel();
+    gameController.cleanBalls(); // TODO: clean
+    window.getPanel().hideButtons();
+    window.getPanel().updateClickables();
+    gameController.setState(controller.State.NORMAL);
 
-    fenetre.setTitle("Abalone");
-    fenetre.setVisible(true);
-    fenetre.getPanneau().genererFond();
+    window.setTitle("Abalone");
+    window.setVisible(true);
+    window.getPanel().drawBackground();
 
-    modele.getTabJoueurs()[0] = new Joueur("joueurNOIR", Couleur.NOIR);
-    modele.getTabJoueurs()[1] = new Joueur("joueurBLANC", Couleur.BLANC);
+    game.players.add(new Player("BLACK", Color.BLACK));
+    game.players.add(new Player("WHITE", Color.WHITE));
+
   }
 }

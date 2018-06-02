@@ -1,11 +1,11 @@
 package modele;
 
-public enum Couleur {
-  BLANC("Couleur blanche"), NOIR("Couleur noire");
+public enum Color {
+  WHITE("Couleur blanche"), BLACK("Couleur noire");
 
   private String name = "";
 
-  Couleur(String name) {
+  Color(String name) {
     this.name = name;
   }
 
