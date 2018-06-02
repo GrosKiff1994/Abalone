@@ -9,26 +9,26 @@ public class Window extends JFrame {
    * 
    */
   private static final long serialVersionUID = 1L;
-  private PanneauJeu panelPrincipal;
+  private GamePanel panelPrincipal;
   private Game modele;
   private GameController controller;
 
   public Window(Game modele) {
     this.modele = modele;
-    setSize((int) (PanneauJeu.DIMBOULE * 16.15),
-        (int) (11 * (PanneauJeu.DIMBOULE - PanneauJeu.DIMBOULE / 16)));
+    setSize((int) (GamePanel.DIMBOULE * 16.15),
+        (int) (11 * (GamePanel.DIMBOULE - GamePanel.DIMBOULE / 16)));
 
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setResizable(false);
     setLocationRelativeTo(null);
   }
 
-  public PanneauJeu getPanel() {
+  public GamePanel getPanel() {
     return this.panelPrincipal;
   }
 
   public void createPanel() {
-    panelPrincipal = new PanneauJeu(this, controller);
+    panelPrincipal = new GamePanel(this, controller);
     setContentPane(panelPrincipal);
   }
 

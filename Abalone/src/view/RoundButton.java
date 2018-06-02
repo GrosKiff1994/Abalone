@@ -12,7 +12,7 @@ import javax.swing.JButton;
 import controller.State;
 import utils.Coord;
 
-public class BoutonRond extends JButton {
+public class RoundButton extends JButton {
 
   private static final long serialVersionUID = 1L;
   public Coord coord;
@@ -64,7 +64,7 @@ public class BoutonRond extends JButton {
         || this.getCoord() == fenetre.getController().getB3();
   }
 
-  public BoutonRond(int rayon, int i, int j, final Window fenetre) {
+  public RoundButton(int rayon, int i, int j, final Window fenetre) {
     this.cliquableDroit = false;
     this.cliquableGauche = false;
     this.setVisible(false);
@@ -72,8 +72,8 @@ public class BoutonRond extends JButton {
     this.fenetre = fenetre;
 
     coord = new Coord(j, i);
-    int x = j * PanneauJeu.DIMBOULE + i * PanneauJeu.DIMBOULE / 2 - 4;
-    int y = i * (PanneauJeu.DIMBOULE - PanneauJeu.DIMBOULE / 8) - 4;
+    int x = j * GamePanel.DIMBOULE + i * GamePanel.DIMBOULE / 2 - 4;
+    int y = i * (GamePanel.DIMBOULE - GamePanel.DIMBOULE / 8) - 4;
 
     setLocation(x, y);
     setSize(rayon, rayon);
@@ -204,7 +204,7 @@ public class BoutonRond extends JButton {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    BoutonRond other = (BoutonRond) obj;
+    RoundButton other = (RoundButton) obj;
     if (coord == null) {
       if (other.coord != null)
         return false;

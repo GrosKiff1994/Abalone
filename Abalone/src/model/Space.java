@@ -1,12 +1,12 @@
 package model;
 
-import view.BoutonRond;
+import view.RoundButton;
 
 public class Space {
 
   public Ball ball;
   public boolean isBorder;
-  public BoutonRond bouton;
+  public RoundButton bouton;
 
   public Space() {
     isBorder = false;

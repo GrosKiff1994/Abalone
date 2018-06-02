@@ -13,7 +13,7 @@ import controller.State;
 import model.Space;
 import utils.CoordDouble;
 
-public class PanneauJeu extends JPanel {
+public class GamePanel extends JPanel {
 
   private static final long serialVersionUID = 1L;
   public static final int DIMBOULE = 60;
@@ -25,7 +25,7 @@ public class PanneauJeu extends JPanel {
   public void updateClickables() {
     for (int i = 0; i < controller.modele.getPlateau().height; i++) {
       for (int j = 0; j < controller.modele.getPlateau().width; j++) {
-        BoutonRond bout = controller.modele.getPlateau().getSpace(i, j).bouton;
+        RoundButton bout = controller.modele.getPlateau().getSpace(i, j).bouton;
         if (bout != null) {
           if (controller.modele.getPlateau().getSpace(i, j).estOccupee()) {
             bout.setVisible(true);
@@ -38,7 +38,7 @@ public class PanneauJeu extends JPanel {
   public void hideButtons() {
     for (int i = 0; i < controller.modele.getPlateau().height; i++) {
       for (int j = 0; j < controller.modele.getPlateau().width; j++) {
-        BoutonRond bout = fenetre.getModele().getPlateau().getSpace(i, j).bouton;
+        RoundButton bout = fenetre.getModele().getPlateau().getSpace(i, j).bouton;
         if (bout != null) {
           bout.reset();
         }
@@ -46,7 +46,7 @@ public class PanneauJeu extends JPanel {
     }
   }
 
-  public PanneauJeu(final Window fenetre, final GameController controller) {
+  public GamePanel(final Window fenetre, final GameController controller) {
     this.fenetre = fenetre;
     this.controller = controller;
 
@@ -73,7 +73,7 @@ public class PanneauJeu extends JPanel {
       for (int j = 0; j < controller.modele.getPlateau().width; j++) {
         Space caseCourante = fenetre.getModele().getPlateau().getSpace(i, j);
         if (caseCourante != null) {
-          BoutonRond tmpBouton = new BoutonRond(DIMBOULE, i, j, fenetre);
+          RoundButton tmpBouton = new RoundButton(DIMBOULE, i, j, fenetre);
           this.add(tmpBouton);
           fenetre.getModele().getPlateau().getSpace(i, j).bouton = tmpBouton;
         }

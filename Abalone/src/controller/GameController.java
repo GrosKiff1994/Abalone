@@ -12,8 +12,8 @@ import model.Space;
 import utils.Coord;
 import utils.CoordDouble;
 import utils.Vector;
-import view.BoutonRond;
-import view.PanneauJeu;
+import view.RoundButton;
+import view.GamePanel;
 import view.Window;
 
 public class GameController {
@@ -108,8 +108,8 @@ public class GameController {
 
   public void sourisRelachee(MouseEvent e) {
 
-    BoutonRond bouton = ((BoutonRond) e.getSource());
-    PanneauJeu panneau = fenetre.getPanel();
+    RoundButton bouton = ((RoundButton) e.getSource());
+    GamePanel panneau = fenetre.getPanel();
     Board plateau = modele.getPlateau();
 
     System.out.println("clic : ligne " + bouton.getCoordI() + ", colonne " + bouton.getCoordJ());
@@ -121,7 +121,7 @@ public class GameController {
 
     switch (etat) {
       case NORMAL:
-        BoutonRond tmp;
+        RoundButton tmp;
         switch (e.getButton()) {
           case CLICGAUCHE: handleLeftClickInNormalState(bouton, panneau, plateau, lesDir); break;
           case CLICDROIT: handleRightClickInNormalState(bouton, panneau, plateau, lesDir); break;
@@ -164,7 +164,7 @@ public class GameController {
     setState(State.NORMAL);
   }
 
-  private void handleRightClickInSecondSelectedForLateralState(BoutonRond bouton, Board plateau) {
+  private void handleRightClickInSecondSelectedForLateralState(RoundButton bouton, Board plateau) {
     if (bouton.isSelectionne())
       return;
 
@@ -202,7 +202,7 @@ public class GameController {
     setState(State.THIRD_SELECTED_FOR_LATERAL);
   }
 
-  private void handleLeftClickInsecondSelectedForLateralState(BoutonRond bouton, PanneauJeu panneau, Board plateau) {
+  private void handleLeftClickInsecondSelectedForLateralState(RoundButton bouton, GamePanel panneau, Board plateau) {
     Vector sensDeuxBoules = new Vector(b1, b2);
 
     Space caseProlonge = plateau.getSpace(bouton.coord.add(sensDeuxBoules));
@@ -237,7 +237,7 @@ public class GameController {
     }
   }
 
-  private void handleRightClickInFirstSelectedForLateralState(BoutonRond bouton, PanneauJeu panneau, Board plateau) {
+  private void handleRightClickInFirstSelectedForLateralState(RoundButton bouton, GamePanel panneau, Board plateau) {
     if (bouton.isSelectionne())
       return;
 
@@ -283,7 +283,7 @@ public class GameController {
     setState(State.SECOND_SELECTED_FOR_LATERAL);
   }
 
-  private void handleLeftClickInFirstSelectedForLineState(BoutonRond bouton, PanneauJeu panneau, Board plateau) {
+  private void handleLeftClickInFirstSelectedForLineState(RoundButton bouton, GamePanel panneau, Board plateau) {
     b2 = bouton.getCoord();
     Vector sensDeuxBoules = new Vector(b1, b2);
     Direction dir = Direction.toDirection(sensDeuxBoules);
@@ -332,8 +332,8 @@ public class GameController {
     setState(State.NORMAL);
   }
 
-  private void handleRightClickInNormalState(BoutonRond bouton, PanneauJeu panneau, Board plateau, Direction[] lesDir) {
-    BoutonRond tmp;// coordonnees depart
+  private void handleRightClickInNormalState(RoundButton bouton, GamePanel panneau, Board plateau, Direction[] lesDir) {
+    RoundButton tmp;// coordonnees depart
 
     b1 = bouton.getCoord();
 
@@ -343,7 +343,7 @@ public class GameController {
 
     panneau.hideButtons();
 
-    BoutonRond boutonDep = plateau.getSpace(b1).bouton;
+    RoundButton boutonDep = plateau.getSpace(b1).bouton;
     boutonDep.setVisible(true);
 
     // afficher cercle voisins
@@ -361,8 +361,8 @@ public class GameController {
     setState(State.FIRST_SELECTED_FOR_LATERAL);
   }
 
-  private void handleLeftClickInNormalState(BoutonRond bouton, PanneauJeu panneau, Board plateau, Direction[] lesDir) {
-    BoutonRond tmp;// coordonnees depart
+  private void handleLeftClickInNormalState(RoundButton bouton, GamePanel panneau, Board plateau, Direction[] lesDir) {
+    RoundButton tmp;// coordonnees depart
     b1 = bouton.getCoord();
     setState(State.FIRST_SELECTED_FOR_LINE);
 
@@ -401,7 +401,7 @@ public class GameController {
     for (Direction dir : lesDir) {
       Space caseDest = plateau.getSpace(centre.bouton.getCoordI() + dir.vector.y,
           centre.bouton.getCoordJ() + dir.vector.x);
-      BoutonRond tmp = caseDest.bouton;
+      RoundButton tmp = caseDest.bouton;
       if (tmp != null && !caseDest.isBorder && !caseDest.estOccupee()) {
         for (Space caseTmp : blackList) {
           if (caseDest.bouton.equals(caseTmp.bouton))
@@ -456,7 +456,7 @@ public class GameController {
   }
 
   public void sourisEntree(MouseEvent e) {
-    BoutonRond bouton = ((BoutonRond) e.getSource());
+    RoundButton bouton = ((RoundButton) e.getSource());
     bouton.setMouseOver(true);
     if (etat == State.SECOND_SELECTED_FOR_LATERAL) {
       Vector sensDeuxBoules = new Vector(b1, b2);
@@ -472,7 +472,7 @@ public class GameController {
   }
 
   public void sourisSortie(MouseEvent e) {
-    BoutonRond bouton = ((BoutonRond) e.getSource());
+    RoundButton bouton = ((RoundButton) e.getSource());
     bouton.setMouseOver(false);
     if (etat == State.SECOND_SELECTED_FOR_LATERAL) {
       Vector sensDeuxBoules = new Vector(b1, b2);
