@@ -163,7 +163,7 @@ public class GameController {
     this.state = State.NORMAL;
   }
 
-  private void handleRightClickInSecondSelectedForLateralState(RoundButton bouton, Board plateau) {
+  private void handleRightClickInSecondSelectedForLateralState(RoundButton bouton, Board board) {
     if (bouton.isSelectionne())
       return;
 
@@ -176,14 +176,14 @@ public class GameController {
     reordonne(b1, b2, b3);
     afficherB1B2B3();
 
-    Space caseB1 = plateau.getSpace(b1);
-    Space caseB2 = plateau.getSpace(b2);
-    Space caseB3 = plateau.getSpace(b3);
+    Space caseB1 = board.getSpace(b1);
+    Space caseB2 = board.getSpace(b2);
+    Space caseB3 = board.getSpace(b3);
 
     Vector sensDeuxBoules = new Vector(b1, b2);
 
-    Space caseDecalDepart = plateau.getSpace(b1.add(sensDeuxBoules.getOpposite()));
-    Space caseDecalArrivee = plateau.getSpace(b3.add(sensDeuxBoules));
+    Space caseDecalDepart = board.getSpace(b1.add(sensDeuxBoules.getOpposite()));
+    Space caseDecalArrivee = board.getSpace(b3.add(sensDeuxBoules));
 
     HashSet<Space> casesSpeciales = new HashSet<>();
     casesSpeciales.add(caseDecalDepart);
@@ -206,13 +206,13 @@ public class GameController {
   }
 
   private void handleLeftClickInsecondSelectedForLateralState(RoundButton bouton, GamePanel panneau,
-      Board plateau) {
+      Board board) {
     Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
     Coord b2 = maybeB2.orElseThrow(() -> new NoSuchElementException("B2 was not set!"));
     Vector sensDeuxBoules = new Vector(b1, b2);
 
-    Space caseProlonge = plateau.getSpace(bouton.coord.add(sensDeuxBoules));
-    Space caseInverse = plateau.getSpace(bouton.coord.add(sensDeuxBoules.getOpposite()));
+    Space caseProlonge = board.getSpace(bouton.coord.add(sensDeuxBoules));
+    Space caseInverse = board.getSpace(bouton.coord.add(sensDeuxBoules.getOpposite()));
 
     if ((caseProlonge.button != null && !caseProlonge.isBorder
         && caseProlonge.button.isMouseOver && !caseProlonge.hasBall())
@@ -244,7 +244,7 @@ public class GameController {
   }
 
   private void handleRightClickInFirstSelectedForLateralState(RoundButton bouton, GamePanel panneau,
-      Board plateau) {
+      Board board) {
     if (bouton.isSelectionne())
       return;
 
@@ -256,10 +256,10 @@ public class GameController {
 
     panneau.hideButtons();
 
-    Space caseDepart = plateau.getSpace(b1);
-    Space caseArrivee = plateau.getSpace(b2);
-    Space caseDecalDepart = plateau.getSpace(b1.add(sensDeuxBoules.getOpposite()));
-    Space caseDecalArrivee = plateau.getSpace(b2.add(sensDeuxBoules));
+    Space caseDepart = board.getSpace(b1);
+    Space caseArrivee = board.getSpace(b2);
+    Space caseDecalDepart = board.getSpace(b1.add(sensDeuxBoules.getOpposite()));
+    Space caseDecalArrivee = board.getSpace(b2.add(sensDeuxBoules));
 
     HashSet<Space> listeCases = new HashSet<>();
     listeCases.add(caseDepart);
@@ -293,7 +293,7 @@ public class GameController {
   }
 
   private void handleLeftClickInFirstSelectedForLineState(RoundButton bouton, GamePanel panneau,
-      Board plateau) {
+      Board board) {
     maybeB2 = Optional.of(bouton.getCoord());
 
     Coord b1 = maybeB1.orElseThrow(() -> new NoSuchElementException("B1 was not set!"));
@@ -304,10 +304,10 @@ public class GameController {
     Direction dir = maybeDir.orElseThrow(()-> new NoSuchElementException("No direction found!"));
 
     /* premiere ligne de boules */
-    Color couleurDepart = plateau.getSpace(b1).ball.orElseThrow(()-> new NoSuchElementException("B1 had no ball set!")).color;
+    Color couleurDepart = board.getSpace(b1).ball.orElseThrow(()-> new NoSuchElementException("B1 had no ball set!")).color;
     int nbCouleurActuelle = this.compteCouleur(dir, b1, couleurDepart);
 
-    Space caseDeFinCouleurActuelle = plateau.getSpace(b1.y + nbCouleurActuelle * sensDeuxBoules.y,
+    Space caseDeFinCouleurActuelle = board.getSpace(b1.y + nbCouleurActuelle * sensDeuxBoules.y,
         b1.x + nbCouleurActuelle * sensDeuxBoules.x);
 
     /* seconde ligne de boules */
@@ -322,7 +322,7 @@ public class GameController {
     boolean deplacementPossible = true;
 
     // verification de la case qui suit la derniere
-    Space caseFinale = plateau.getSpace(b1.y + nbBoulesDeplac * sensDeuxBoules.y,
+    Space caseFinale = board.getSpace(b1.y + nbBoulesDeplac * sensDeuxBoules.y,
         b1.x + nbBoulesDeplac * sensDeuxBoules.x);
     if (caseFinale != null && caseFinale.hasBall()) {
       deplacementPossible = false;
@@ -347,7 +347,7 @@ public class GameController {
     this.state = State.NORMAL;
   }
 
-  private void handleRightClickInNormalState(RoundButton bouton, GamePanel panneau, Board plateau,
+  private void handleRightClickInNormalState(RoundButton bouton, GamePanel panneau, Board board,
       Direction[] lesDir) {
     RoundButton tmp;// coordonnees depart
 
@@ -360,16 +360,16 @@ public class GameController {
 
     panneau.hideButtons();
 
-    RoundButton boutonDep = plateau.getSpace(b1).button;
+    RoundButton boutonDep = board.getSpace(b1).button;
     boutonDep.setVisible(true);
 
     // afficher cercle voisins
     for (Direction dir : lesDir) {
       Space spaceDest =
-          plateau.getSpace(bouton.getCoordI() + dir.vector.y, bouton.getCoordJ() + dir.vector.x);
+          board.getSpace(bouton.getCoordI() + dir.vector.y, bouton.getCoordJ() + dir.vector.x);
 
       tmp = spaceDest.button;
-      if(tmp != null && !spaceDest.isBorder && spaceDest.ball.map(b -> b.color).equals(plateau.getSpace(b1).ball.map(b -> b.color))) {
+      if(tmp != null && !spaceDest.isBorder && spaceDest.ball.map(b -> b.color).equals(board.getSpace(b1).ball.map(b -> b.color))) {
         tmp.mettreCliquableDroit();
       }
     }
@@ -377,7 +377,7 @@ public class GameController {
     this.state = State.FIRST_SELECTED_FOR_LATERAL;
   }
 
-  private void handleLeftClickInNormalState(RoundButton bouton, GamePanel panneau, Board plateau,
+  private void handleLeftClickInNormalState(RoundButton bouton, GamePanel panneau, Board board,
       Direction[] lesDir) {
     RoundButton tmp;// coordonnees depart
     maybeB1 = Optional.of(bouton.getCoord());
@@ -390,8 +390,8 @@ public class GameController {
     for (Direction dir : lesDir) {
       Coord dest = new Coord(bouton.getCoordJ() + dir.vector.x, bouton.getCoordI() + dir.vector.y);
 
-      tmp = plateau.getSpace(dest).button;
-      if (tmp != null && !plateau.getSpace(dest).isBorder) {
+      tmp = board.getSpace(dest).button;
+      if (tmp != null && !board.getSpace(dest).isBorder) {
         tmp.mettreCliquableGauche();
       }
     }
@@ -429,22 +429,22 @@ public class GameController {
   }
 
   private void eliminerForeverAlone() {
-    Board plateau = this.game.board;
+    Board board = this.game.board;
     Direction[] lesDir = Direction.values();
 
     // cache les boutons isolés
     for (int i = 0; i < this.game.board.height; i++) {
       for (int j = 0; j < this.game.board.width; j++) {
-        if (plateau.getSpace(i, j).button.isLeftClickable()) {
+        if (board.getSpace(i, j).button.isLeftClickable()) {
           boolean aVoisin = false;
           for (Direction dir : lesDir) {
-            if (plateau.getSpace(i + dir.vector.y, j + dir.vector.x).button.isLeftClickable()) {
+            if (board.getSpace(i + dir.vector.y, j + dir.vector.x).button.isLeftClickable()) {
               aVoisin = true;
               break;
             }
           }
           if (!aVoisin) {
-            plateau.getSpace(i, j).button.reset();
+            board.getSpace(i, j).button.reset();
           }
         }
       }
