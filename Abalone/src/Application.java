@@ -20,7 +20,7 @@ public class Application {
     game.players.add(new Player("WHITE", Color.WHITE));
 
     controller.window = window;
-    controller.state = State.NORMAL;
+    controller.setState(State.NORMAL);
     controller.cleanMarbles(); // TODO: clean
 
     window.controller = controller;

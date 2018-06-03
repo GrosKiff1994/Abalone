@@ -60,7 +60,7 @@ public class GamePanel extends JPanel {
           hideButtons();
           updateClickables();
           fenetre.controller.cleanMarbles();
-          controller.state = State.NORMAL;
+          controller.setState(State.NORMAL);
           System.out.println("STATE : NORMAL");
         }
       }

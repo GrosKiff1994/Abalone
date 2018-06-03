@@ -155,7 +155,7 @@ public class GameController {
 
   private void handleLeftClickInThirdSelectedfForLateralState() {
     this.cleanMarbles();
-    this.state = State.NORMAL;
+    this.setState(State.NORMAL);
   }
 
   private void handleRightClickInSecondSelectedForLateralState(RoundButton bouton, Board board) {
@@ -193,7 +193,7 @@ public class GameController {
 
     this.eliminerForeverAlone();
 
-    this.state = State.THIRD_SELECTED_FOR_LATERAL;
+    this.setState(State.THIRD_SELECTED_FOR_LATERAL);
   }
 
   private void handleLeftClickInsecondSelectedForLateralState(RoundButton button, GamePanel panel,
@@ -227,7 +227,7 @@ public class GameController {
       panel.hideButtons();
       panel.updateClickables();
 
-      this.state = State.NORMAL;
+      this.setState(State.NORMAL);
     }
   }
 
@@ -272,7 +272,7 @@ public class GameController {
 
     eliminerForeverAlone();
 
-    this.state = State.SECOND_SELECTED_FOR_LATERAL;
+    this.setState(State.SECOND_SELECTED_FOR_LATERAL);
   }
 
   private void handleLeftClickInFirstSelectedForLineState(RoundButton bouton, GamePanel panneau,
@@ -323,7 +323,7 @@ public class GameController {
     panneau.hideButtons();
     panneau.updateClickables();
 
-    this.state = State.NORMAL;
+    this.setState(State.NORMAL);
   }
 
   private void handleRightClickInNormalState(RoundButton bouton, GamePanel panneau, Board board,
@@ -353,14 +353,14 @@ public class GameController {
       }
     }
 
-    this.state = State.FIRST_SELECTED_FOR_LATERAL;
+    this.setState(State.FIRST_SELECTED_FOR_LATERAL);
   }
 
   private void handleLeftClickInNormalState(RoundButton bouton, GamePanel panneau, Board board,
       Direction[] lesDir) {
     RoundButton tmp;// coordonnees depart
     b1 = bouton.coord;
-    this.state = State.FIRST_SELECTED_FOR_LINE;
+    this.setState(State.FIRST_SELECTED_FOR_LINE);
 
     // cacher
     panneau.hideButtons();
@@ -503,11 +503,8 @@ public class GameController {
     for (int i = 0; i < IMAGES_PER_SECOND; i++) {
       long debut = System.currentTimeMillis();
       marbleToMove.coord.setCoord(CoordDouble.somme(marbleToMove.coord, delta));
-
       window.repaint();
-
       window.panel.paintImmediately(0, 0, window.panel.getWidth(), window.panel.getHeight());
-
       try {
         long tpsRestant = tempsPeriode - (System.currentTimeMillis() - debut);
         if (tpsRestant > 0)
@@ -515,12 +512,15 @@ public class GameController {
       } catch (InterruptedException e) {
         e.printStackTrace();
       }
-
     }
-
     marbleToMove.coord.setCoord(coordCaseSuivante.y, coordCaseSuivante.x);
     game.board.getSpace(coordCaseSuivante).marble = caseActuelle.marble;
     caseActuelle.marble = null;
-
   }
+
+  public void setState(State state) {
+    System.out.println("Transition from state " + this.state + " to " + state);
+    this.state = state;
+  }
+
 }
