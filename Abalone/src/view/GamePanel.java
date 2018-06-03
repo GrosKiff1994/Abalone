@@ -17,7 +17,8 @@ import utils.CoordDouble;
 public class GamePanel extends JPanel {
 
   private static final long serialVersionUID = 1L;
-  public static final int DIMBOULE = 60;
+
+  public static final int MARBLE_SIZE = 60;
 
   private Window window;
   private BufferedImage background;
@@ -51,7 +52,7 @@ public class GamePanel extends JPanel {
     this.window = fenetre;
     this.controller = controller;
 
-    class listenerAnnuler extends MouseAdapter {
+    class MouseCancelListener extends MouseAdapter {
 
       @Override
       public void mouseReleased(java.awt.event.MouseEvent e) {
@@ -60,13 +61,13 @@ public class GamePanel extends JPanel {
           updateClickables();
           fenetre.controller.cleanMarbles();
           controller.state = State.NORMAL;
-          System.out.println("Etat : NORMAL");
+          System.out.println("STATE : NORMAL");
         }
       }
 
     }
 
-    this.addMouseListener(new listenerAnnuler());
+    this.addMouseListener(new MouseCancelListener());
 
     this.setLayout(null);
 
@@ -74,7 +75,7 @@ public class GamePanel extends JPanel {
       for (int j = 0; j < controller.game.board.width; j++) {
         Space caseCourante = fenetre.game.board.getSpace(i, j);
         if (caseCourante != null) {
-          RoundButton tmpBouton = new RoundButton(DIMBOULE, i, j, fenetre);
+          RoundButton tmpBouton = new RoundButton(MARBLE_SIZE, i, j, fenetre);
           this.add(tmpBouton);
           fenetre.game.board.getSpace(i, j).button = tmpBouton;
         }
@@ -87,23 +88,19 @@ public class GamePanel extends JPanel {
   public void drawBackground() {
     background = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_ARGB);
     Graphics g = background.getGraphics();
-
-    // parcours du tableau
     for (int i = 0; i < controller.game.board.height; i++) {
       for (int j = 0; j < controller.game.board.width; j++) {
         Space caseCourante = window.game.board.getSpace(i, j);
-        // case existe ?
         if (caseCourante != null && !caseCourante.isBorder) {
           g.setColor(Color.LIGHT_GRAY);
-          g.fillOval(j * DIMBOULE + i * DIMBOULE / 2 - 2, i * (DIMBOULE - DIMBOULE / 8) - 2,
-              DIMBOULE, DIMBOULE);
+          g.fillOval(j * MARBLE_SIZE + i * MARBLE_SIZE / 2 - 2,
+              i * (MARBLE_SIZE - MARBLE_SIZE / 8) - 2, MARBLE_SIZE, MARBLE_SIZE);
         }
-
       }
-
     }
   }
 
+  @Override
   public void paintComponent(Graphics g) {
 
     Graphics2D graphics2D = (Graphics2D) g;
@@ -120,11 +117,9 @@ public class GamePanel extends JPanel {
         if (caseCourante != null && caseCourante.hasMarble()) {
           Marble marble = caseCourante.marble;
           CoordDouble coord = marble.coord;
-
           g.setColor(Color.BLACK);
-          g.fillOval((int) (coord.x * DIMBOULE + coord.y * DIMBOULE / 2 - 2),
-              (int) (coord.y * (DIMBOULE - DIMBOULE / 8) - 2), DIMBOULE, DIMBOULE);
-
+          g.fillOval((int) (coord.x * MARBLE_SIZE + coord.y * MARBLE_SIZE / 2 - 2),
+              (int) (coord.y * (MARBLE_SIZE - MARBLE_SIZE / 8) - 2), MARBLE_SIZE, MARBLE_SIZE);
           // selon la couleur
           switch (marble.color) {
             case BLACK:
@@ -135,13 +130,11 @@ public class GamePanel extends JPanel {
               break;
             default:
           }
-          g.fillOval((int) (coord.x * DIMBOULE + coord.y * DIMBOULE / 2 - 4),
-              (int) (coord.y * (DIMBOULE - DIMBOULE / 8) - 4), DIMBOULE, DIMBOULE);
+          g.fillOval((int) (coord.x * MARBLE_SIZE + coord.y * MARBLE_SIZE / 2 - 4),
+              (int) (coord.y * (MARBLE_SIZE - MARBLE_SIZE / 8) - 4), MARBLE_SIZE, MARBLE_SIZE);
         }
       }
-
     }
-
   }
 
 }

@@ -12,8 +12,4 @@ public class Player {
     this.lostMarbles = 0;
   }
 
-  public String toString() {
-    return this.name;
-  }
-
 }

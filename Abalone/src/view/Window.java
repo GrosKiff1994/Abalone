@@ -13,8 +13,8 @@ public class Window extends JFrame {
 
   public Window(Game game) {
     this.game = game;
-    setSize((int) (GamePanel.DIMBOULE * 16.15),
-        (int) (11 * (GamePanel.DIMBOULE - GamePanel.DIMBOULE / 16)));
+    setSize((int) (GamePanel.MARBLE_SIZE * 16.15),
+        (int) (11 * (GamePanel.MARBLE_SIZE - GamePanel.MARBLE_SIZE / 16)));
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setResizable(false);
     setLocationRelativeTo(null);
