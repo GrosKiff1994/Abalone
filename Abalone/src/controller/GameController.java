@@ -332,7 +332,6 @@ public class GameController {
 
     b1 = bouton.coord;
 
-    System.out.println("dans 1er clic droit");
     afficherB1B2B3();
     System.out.println(bouton);
 
